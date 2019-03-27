@@ -1,0 +1,19 @@
+.form-textarea {
+  flex: 1;
+  height: 35px;
+  border-radius: 50px;
+  resize: none;
+  padding: 10px 20px;
+  font-size: 24px;
+  font-family: Fjalla One;
+  overflow: hidden;
+  border-color: none;
+  border: none;
+  background-color: white;
+  border: 5px solid #ffe6cc;
+  text-align: center;
+}
+
+.form-textarea:focus {
+  border: 5px solid #ffcc99;
+}
