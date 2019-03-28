@@ -1,0 +1,14 @@
+.button {
+  flex: 1;
+  height: 40px;
+  margin: 30px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
+  font-size: 1.2em;
+  font-family: Fjalla One;
+  background-color: #f2f2f2;
+  border: 5px solid #8c8c8c;
+}

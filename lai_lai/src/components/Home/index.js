@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 
 import FloatingButton from '../../common/FloatingButton'
+import AttendanceList from './AttendanceList'
 
 import './index.css';
 
@@ -9,24 +11,18 @@ class Home extends Component {
     super()
 
     this.state = {
-      date: '',
       attendeesData: [],
+      screen: 'home',
     }
     this.addAttendee=this.addAttendee.bind(this)
-    this.changeDate=this.changeDate.bind(this)
     this.onAddAttendee=this.onAddAttendee.bind(this)
     this.onDelete=this.onDelete.bind(this)
     this.onSend=this.onSend.bind(this)
+    this.changeScreen=this.changeScreen.bind(this)
   }
 
   addAttendee() {
     this.props.setModal('show', 'AddAttendeeModal', this.onAddAttendee)
-  }
-
-  changeDate(date) {
-    this.setState({date: date},() => {
-      localStorage.setItem('period', JSON.stringify(date))
-    })
   }
 
   onAddAttendee(name, number) {
@@ -44,8 +40,7 @@ class Home extends Component {
     // localStorage.setItem('attendees', JSON.stringify(test))
 
     let attendeesData = JSON.parse(localStorage.getItem('attendees'))
-    let date = JSON.parse(localStorage.getItem('period'))
-    if (attendeesData) this.setState({attendeesData: attendeesData, date: date})
+    if (attendeesData) this.setState({attendeesData: attendeesData})
   }
 
   renderAttendees() {
@@ -84,31 +79,78 @@ class Home extends Component {
   }
 
   onSend() {
+    axios.post('http://localhost:3001/whatsapp', {
+      attendees: this.state.attendeesData
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
+  changeScreen(screen) {
+    this.setState({screen: screen})
+  }
+
+  renderScreen() {
+    let { screen } = this.state
+    let date = this.props.date || 'Set Date'
+    if (screen === 'home') {
+      return (
+        <div className="home--mainWrapper">
+          <div className="home-period">
+            <div className="home-period-text" onClick={() => this.props.setModal('show', 'ChangeDateModal', this.props.changeDate)}>
+              {date}
+            </div>
+          </div>
+          <div className="home-attendees">
+            <div className="home-attendees-headers">
+              <div className="home-attendees-headers-name">Name</div>
+              <div className="home-attendees-headers-number">Contact Number</div>
+            </div>
+            {this.renderAttendees()}
+            <FloatingButton
+              function={this.addAttendee}
+            />
+          </div>
+          <div className="home-sendButton" onClick={this.onSend}>
+            Send
+          </div>
+        </div>
+      )
+    }
+    else if (screen === 'attendance') {
+        return (
+          <div className="home--mainWrapper">
+            <div className="home-attendance">
+              <div className="home-attendance-list">
+                <AttendanceList
+                />
+              </div>
+            </div>
+          </div>
+        )
+    }
   }
 
   render() {
-    let date = this.state.date || 'Set Date'
+    let { screen } = this.state
+    let selected
+    if (screen === 'home') selected = ' home'
+    if (screen === 'attendance') selected = ' attendance'
     return (
       <div className="home">
-        <div className="home-period">
-          <div className="home-period-text" onClick={() => this.props.setModal('show', 'ChangeDateModal', this.changeDate)}>
-            {date}
+        {this.renderScreen()}
+        <div className="home-tabs">
+          <div className="home-tabs-home" onClick={() => this.changeScreen('home')}>
+            <div className={"home-tabs-home-icon" + selected} />
+          </div>
+          <div className="home-tabs-attendance" onClick={() => this.changeScreen('attendance')}>
+            <div className={"home-tabs-attendance-icon" + selected} />
           </div>
         </div>
-        <div className="home-attendees">
-          <div className="home-attendees-headers">
-            <div className="home-attendees-headers-name">Name</div>
-            <div className="home-attendees-headers-number">Contact Number</div>
-          </div>
-          {this.renderAttendees()}
-        </div>
-        <div className="home-sendButton" onClick={this.onSend}>
-          Send
-        </div>
-        <FloatingButton
-          function={this.addAttendee}
-        />
       </div>
     );
   }

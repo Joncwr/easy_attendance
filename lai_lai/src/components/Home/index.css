@@ -5,10 +5,15 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    background-color: #fff2e6;
-    padding: 50px 0;
     box-sizing: border-box;
     font-family: Fjalla One;
+  }
+
+  .home--mainWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
   }
 
   .home-period {
@@ -17,7 +22,7 @@
   }
 
   .home-period-text {
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: 700;
     padding: 20px 40px;
     border-radius: 50px;
@@ -25,6 +30,73 @@
     box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
     border: 4px solid #ffd9b3;
   }
+
+  .home-attendees{
+    flex: 1;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #ffe6cc;
+    border-top: 4px solid #ffd9b3;
+    border-bottom: 4px solid #ffd9b3;
+    overflow: auto;
+    position: relative;
+  }
+
+  .home-attendees-headers {
+    font-weight: 700;
+    margin: 0 30px 20px 0;
+  }
+
+  .home-attendees-info,
+  .home-attendees-headers {
+    display: flex;
+    font-size: 1.3em;
+  }
+
+  .home-attendees-info-name,
+  .home-attendees-headers-name{
+    flex: 2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .home-attendees-info-number,
+  .home-attendees-headers-number{
+    flex: 3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .home-attendees-info {
+    padding: 10px 0;
+  }
+
+  .home-attendees-info-deleteIcon {
+    height: 25px;
+    width: 25px;
+    background-color: black;
+  	mask: url('/img/icon_delete.svg') no-repeat center center/ cover;
+  }
+
+  .home-sendButton {
+    width: 50%;
+    height: 40px;
+    margin: 30px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
+    font-size: 1.3em;
+    font-family: Fjalla One;
+    font-weight: 600;
+    background-color: #ffc299;
+    border: 5px solid #ff8533;
+    align-self: center;
+  }
+
 }
 
 @media (min-width:1025px) {
@@ -38,6 +110,7 @@
 }
 
 .home-attendees{
+  flex: 1;
   padding: 20px;
   margin-top: 20px;
   background-color: #ffe6cc;
@@ -53,7 +126,7 @@
 .home-attendees-info,
 .home-attendees-headers {
   display: flex;
-  font-size: 20px;
+  font-size: 1.3em;
 }
 
 .home-attendees-info-name,
@@ -92,9 +165,66 @@
   align-items: center;
   border-radius: 50px;
   box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
-  font-size: 20px;
+  font-size: 1.3em;
   font-family: Fjalla One;
+  font-weight: 600;
   background-color: #ffc299;
   border: 5px solid #ff8533;
   align-self: center;
+}
+
+.home-tabs {
+  height: 10%;
+  width: 100%;
+  display: flex;
+  border-top: 5px solid #ffd9b3;
+  background-color: #ffe6cc;
+}
+
+.home-tabs-home,
+.home-tabs-attendance {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-tabs-home {
+  border-right: 5px solid #ffd9b3;
+}
+
+.home-tabs-home-icon,
+.home-tabs-attendance-icon {
+  height: 40px;
+  width: 40px;
+  opacity: .3;
+}
+
+.home-tabs-home-icon.home,
+.home-tabs-attendance-icon.attendance {
+  opacity: 1;
+}
+
+.home-tabs-home-icon {
+	background: url('/img/icon_home@3x.png') no-repeat center center/ contain;
+}
+
+.home-tabs-attendance-icon {
+	background: url('/img/icon_attendance@3x.png') no-repeat center center/ contain;
+}
+
+/* Attendance Page */
+.home-attendance {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top: 5px solid #ff8533;
+  border-bottom: 5px solid #ff8533;
+  margin: 10px 0 30px 0;
+}
+
+.home-attendance-list {
+  flex: 1;
+  display: flex;
+  background-color: #fff;
 }

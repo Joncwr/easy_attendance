@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 import Home from './components/Home'
+import Confirmation from './components/Confirmation'
 import ModalConductor from './helpers/ModalConductor'
 import Snackbar from './helpers/Snackbar'
 
@@ -21,8 +22,22 @@ class App extends Component {
       modalProps: null,
       snackbarStatus: '',
       snackbarProps: {},
+      date: '',
     }
     this.setModal=this.setModal.bind(this)
+    this.setSnackbar=this.setSnackbar.bind(this)
+    this.changeDate=this.changeDate.bind(this)
+  }
+
+  componentDidMount() {
+    let date = JSON.parse(localStorage.getItem('period'))
+    this.setState({date: date})
+  }
+
+  changeDate(date) {
+    this.setState({date: date},() => {
+      localStorage.setItem('period', JSON.stringify(date))
+    })
   }
 
   setModal(modalStatus, modalName, modalProps) {
@@ -74,10 +89,18 @@ class App extends Component {
             snackbarStatus={this.state.snackbarStatus}
             snackbarProps={this.state.snackbarProps}
           />
-          <Route exact path="/" render={() => (
+          <Route exact path="/home" render={() => (
             <Home
+              date={this.state.date}
+              changeDate={this.changeDate}
               setModal={this.setModal}
               setSnackbar={this.setSnackbar}
+              history={history}
+            />
+          )} />
+        <Route exact path="/confirmation" render={() => (
+            <Confirmation
+              date={this.state.date}
               history={history}
             />
           )} />
