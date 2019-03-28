@@ -28,4 +28,8 @@ app.post('/whatsapp', (req, res) => {
   })
 });
 
+app.get('/online', (req, res) => {
+  res.send('online')
+});
+
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}!!!!`));
