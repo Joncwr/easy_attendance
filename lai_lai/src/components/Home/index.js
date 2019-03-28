@@ -13,7 +13,7 @@ class Home extends Component {
 
     this.state = {
       attendeesData: [],
-      screen: 'attendance',
+      screen: 'home',
     }
     this.addAttendee=this.addAttendee.bind(this)
     this.getAttendees=this.getAttendees.bind(this)
