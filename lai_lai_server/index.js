@@ -19,7 +19,7 @@ app.post('/whatsapp', (req, res) => {
   attendees.forEach(data => {
     client.messages
       .create({
-         body: `Hi! Please click on the link to confirm your attendance for the upcoming bible study! 18.191.78.79/confirmation?name=${data.name}`,
+         body: `http://18.191.78.79/confirmation?name=${data.name} Hi! Please click on the link to confirm your attendance for the upcoming bible study!`,
          from: 'whatsapp:+14155238886',
          to: `whatsapp:${data.number}`
        })
