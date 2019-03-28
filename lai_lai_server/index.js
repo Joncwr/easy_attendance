@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const Attendees = require('./routes/attendees')
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
@@ -31,5 +33,7 @@ app.post('/whatsapp', (req, res) => {
 app.get('/online', (req, res) => {
   res.send('online')
 });
+
+app.use('/attendees', Attendees)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}!!!!`));

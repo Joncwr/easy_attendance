@@ -3,6 +3,7 @@ import queryString from 'query-string'
 
 import Button from '../../common/Button'
 import LoadingOverlay from '../../common/LoadingOverlay'
+import AttendeesApi from '../../services/api/attendees'
 
 import './index.css'
 
@@ -27,13 +28,19 @@ class Confirmation extends React.Component {
   }
 
   onPress(status) {
-    this.setState({isLoading: true}, () => {
-      let attendance = JSON.parse(localStorage.getItem('attendanceSheet')) || {}
-      attendance[this.state.name] = status
-      localStorage.setItem('attendanceSheet', JSON.stringify(attendance))
-
-      this.setState({isLoading: false, hasAnswered: true})
+    let attendanceDict = {
+      name: this.state.name,
+      attendance: status
+    }
+    AttendeesApi.attendance(attendanceDict)
+    .then(res => {
+      this.props.setSnackbar('show', {
+        text: "Attendance submitted."
+      })
     })
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Could'nt submit attendance."
+    }))
   }
 
   renderScreen(date,name) {
@@ -50,7 +57,7 @@ class Confirmation extends React.Component {
           </div>
           <div className="confirmation-actions">
             <Button
-              onClick={() => this.onPress('decline')}
+              onClick={() => this.onPress(false)}
               name='Decline'
               style={{
                 backgroundColor: '#ffd1b3',
@@ -58,7 +65,7 @@ class Confirmation extends React.Component {
               }}
             />
             <Button
-              onClick={() => this.onPress('confirm')}
+              onClick={() => this.onPress(true)}
               name='Confirm'
               style={{
                 backgroundColor: '#e6ffe6',

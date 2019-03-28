@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import FloatingButton from '../../common/FloatingButton'
 import AttendanceList from './AttendanceList'
+import AttendeesApi from '../../services/api/attendees'
 
 import './index.css';
 
@@ -12,9 +13,10 @@ class Home extends Component {
 
     this.state = {
       attendeesData: [],
-      screen: 'home',
+      screen: 'attendance',
     }
     this.addAttendee=this.addAttendee.bind(this)
+    this.getAttendees=this.getAttendees.bind(this)
     this.onAddAttendee=this.onAddAttendee.bind(this)
     this.onDelete=this.onDelete.bind(this)
     this.onSend=this.onSend.bind(this)
@@ -26,21 +28,28 @@ class Home extends Component {
   }
 
   onAddAttendee(name, number) {
-    let attendeesData = Object.assign([], this.state.attendeesData)
-    attendeesData.push({
-      'name': name,
-      'number': number
+    let user = { name, number }
+    AttendeesApi.addAttendee(user)
+    .then(res => {
+      this.props.setSnackbar('show', {
+        text: "User Added."
+      })
+      this.getAttendees()
     })
-    this.setState({attendeesData: attendeesData},() => {
-      localStorage.setItem('attendees', JSON.stringify(attendeesData))
-    })
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Could'nt add user."
+    }))
   }
 
   componentDidMount() {
-    // localStorage.setItem('attendees', JSON.stringify(test))
+    this.getAttendees()
+  }
 
-    let attendeesData = JSON.parse(localStorage.getItem('attendees'))
-    if (attendeesData) this.setState({attendeesData: attendeesData})
+  getAttendees() {
+    AttendeesApi.getAttendees()
+    .then(res => {
+      this.setState({attendeesData: res})
+    })
   }
 
   renderAttendees() {
@@ -71,11 +80,17 @@ class Home extends Component {
   }
 
   onDelete(index) {
-    let attendeesData = Object.assign([], this.state.attendeesData)
-    attendeesData.splice(index, 1)
-    this.setState({attendeesData: attendeesData},() => {
-      localStorage.setItem('attendees', JSON.stringify(attendeesData))
+    let name = this.state.attendeesData[index].name
+    AttendeesApi.deleteAttendee(name)
+    .then(res => {
+      this.props.setSnackbar('show', {
+        text: "User deleted."
+      })
+      this.getAttendees()
     })
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Could'nt delete user."
+    }))
   }
 
   onSend() {

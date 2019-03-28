@@ -6,6 +6,8 @@ import Home from './components/Home'
 import Confirmation from './components/Confirmation'
 import ModalConductor from './helpers/ModalConductor'
 import Snackbar from './helpers/Snackbar'
+import LoadingOverlay from './common/LoadingOverlay'
+import axios from './services/axios'
 
 import './App.css';
 
@@ -23,15 +25,22 @@ class App extends Component {
       snackbarStatus: '',
       snackbarProps: {},
       date: '',
+      isLoading: false,
     }
     this.setModal=this.setModal.bind(this)
     this.setSnackbar=this.setSnackbar.bind(this)
     this.changeDate=this.changeDate.bind(this)
+    this.setLoadingOverlay=this.setLoadingOverlay.bind(this)
+    axios.setLoadingOverlay(this.setLoadingOverlay)
   }
 
   componentDidMount() {
     let date = JSON.parse(localStorage.getItem('period'))
     this.setState({date: date})
+  }
+
+  setLoadingOverlay(state) {
+    this.setState({isLoading: state})
   }
 
   changeDate(date) {
@@ -78,6 +87,9 @@ class App extends Component {
     return (
       <Router  history={history}>
         <div className="default">
+          <LoadingOverlay
+            isLoading={this.state.isLoading}
+          />
           <ModalConductor
             modalName={this.state.modalName}
             modalStatus={this.state.modalStatus}
@@ -102,6 +114,7 @@ class App extends Component {
             <Confirmation
               date={this.state.date}
               history={history}
+              setSnackbar={this.setSnackbar}
             />
           )} />
         </div>
