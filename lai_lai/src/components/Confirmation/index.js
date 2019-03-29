@@ -1,5 +1,6 @@
 import React from 'react'
 import queryString from 'query-string'
+import Lottie from 'react-lottie';
 
 import Button from '../../common/Button'
 import LoadingOverlay from '../../common/LoadingOverlay'
@@ -15,6 +16,8 @@ class Confirmation extends React.Component {
       name: '',
       hasAnswered: false,
       isLoading: false,
+      isStopped: false,
+      isPaused: false,
     }
     this.onPress=this.onPress.bind(this)
   }
@@ -49,7 +52,21 @@ class Confirmation extends React.Component {
       return (
         <div className="confirmation--mainWrapper">
           <div className="confirmation-content">
-            <img src='/img/graphic_cross_sad@3x.png' className="confirmation-content-graphic" />
+            <div className="confirmation-content-graphic">
+              <Lottie
+                options={
+                  {
+                    loop: true,
+                    autoplay: true,
+                    animationData: require('./animation_sad_cross.json'),
+                    rendererSettings: {
+                      preserveAspectRatio: 'xMidYMid slice'
+                    }
+                  }
+                }
+                isStopped={this.state.isStopped}
+                isPaused={this.state.isPaused}/>
+            </div>
             <div className="confirmation-content-message">
               <div className="confirmation-content-message-text">
                 Hai <span style={{fontWeight: '700', color: '#ff8000'}}>{name}</span>, will you be joining us for the next bible study dated above?
@@ -81,7 +98,21 @@ class Confirmation extends React.Component {
       return (
         <div className="confirmation--mainWrapper">
           <div className="confirmation-content">
-            <img src='/img/graphic_cross_happy@3x.png' className="confirmation-content-graphic" />
+            <div className="confirmation-content-graphic">
+              <Lottie
+                options={
+                  {
+                    loop: true,
+                    autoplay: true,
+                    animationData: require('./animation_happy_cross.json'),
+                    rendererSettings: {
+                      preserveAspectRatio: 'xMidYMid slice'
+                    }
+                  }
+                }
+                isStopped={this.state.isStopped}
+                isPaused={this.state.isPaused}/>
+            </div>
             <div className="confirmation-content-message">
               <div className="confirmation-content-message-text done">
                 Thanks! Your attendance has been saved!

@@ -48,7 +48,8 @@
   height: 50%;
   width: 100%;
   margin-top: 10%;
-  object-fit: contain;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .confirmation-content-message {
