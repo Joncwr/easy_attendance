@@ -4,6 +4,7 @@ import axios from 'axios'
 import FloatingButton from '../../common/FloatingButton'
 import AttendanceList from './AttendanceList'
 import AttendeesApi from '../../services/api/attendees'
+import MessageApi from '../../services/api/messaging'
 
 import './index.css';
 
@@ -94,15 +95,16 @@ class Home extends Component {
   }
 
   onSend() {
-    axios.post('http://localhost:3001/whatsapp', {
-      attendees: this.state.attendeesData
+    MessageApi.sendBroadcastMessage(this.state.attendeesData)
+    .then(res => {
+      console.log(res);
+      this.props.setSnackbar('show', {
+        text: "Message broadcasted."
+      })
     })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Could'nt broadcast message."
+    }))
   }
 
   changeScreen(screen) {
