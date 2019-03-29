@@ -7,26 +7,26 @@ class DeleteAttendeeModal extends React.Component {
     super()
 
     this.state = {
-      name: '',
-      number: '',
     }
 
     this.onConfirm=this.onConfirm.bind(this)
   }
 
   onConfirm() {
-    this.props.modalProps.function(this.props.modalProps.index)
+    this.props.modalProps.function(this.props.modalProps.value)
     this.props.setModal('hide')
   }
 
   render() {
     let header
+    let style
     if (this.props.modalProps) {
-      header = this.props.modalProps.text
+      if (this.props.modalProps.text) header = this.props.modalProps.text
+      if (this.props.modalProps.style) style = this.props.modalProps.style
     }
     return (
       <div className="confirmationModal">
-        <div className="confirmationModal-header">
+        <div className="confirmationModal-header" style={style}>
           {header}
         </div>
         <div className="confirmationModal-actions">

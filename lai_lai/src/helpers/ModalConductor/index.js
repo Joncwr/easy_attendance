@@ -2,7 +2,7 @@ import React from 'react'
 
 import AddAttendeeModal from '../../common/Modals/AddAttendeeModal'
 import ChangeDateModal from '../../common/Modals/ChangeDateModal'
-import DeleteAttendeeModal from '../../common/Modals/DeleteAttendeeModal'
+import ConfirmationModal from '../../common/Modals/ConfirmationModal'
 
 import './index.css'
 
@@ -21,8 +21,8 @@ class ModalComponent extends React.Component {
                  setModal={this.props.setModal}
               />
 
-      case "DeleteAttendeeModal":
-        return <DeleteAttendeeModal
+            case "ConfirmationModal":
+        return <ConfirmationModal
                   modalProps={this.props.modalProps}
                   setModal={this.props.setModal}
                />
@@ -39,7 +39,7 @@ class ModalComponent extends React.Component {
       return (
         <div className="modal">
           <div className="modal-overlay" onClick={() => this.props.setModal('hide')}/>
-          <div className="modal-container" onMouseDown={e => e.stopPropagation()}>
+          <div className="modal-container defaultModal" onMouseDown={e => e.stopPropagation()}>
             {this.renderChildren(modalName)}
           </div>
         </div>

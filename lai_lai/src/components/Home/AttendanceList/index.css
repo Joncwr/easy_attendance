@@ -36,6 +36,19 @@
   font-weight: 600;
 }
 
+.attendanceList-contact-action {
+  width: 50px;
+  height: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+.attendanceList-contact-action-icon {
+  height: 100%;
+  width: 100%;
+	background: url('/img/icon_send_link@3x.png') no-repeat center center/ contain;
+}
+
 .attendanceList-stats {
   height: 100px;
   display: flex;

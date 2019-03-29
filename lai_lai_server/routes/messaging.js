@@ -37,4 +37,22 @@ router.post('/broadcast', (req, res) => {
   })
 });
 
+router.post('/single', (req, res) => {
+  let { name, number } = req.body
+  let formattedName = name.replace(/ /g, '%20')
+  client.messages
+    .create({
+       body: `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?name=${formattedName} Hi! Please click on the link to confirm your attendance for the upcoming bible study!`,
+       from: 'whatsapp:+14155238886',
+       to: `whatsapp:${number}`
+     })
+    .then(message => {
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      res.sendStatus(400)
+    })
+    .done();
+});
+
 module.exports = router

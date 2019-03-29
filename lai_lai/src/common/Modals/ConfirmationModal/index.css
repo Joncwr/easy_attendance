@@ -9,6 +9,8 @@
 
 .confirmationModal-header {
   margin-top: 30px;
+  padding: 0 10px;
+  text-align: center;
   font-size: 2em;
   font-weight: 700;
   font-family: Fjalla One;
@@ -36,11 +38,11 @@
 }
 
 .confirmationModal-actions-confirm {
-  background-color: #ccffcc;
-  border: 5px solid #80ff80;
+  background-color: #e6ffe6;
+  border: 5px solid #4feb8b;
 }
 
 .confirmationModal-actions-decline {
-  background-color: #ffcccc;
+  background-color: #ffe6e6;
   border: 5px solid #ff8080;
 }

@@ -73,11 +73,11 @@ class Home extends Component {
   showOnDeleteModal(index) {
     let onDeleteDict = {
       text: 'Delete?',
-      index: index,
+      value: index,
       function: this.onDelete,
     }
 
-    this.props.setModal('show', 'DeleteAttendeeModal', onDeleteDict)
+    this.props.setModal('show', 'ConfirmationModal', onDeleteDict)
   }
 
   onDelete(index) {
@@ -126,11 +126,9 @@ class Home extends Component {
             <div className="home-attendees-headers">
               <div className="home-attendees-headers-name">Name</div>
               <div className="home-attendees-headers-number">Contact Number</div>
+              <div className="home-attendees-headers-number-add" onClick={this.addAttendee} />
             </div>
             {this.renderAttendees()}
-            <FloatingButton
-              function={this.addAttendee}
-            />
           </div>
           <div className="home-sendButton" onClick={this.onSend}>
             Send
@@ -144,6 +142,9 @@ class Home extends Component {
             <div className="home-attendance">
               <div className="home-attendance-list">
                 <AttendanceList
+                  setModal={this.props.setModal}
+                  attendeesData={this.state.attendeesData}
+                  setSnackbar={this.props.setSnackbar}
                 />
               </div>
             </div>

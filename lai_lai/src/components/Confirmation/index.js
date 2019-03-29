@@ -37,6 +37,7 @@ class Confirmation extends React.Component {
       this.props.setSnackbar('show', {
         text: "Attendance submitted."
       })
+      this.setState({hasAnswered: true})
     })
     .catch(err => this.props.setSnackbar('show', {
       text: "Could'nt submit attendance."
@@ -69,7 +70,7 @@ class Confirmation extends React.Component {
               name='Confirm'
               style={{
                 backgroundColor: '#e6ffe6',
-                borderColor: '#66ff66'
+                borderColor: '#4feb8b'
               }}
             />
           </div>
@@ -83,7 +84,7 @@ class Confirmation extends React.Component {
             <img src='/img/graphic_cross_happy@3x.png' className="confirmation-content-graphic" />
             <div className="confirmation-content-message">
               <div className="confirmation-content-message-text done">
-                Thanks! Your request has been saved!
+                Thanks! Your attendance has been saved!
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ import ModalConductor from './helpers/ModalConductor'
 import Snackbar from './helpers/Snackbar'
 import LoadingOverlay from './common/LoadingOverlay'
 import axios from './services/axios'
+import DateApi from './services/api/date'
 
 import './App.css';
 
@@ -28,6 +29,7 @@ class App extends Component {
       isLoading: false,
     }
     this.setModal=this.setModal.bind(this)
+    this.getDate=this.getDate.bind(this)
     this.setSnackbar=this.setSnackbar.bind(this)
     this.changeDate=this.changeDate.bind(this)
     this.setLoadingOverlay=this.setLoadingOverlay.bind(this)
@@ -35,8 +37,15 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let date = JSON.parse(localStorage.getItem('period'))
-    this.setState({date: date})
+    this.getDate()
+  }
+
+  getDate() {
+    DateApi.getDate()
+    .then(res => {
+      this.setState({date: res[0].date})
+    })
+    .catch(err => console.log(err))
   }
 
   setLoadingOverlay(state) {
@@ -44,9 +53,20 @@ class App extends Component {
   }
 
   changeDate(date) {
-    this.setState({date: date},() => {
-      localStorage.setItem('period', JSON.stringify(date))
+    let dateDict = {
+      date: this.state.date,
+      newDate: date
+    }
+    DateApi.updateDate(dateDict)
+    .then(res => {
+      this.setSnackbar('show', {
+        text: "Date changed."
+      })
+      this.getDate()
     })
+    .catch(err => this.setSnackbar('show', {
+      text: "Could'nt change date."
+    }))
   }
 
   setModal(modalStatus, modalName, modalProps) {

@@ -10,5 +10,28 @@
 }
 
 input:focus, textarea:focus, select:focus{
-        outline: none;
-    }
+  outline: none;
+}
+
+.defaultModal {
+  -webkit-animation: fadein .4s ease-out; /* Safari, Chrome and Opera > 12.1 */
+   -moz-animation: fadein .4s ease-out; /* Firefox < 16 */
+    -ms-animation: fadein .4s ease-out; /* Internet Explorer */
+     -o-animation: fadein .4s ease-out; /* Opera < 12.1 */
+        animation: fadein .4s ease-out;
+}
+
+@keyframes fadein {
+  0% {
+    transform: translateY(35px);
+    opacity: 0;
+  }
+  85% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}

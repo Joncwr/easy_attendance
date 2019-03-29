@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const Attendees = require('./routes/attendees')
 const Messaging = require('./routes/messaging')
+const Date = require('./routes/date')
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -20,5 +21,6 @@ app.get('/online', (req, res) => {
 
 app.use('/attendees', Attendees)
 app.use('/messaging', Messaging)
+app.use('/date', Date)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}!!!!`));

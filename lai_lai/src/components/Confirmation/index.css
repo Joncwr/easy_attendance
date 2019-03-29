@@ -47,6 +47,7 @@
 .confirmation-content-graphic{
   height: 50%;
   width: 100%;
+  margin-top: 10%;
   object-fit: contain;
 }
 
