@@ -7,19 +7,33 @@ const client = require('twilio')(accountSid, authToken);
 
 router.post('/broadcast', (req, res) => {
   let attendees = req.body
+  let result = []
+  let test
+  let counter = 0
   attendees.forEach(data => {
+    counter++
+    let { name } = data
+    let formattedName = name.replace(/ /g, '%20')
     client.messages
       .create({
-         body: `Hi! Please click on the link to confirm your attendance for the upcoming bible study! => http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?name=${data.name}`,
+         body: `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?name=${formattedName} Hi! Please click on the link to confirm your attendance for the upcoming bible study!`,
          from: 'whatsapp:+14155238886',
          to: `whatsapp:${data.number}`
        })
       .then(message => {
-        console.log(message)
-        res.sendStatus(200)
+        result.push({
+          name: data.name,
+          message: message
+        })
+        test = message
+        // console.log(message)
       })
-      .catch(err => res.sendStatus(400))
+      .catch(err => {
+        // console.log(err)
+        res.sendStatus(400)
+      })
       .done();
+    if (counter === attendees.length) res.send(result)
   })
 });
 
