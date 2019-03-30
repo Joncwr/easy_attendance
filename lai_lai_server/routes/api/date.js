@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const Date = require('../models/date')
+const Date = require('../../models/date')
 
 router.get('/getDate', (req, res) => {
   return Date

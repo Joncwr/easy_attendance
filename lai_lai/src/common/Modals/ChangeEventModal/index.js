@@ -4,7 +4,7 @@ import Input from '../../../common/Input'
 
 import './index.css'
 
-class ChangeDateModal extends React.Component {
+class ChangeEventModal extends React.Component {
   constructor(){
     super()
 
@@ -35,7 +35,7 @@ class ChangeDateModal extends React.Component {
         <div className="addAttendeeModal-input">
           <div className="addAttendeeModal-input-name">
             <div className="addAttendeeModal-input-name-header">
-              Date
+              Event
             </div>
             <Input
               handleChange={this.handleChange}
@@ -52,4 +52,4 @@ class ChangeDateModal extends React.Component {
   }
 }
 
-export default ChangeDateModal
+export default ChangeEventModal

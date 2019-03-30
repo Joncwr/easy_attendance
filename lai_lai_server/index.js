@@ -1,13 +1,14 @@
 require('dotenv').config()
-
-const Attendees = require('./routes/attendees')
-const Messaging = require('./routes/messaging')
-const Date = require('./routes/date')
+const Api = require('./routes/api')
+const Admin = require('./routes/admin')
 
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const app = express();
+const passport    = require('passport');
+require('./auth/passport');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors())
@@ -19,8 +20,7 @@ app.get('/online', (req, res) => {
   res.send('online')
 });
 
-app.use('/attendees', Attendees)
-app.use('/messaging', Messaging)
-app.use('/date', Date)
+app.use('/api', passport.authenticate('jwt', {session: false}), Api)
+app.use('/admin', Admin)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}!!!!`));

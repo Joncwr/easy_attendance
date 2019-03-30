@@ -1,9 +1,9 @@
-const axios = require('../axios')
+const jwtMiddleware = require('../jwtMiddleware')
 
 module.exports = {
   getDate: () => {
     return new Promise((resolve, reject) => {
-      axios.axiosApi('get', 'date/getDate')
+      jwtMiddleware.jwtFetch('get', 'api/date/getDate')
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -13,7 +13,7 @@ module.exports = {
   },
   updateDate: (dateDict) => {
     return new Promise((resolve, reject) => {
-      axios.axiosApi('put', 'date/updateDate', dateDict)
+      jwtMiddleware.jwtFetch('put', 'api/date/updateDate', dateDict)
       .then(res => {
         if (res) resolve(res)
         else reject(res)

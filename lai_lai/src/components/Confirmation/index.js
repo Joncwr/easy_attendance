@@ -79,7 +79,9 @@ class Confirmation extends React.Component {
               name='Decline'
               style={{
                 backgroundColor: '#ffd1b3',
-                borderColor: '#ff8533'
+                borderColor: '#ff8533',
+                margin: '0 10px',
+                flex: 1,
               }}
             />
             <Button
@@ -87,7 +89,9 @@ class Confirmation extends React.Component {
               name='Confirm'
               style={{
                 backgroundColor: '#e6ffe6',
-                borderColor: '#4feb8b'
+                borderColor: '#4feb8b',
+                margin: '0 10px',
+                flex: 1,
               }}
             />
           </div>

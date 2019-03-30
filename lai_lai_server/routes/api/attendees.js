@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const Attendees = require('../models/attendees')
+const Attendees = require('../../models/attendees')
 
 router.get('/test', (req, res) => {
   res.send('hi')

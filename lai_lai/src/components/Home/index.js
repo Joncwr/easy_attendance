@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios'
 
-import FloatingButton from '../../common/FloatingButton'
 import AttendanceList from './AttendanceList'
 import AttendeesApi from '../../services/api/attendees'
 import MessageApi from '../../services/api/messaging'
+import UsersApi from '../../services/api/users'
+import EventsApi from '../../services/api/events'
 
 import './index.css';
 
@@ -15,6 +15,7 @@ class Home extends Component {
     this.state = {
       attendeesData: [],
       screen: 'home',
+      user: {},
     }
     this.addAttendee=this.addAttendee.bind(this)
     this.getAttendees=this.getAttendees.bind(this)
@@ -22,6 +23,8 @@ class Home extends Component {
     this.onDelete=this.onDelete.bind(this)
     this.onSend=this.onSend.bind(this)
     this.changeScreen=this.changeScreen.bind(this)
+    this.setEvent=this.setEvent.bind(this)
+    this.getUser=this.getUser.bind(this)
   }
 
   addAttendee() {
@@ -43,7 +46,24 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    this.getUser()
     this.getAttendees()
+  }
+
+  getUser() {
+    let { userId } = JSON.parse(localStorage.getItem('user'))
+    UsersApi.getUser(userId)
+    .then(([res]) => {
+      this.setState({user: res},() => {
+        let [groups] = res.groups
+        if (groups.events) {
+          this.props.setDate(groups.events.name)
+        }
+      })
+    })
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Please refresh the page."
+    }))
   }
 
   getAttendees() {
@@ -111,14 +131,60 @@ class Home extends Component {
     this.setState({screen: screen})
   }
 
+  setEvent(event) {
+    if (event !== '') {
+      let user = Object.assign({}, this.state.user)
+      let [group] = user.groups
+      if (group.events) {
+        let updateEventDict = {
+          current_event: group.current_event,
+          event_name: event
+        }
+        EventsApi.updateEvent(updateEventDict)
+        .then(res => {
+          this.props.setDate(event)
+          this.props.setSnackbar('show', {
+            text: "Event updated."
+          })
+          this.getUser()
+        })
+        .catch(err => this.props.setSnackbar('show', {
+          text: "Could'nt update event."
+        }))
+      }
+      else {
+        let createEventsDict = {
+          group_id: group.id,
+          event_name: event
+        }
+        EventsApi.createEvent(createEventsDict)
+        .then(res => {
+          this.props.setDate(event)
+          this.props.setSnackbar('show', {
+            text: "Event created."
+          })
+          this.getUser()
+        })
+        .catch(err => this.props.setSnackbar('show', {
+          text: "Could'nt create event."
+        }))
+      }
+    }
+    else {
+      this.props.setSnackbar('show', {
+        text: "Error: Blank event name."
+      })
+    }
+  }
+
   renderScreen() {
     let { screen } = this.state
-    let date = this.props.date || 'Set Date'
+    let date = this.props.date || 'Create New Event'
     if (screen === 'home') {
       return (
         <div className="home--mainWrapper">
           <div className="home-period">
-            <div className="home-period-text" onClick={() => this.props.setModal('show', 'ChangeDateModal', this.props.changeDate)}>
+            <div className="home-period-text" onClick={() => this.props.setModal('show', 'ChangeEventModal', this.setEvent)}>
               {date}
             </div>
           </div>
@@ -137,19 +203,19 @@ class Home extends Component {
       )
     }
     else if (screen === 'attendance') {
-        return (
-          <div className="home--mainWrapper">
-            <div className="home-attendance">
-              <div className="home-attendance-list">
-                <AttendanceList
-                  setModal={this.props.setModal}
-                  attendeesData={this.state.attendeesData}
-                  setSnackbar={this.props.setSnackbar}
-                />
-              </div>
+      return (
+        <div className="home--mainWrapper">
+          <div className="home-attendance">
+            <div className="home-attendance-list">
+              <AttendanceList
+                setModal={this.props.setModal}
+                attendeesData={this.state.attendeesData}
+                setSnackbar={this.props.setSnackbar}
+              />
             </div>
           </div>
-        )
+        </div>
+      )
     }
   }
 

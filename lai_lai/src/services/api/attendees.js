@@ -1,9 +1,9 @@
-const axios = require('../axios')
+const jwtMiddleware = require('../jwtMiddleware')
 
 module.exports = {
   getAttendees: () => {
     return new Promise((resolve, reject) => {
-      axios.axiosApi('get', 'attendees/getAttendees')
+      jwtMiddleware.jwtFetch('get', 'api/attendees/getAttendees')
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -13,7 +13,7 @@ module.exports = {
   },
   addAttendee: (user) => {
     return new Promise((resolve, reject) => {
-      axios.axiosApi('post', 'attendees/addAttendee', user)
+      jwtMiddleware.jwtFetch('post', 'api/attendees/addAttendee', user)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -23,7 +23,7 @@ module.exports = {
   },
   deleteAttendee: (name) => {
     return new Promise((resolve, reject) => {
-      axios.axiosApi('delete', 'attendees/deleteAttendee/' + name)
+      jwtMiddleware.jwtFetch('delete', 'api/attendees/deleteAttendee/' + name)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -33,7 +33,7 @@ module.exports = {
   },
   attendance: (attendance) => {
     return new Promise((resolve, reject) => {
-      axios.axiosApi('put', 'attendees/attendance', attendance)
+      jwtMiddleware.jwtFetch('put', 'api/attendees/attendance', attendance)
       .then(res => {
         if (res) resolve(res)
         else reject(res)

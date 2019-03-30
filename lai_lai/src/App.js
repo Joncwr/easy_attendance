@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 import Home from './components/Home'
+import Login from './components/Login'
 import Confirmation from './components/Confirmation'
+import Registration from './components/Registration'
 import ModalConductor from './helpers/ModalConductor'
 import Snackbar from './helpers/Snackbar'
 import LoadingOverlay from './common/LoadingOverlay'
-import axios from './services/axios'
+import jwtMiddleware from './services/jwtMiddleware'
 import DateApi from './services/api/date'
 
 import './App.css';
@@ -29,44 +31,21 @@ class App extends Component {
       isLoading: false,
     }
     this.setModal=this.setModal.bind(this)
-    this.getDate=this.getDate.bind(this)
     this.setSnackbar=this.setSnackbar.bind(this)
-    this.changeDate=this.changeDate.bind(this)
+    this.setDate=this.setDate.bind(this)
     this.setLoadingOverlay=this.setLoadingOverlay.bind(this)
-    axios.setLoadingOverlay(this.setLoadingOverlay)
+    jwtMiddleware.setLoadingOverlay(this.setLoadingOverlay)
   }
 
   componentDidMount() {
-    this.getDate()
   }
 
-  getDate() {
-    DateApi.getDate()
-    .then(res => {
-      this.setState({date: res[0].date})
-    })
-    .catch(err => console.log(err))
+  setDate(date) {
+    this.setState({date: date})
   }
 
   setLoadingOverlay(state) {
     this.setState({isLoading: state})
-  }
-
-  changeDate(date) {
-    let dateDict = {
-      date: this.state.date,
-      newDate: date
-    }
-    DateApi.updateDate(dateDict)
-    .then(res => {
-      this.setSnackbar('show', {
-        text: "Date changed."
-      })
-      this.getDate()
-    })
-    .catch(err => this.setSnackbar('show', {
-      text: "Could'nt change date."
-    }))
   }
 
   setModal(modalStatus, modalName, modalProps) {
@@ -121,18 +100,31 @@ class App extends Component {
             snackbarStatus={this.state.snackbarStatus}
             snackbarProps={this.state.snackbarProps}
           />
-          <Route exact path="/home" render={() => (
-            <Home
-              date={this.state.date}
-              changeDate={this.changeDate}
+          <Route exact path="/" render={() => (
+            <Login
               setModal={this.setModal}
               setSnackbar={this.setSnackbar}
               history={history}
             />
           )} />
-        <Route exact path="/confirmation" render={() => (
+          <Route exact path="/home" render={() => (
+            <Home
+              date={this.state.date}
+              setDate={this.setDate}
+              setModal={this.setModal}
+              setSnackbar={this.setSnackbar}
+              history={history}
+            />
+          )} />
+          <Route exact path="/confirmation" render={() => (
             <Confirmation
               date={this.state.date}
+              history={history}
+              setSnackbar={this.setSnackbar}
+            />
+          )} />
+        <Route exact path="/registration" render={() => (
+            <Registration
               history={history}
               setSnackbar={this.setSnackbar}
             />

@@ -11,6 +11,8 @@ class Input extends React.Component {
           style={this.props.style}
           name={this.props.name}
           value={this.props.state}
+          type={this.props.type}
+          placeholder={this.props.placeholder}
           onChange={this.props.handleChange}
         />
       </div>
