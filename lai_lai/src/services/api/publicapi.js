@@ -3,7 +3,7 @@ let axios = require('axios')
 module.exports = {
   getEvent: (eventId) => {
     return new Promise((resolve, reject) => {
-      axios.get('get', 'publicapi/getEvent/' + eventId)
+      axios.get('publicapi/getEvent/' + eventId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -13,7 +13,7 @@ module.exports = {
   },
   getAttendee: (attendeeId) => {
     return new Promise((resolve, reject) => {
-      axios.get('get', 'publicapi/getAttendee/' + attendeeId)
+      axios.get('publicapi/getAttendee/' + attendeeId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -23,7 +23,7 @@ module.exports = {
   },
   postAttendance: (attendanceDict) => {
     return new Promise((resolve, reject) => {
-      axios.post('post', 'publicapi/attendance', attendanceDict)
+      axios.post('publicapi/attendance', attendanceDict)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
