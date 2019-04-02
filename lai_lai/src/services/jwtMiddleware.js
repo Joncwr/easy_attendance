@@ -34,7 +34,6 @@ module.exports = {
   },
   publicFetch: (method, endpoint, json) => {
     return new Promise((resolve, reject) => {
-      let { token } = JSON.parse(localStorage.getItem('user'))
       loadingOverlay(true)
       axios({
         url: process.env.REACT_APP_SERVER + endpoint,
