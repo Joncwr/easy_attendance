@@ -60,7 +60,6 @@ class Home extends Component {
   componentDidMount() {
     this.getUser()
     this.getAttendees()
-    this.props.setModal('show', 'ChangeEventModal', this.setEvent)
   }
 
   getUser() {
