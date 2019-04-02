@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router()
 
 const Attendance = require('../../models/attendance')
-const accountSid = 'AC1f07119bcde145d72ae5fadc23503ec6';
-const authToken = 'f6dfb3d44f606fa2462519d5b9a38030';
+const accountSid = 'AC5af195c67fd6e784c03f34e51eb7dd3b';
+const authToken = '33c1b87b673af4cb521989e6b27e42e2';
 const client = require('twilio')(accountSid, authToken);
 
 router.post('/broadcast', (req, res) => {
