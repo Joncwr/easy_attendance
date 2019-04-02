@@ -1,9 +1,9 @@
 const jwtMiddleware = require('../jwtMiddleware')
 
 module.exports = {
-  getAttendees: () => {
+  getEvent: (eventId) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('get', 'api/attendees/getAttendees')
+      jwtMiddleware.jwtFetch('get', 'publicapi/getEvent/' + eventId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -11,9 +11,9 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
-  addAttendee: (user) => {
+  getAttendee: (attendeeId) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('post', 'api/attendees/addAttendee', user)
+      jwtMiddleware.jwtFetch('get', 'publicapi/getAttendee/' + attendeeId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -21,9 +21,9 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
-  deleteAttendee: (id) => {
+  postAttendance: (attendanceDict) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('delete', 'api/attendees/deleteAttendee/' + id)
+      jwtMiddleware.jwtFetch('post', 'publicapi/attendance', attendanceDict)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -31,14 +31,4 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
-  attendance: (attendance) => {
-    return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('put', 'api/attendees/attendance', attendance)
-      .then(res => {
-        if (res) resolve(res)
-        else reject(res)
-      })
-      .catch(err => reject(err))
-    })
-  }
 }

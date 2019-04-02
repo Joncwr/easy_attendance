@@ -1,4 +1,5 @@
-.addAttendeeModal {
+.addAttendeeModal,
+.changeEventModal {
   width: 350px;
   display: flex;
   flex-direction: column;
@@ -7,9 +8,11 @@
   background-color: #fff2e6;
 }
 
-.addAttendeeModal-input {
+.addAttendeeModal-input,
+.changeEventModal-input {
 }
 
+.changeEventModal-input-name,
 .addAttendeeModal-input-name,
 .addAttendeeModal-input-number {
   display: flex;
@@ -19,6 +22,7 @@
   margin: 40px 20px;
 }
 
+.changeEventModal-input-name-header,
 .addAttendeeModal-input-number-header,
 .addAttendeeModal-input-name-header {
   flex: 1;

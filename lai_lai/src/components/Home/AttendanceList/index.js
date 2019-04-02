@@ -1,7 +1,9 @@
 import React from 'react'
 
+import Button from '../../../common/Button'
 import AttendeesApi from '../../../services/api/attendees'
 import MessageApi from '../../../services/api/messaging'
+import AttendanceApi from '../../../services/api/attendance'
 
 import './index.css'
 
@@ -35,14 +37,37 @@ class AttendanceList extends React.Component {
     this.props.setModal('show', 'ConfirmationModal', manualSendDict)
   }
 
+  onSave() {
+    let saveAttendanceDict = {
+      text: 'Save attendance?',
+      value: this.state.attendees,
+      function: this.saveAttendance.bind(this)
+    }
+
+    this.props.setModal('show', 'ConfirmationModal', saveAttendanceDict)
+  }
+
+  saveAttendance(attendanceDict) {
+    let saveAttendanceDict = {
+      group_id: this.props.currentGroup.id,
+      event_id: this.props.currentGroup.current_event,
+      attendanceDict
+    }
+    console.log(saveAttendanceDict);
+  }
+
   manualSendLink(name) {
     let attendeesData = Object.assign([], this.props.attendeesData)
     let userDict
     attendeesData.forEach(data => {
+      let event_id
+      if (this.props.currentGroup) event_id = this.props.currentGroup.current_event
       if (data.name === name) {
         userDict = {
           name: data.name,
-          number: data.number
+          number: data.number,
+          id: data.id,
+          event_id: event_id
         }
       }
     })
@@ -60,17 +85,40 @@ class AttendanceList extends React.Component {
 
   getAttendees() {
     AttendeesApi.getAttendees()
-    .then(res => {
-      let confirmed = 0
-      let declined = 0
-      let uncertain = 0
+    .then(attendees => {
+      if (this.props.currentGroup) {
+        AttendanceApi.getAttendance(this.props.currentGroup.current_event)
+        .then(attendance => {
+          let confirmed = 0
+          let declined = 0
+          let uncertain = 0
 
-      res.forEach(data => {
-        if (data.attending) confirmed++
-        else if (data.attending === null) uncertain++
-        else if (!data.attending) declined++
-      })
-      this.setState({attendees: res, confirmed: confirmed, declined: declined, uncertain: uncertain})
+          attendees.forEach(data => {
+            let status = 'blank'
+            attendance.forEach(attendance => {
+              if (data.id === attendance.attendee_id) {
+                if (attendance.status) {
+                  status = 'confirmed'
+                  confirmed ++
+                }
+                else if (!attendance.status) {
+                  status = 'declined'
+                  declined ++
+                }
+              }
+            })
+            if (status === 'blank') {
+              status = 'Have not answered.'
+              uncertain ++
+            }
+            data['status'] = status
+          })
+          this.setState({attendees: attendees, confirmed: confirmed, declined: declined, uncertain: uncertain})
+        })
+        .catch(err => this.props.setSnackbar('show', {
+          text: "Could'nt get attendance."
+        }))
+      }
     })
     .catch(err => console.log(err))
   }
@@ -78,18 +126,15 @@ class AttendanceList extends React.Component {
   renderAttendees() {
     let renderAttendees = []
     let attendeesArr = Object.assign([], this.state.attendees)
+
     attendeesArr.forEach((data,index) => {
-      let status
-      if (data.attending) status = 'confirmed'
-      else if (data.attending === null) status = 'Have not answered.'
-      else if (!data.attending) status = 'declined'
       renderAttendees.push(
         <div className="attendanceList-contact" key={index}>
           <div className="attendanceList-contact-name">
             {data.name}
           </div>
           <div className="attendanceList-contact-status">
-            {status}
+            {data.status}
           </div>
           <div className="attendanceList-contact-action" onClick={() => this.onPress(data.name)}>
             <div className="attendanceList-contact-action-icon" />

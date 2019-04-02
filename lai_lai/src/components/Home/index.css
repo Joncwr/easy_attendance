@@ -162,13 +162,9 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  border-top: 5px solid #ff8533;
-  border-bottom: 5px solid #ff8533;
-  margin: 10px 0 30px 0;
 }
 
 .home-attendance-list {
   flex: 1;
   display: flex;
-  background-color: #fff;
 }

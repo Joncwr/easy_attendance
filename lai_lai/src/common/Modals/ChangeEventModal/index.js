@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Input from '../../../common/Input'
+import Button from '../../../common/Button'
 
 import './index.css'
 
@@ -10,7 +11,6 @@ class ChangeEventModal extends React.Component {
 
     this.state = {
       name: '',
-      number: '',
     }
 
     this.handleChange=this.handleChange.bind(this)
@@ -24,17 +24,17 @@ class ChangeEventModal extends React.Component {
     this.setState({[name]: value})
   }
 
-  onSubmit() {
-    this.props.modalProps(this.state.name, this.state.number)
+  onSubmit(method) {
+    this.props.modalProps(method, this.state.name)
     this.props.setModal('hide')
   }
 
   render() {
     return (
-      <div className="addAttendeeModal">
-        <div className="addAttendeeModal-input">
-          <div className="addAttendeeModal-input-name">
-            <div className="addAttendeeModal-input-name-header">
+      <div className="changeEventModal">
+        <div className="changeEventModal-input">
+          <div className="changeEventModal-input-name">
+            <div className="changeEventModal-input-name-header">
               Event
             </div>
             <Input
@@ -44,8 +44,29 @@ class ChangeEventModal extends React.Component {
             />
           </div>
         </div>
-        <div className="addAttendeeModal-button" onClick={this.onSubmit}>
-          Change
+        <div className="changeEventModal-actions">
+          <Button
+            onClick={() => this.onSubmit('create')}
+            name='Create'
+            style={{
+              backgroundColor: '#ccffee',
+              borderColor: '#33ffbb',
+              height: '50px',
+              flex: 1,
+              margin: '0 10px'
+            }}
+          />
+          <Button
+            onClick={() => this.onSubmit('update')}
+            name='Update'
+            style={{
+              backgroundColor: '#ffddcc',
+              borderColor: '#ff884d',
+              height: '50px',
+              flex: 1,
+              margin: '0 10px'
+            }}
+          />
         </div>
       </div>
     )

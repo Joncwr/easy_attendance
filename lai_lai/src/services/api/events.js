@@ -11,6 +11,7 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
+
   createEvent: (eventDict) => {
     return new Promise((resolve, reject) => {
       jwtMiddleware.jwtFetch('post', 'api/events/createEvent', eventDict)

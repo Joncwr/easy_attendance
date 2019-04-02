@@ -1,0 +1,7 @@
+.changeEventModal-actions {
+  display: flex;
+  width: 100%;
+  padding: 0 25px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}

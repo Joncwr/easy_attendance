@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 
 import Home from './components/Home'
@@ -107,7 +107,7 @@ class App extends Component {
               history={history}
             />
           )} />
-          <Route exact path="/home" render={() => (
+          <Route path="/home" render={() => (
             <Home
               date={this.state.date}
               setDate={this.setDate}
@@ -116,14 +116,13 @@ class App extends Component {
               history={history}
             />
           )} />
-          <Route exact path="/confirmation" render={() => (
+          <Route path="/confirmation" render={() => (
             <Confirmation
-              date={this.state.date}
               history={history}
               setSnackbar={this.setSnackbar}
             />
           )} />
-        <Route exact path="/registration" render={() => (
+          <Route path="/registration" render={() => (
             <Registration
               history={history}
               setSnackbar={this.setSnackbar}

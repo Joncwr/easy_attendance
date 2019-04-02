@@ -1,6 +1,7 @@
 require('dotenv').config()
 const Api = require('./routes/api')
 const Admin = require('./routes/admin')
+const Public = require('./routes/publicapi')
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -22,5 +23,6 @@ app.get('/online', (req, res) => {
 
 app.use('/api', passport.authenticate('jwt', {session: false}), Api)
 app.use('/admin', Admin)
+app.use('/publicapi', Public)
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}!!!!`));

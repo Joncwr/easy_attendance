@@ -16,6 +16,8 @@ class Home extends Component {
       attendeesData: [],
       screen: 'home',
       user: {},
+      groups: [],
+      currentGroup: {},
     }
     this.addAttendee=this.addAttendee.bind(this)
     this.getAttendees=this.getAttendees.bind(this)
@@ -32,22 +34,33 @@ class Home extends Component {
   }
 
   onAddAttendee(name, number) {
-    let user = { name, number }
-    AttendeesApi.addAttendee(user)
-    .then(res => {
-      this.props.setSnackbar('show', {
-        text: "User Added."
+    let groups = Object.assign([], this.state.groups)
+    // for now since there is only one group need to change next time when more implement more groups per users
+    if (groups.length > 0) {
+      let group_id = groups[0].id
+      let user = { name, number, group_id}
+      AttendeesApi.addAttendee(user)
+      .then(res => {
+        this.props.setSnackbar('show', {
+          text: "User Added."
+        })
+        this.getAttendees()
       })
-      this.getAttendees()
-    })
-    .catch(err => this.props.setSnackbar('show', {
-      text: "Could'nt add user."
-    }))
+      .catch(err => this.props.setSnackbar('show', {
+        text: "Could'nt add user."
+      }))
+    }
+    else {
+      this.props.setSnackbar('show', {
+        text: "Please refresh the page."
+      })
+    }
   }
 
   componentDidMount() {
     this.getUser()
     this.getAttendees()
+    this.props.setModal('show', 'ChangeEventModal', this.setEvent)
   }
 
   getUser() {
@@ -55,9 +68,12 @@ class Home extends Component {
     UsersApi.getUser(userId)
     .then(([res]) => {
       this.setState({user: res},() => {
-        let [groups] = res.groups
-        if (groups.events) {
-          this.props.setDate(groups.events.name)
+        if (res.groups.length > 0) {
+          this.setState({groups: res.groups, currentGroup: res.groups[0]})
+          let [groups] = res.groups
+          if (groups.events) {
+            this.props.setDate(groups.events.name)
+          }
         }
       })
     })
@@ -91,8 +107,9 @@ class Home extends Component {
   }
 
   showOnDeleteModal(index) {
+    let name = this.state.attendeesData[index].name
     let onDeleteDict = {
-      text: 'Delete?',
+      text: 'Delete ' + name + '?',
       value: index,
       function: this.onDelete,
     }
@@ -101,8 +118,8 @@ class Home extends Component {
   }
 
   onDelete(index) {
-    let name = this.state.attendeesData[index].name
-    AttendeesApi.deleteAttendee(name)
+    let id = this.state.attendeesData[index].id
+    AttendeesApi.deleteAttendee(id)
     .then(res => {
       this.props.setSnackbar('show', {
         text: "User deleted."
@@ -115,7 +132,27 @@ class Home extends Component {
   }
 
   onSend() {
-    MessageApi.sendBroadcastMessage(this.state.attendeesData)
+    console.log(this.state.attendeesData);
+    if (this.state.attendeesData.length > 0) {
+      let messageDict = {
+        text: 'Broadcast invitation?',
+        value: {
+          attendeesData: this.state.attendeesData,
+          event_id: this.state.currentGroup.current_event,
+        },
+        function: this.broadcastMessageApi.bind(this)
+      }
+      this.props.setModal('show', 'ConfirmationModal', messageDict)
+    }
+    else {
+      this.props.setSnackbar('show', {
+        text: "No attendees present."
+      })
+    }
+  }
+
+  broadcastMessageApi(messageDict) {
+    MessageApi.sendBroadcastMessage(messageDict)
     .then(res => {
       console.log(res);
       this.props.setSnackbar('show', {
@@ -131,11 +168,12 @@ class Home extends Component {
     this.setState({screen: screen})
   }
 
-  setEvent(event) {
+  setEvent(method, event) {
     if (event !== '') {
+      console.log(method, event);
       let user = Object.assign({}, this.state.user)
       let [group] = user.groups
-      if (group.events) {
+      if (group.events && method === 'update') {
         let updateEventDict = {
           current_event: group.current_event,
           event_name: event
@@ -208,6 +246,7 @@ class Home extends Component {
           <div className="home-attendance">
             <div className="home-attendance-list">
               <AttendanceList
+                currentGroup={this.state.currentGroup}
                 setModal={this.props.setModal}
                 attendeesData={this.state.attendeesData}
                 setSnackbar={this.props.setSnackbar}

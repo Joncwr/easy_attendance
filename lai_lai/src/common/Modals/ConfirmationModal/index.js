@@ -30,11 +30,11 @@ class DeleteAttendeeModal extends React.Component {
           {header}
         </div>
         <div className="confirmationModal-actions">
-          <div className="confirmationModal-actions-confirm" onClick={this.onConfirm}>
-            Confirm
-          </div>
           <div className="confirmationModal-actions-decline" onClick={() => this.props.setModal('hide')}>
             Decline
+          </div>
+          <div className="confirmationModal-actions-confirm" onClick={this.onConfirm}>
+            Confirm
           </div>
         </div>
       </div>

@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 
 const Attendees = require('../../models/attendees')
+const Attendance = require('../../models/attendance')
+const Attendees_Groups = require('../../models/attendees_groups')
 
 router.get('/test', (req, res) => {
   res.send('hi')
@@ -16,39 +18,44 @@ router.get('/getAttendees', (req, res) => {
 });
 
 router.post('/addAttendee', (req, res) => {
-  console.log(req.body);
+  let { name, number, group_id } = req.body
   return Attendees
     .query()
-    .insert(req.body)
-    .then(table =>{
-      res.sendStatus(200)
+    .insert({name, number})
+    .then(attendee => {
+      return Attendees_Groups
+      .query()
+      .insert({attendee_id: attendee.id, group_id: group_id})
+      .then(attendees_groups => {
+        res.send(200)
+      })
+      .catch(err => res.sendStatus(400))
     })
     .catch(err => res.sendStatus(400))
 });
 
-router.delete('/deleteAttendee/:name', (req, res) => {
-  const { name } = req.params
-  return Attendees
+router.delete('/deleteAttendee/:id', (req, res) => {
+  const { id } = req.params
+  return Attendees_Groups
+  .query()
+  .where({attendee_id: id})
+  .del()
+  .then(attendees_groups => {
+    return Attendance
     .query()
-    .where({name})
-    .delete()
-    .then(table => {
-      res.sendStatus(200)
+    .where({attendee_id: id})
+    .del()
+    .then(attendance => {
+      return Attendees
+      .query()
+      .where({id})
+      .delete()
+      .then(table => {
+        res.sendStatus(200)
+      })
     })
-    .catch(err => res.sendStatus(400))
-});
-
-router.put('/attendance', (req, res) => {
-  let { name, attendance } = req.body
-  return Attendees
-    .query()
-    .where({name})
-    .patch({ attending: attendance })
-    .then(table => {
-      console.log(table);
-      res.sendStatus(200)
-    })
-    .catch(err => res.sendStatus(400))
+  })
+  .catch(err => res.sendStatus(400))
 });
 
 module.exports = router
