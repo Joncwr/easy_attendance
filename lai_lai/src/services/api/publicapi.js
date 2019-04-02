@@ -1,9 +1,9 @@
-const jwtMiddleware = require('../jwtMiddleware')
+let axios = require('axios')
 
 module.exports = {
   getEvent: (eventId) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('get', 'publicapi/getEvent/' + eventId)
+      axios.get('get', 'publicapi/getEvent/' + eventId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -13,7 +13,7 @@ module.exports = {
   },
   getAttendee: (attendeeId) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('get', 'publicapi/getAttendee/' + attendeeId)
+      axios.get('get', 'publicapi/getAttendee/' + attendeeId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -23,7 +23,7 @@ module.exports = {
   },
   postAttendance: (attendanceDict) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('post', 'publicapi/attendance', attendanceDict)
+      axios.post('post', 'publicapi/attendance', attendanceDict)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
