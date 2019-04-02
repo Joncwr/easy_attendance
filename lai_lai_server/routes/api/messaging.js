@@ -8,6 +8,7 @@ const client = require('twilio')(accountSid, authToken);
 
 router.post('/broadcast', (req, res) => {
   let { attendeesData, event_id } = req.body
+  console.log(attendeesData, event_id);
   let attendees = req.body
   let result = []
   let test
