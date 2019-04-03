@@ -74,7 +74,7 @@ class Confirmation extends React.Component {
                     autoplay: true,
                     animationData: require('./animation_sad_cross.json'),
                     rendererSettings: {
-                      preserveAspectRatio: 'xMidYMid slice'
+                      preserveAspectRatio: 'xMidYMid meet'
                     }
                   }
                 }
@@ -124,7 +124,7 @@ class Confirmation extends React.Component {
                     autoplay: true,
                     animationData: require('./animation_happy_cross.json'),
                     rendererSettings: {
-                      preserveAspectRatio: 'xMidYMid slice'
+                      preserveAspectRatio: 'xMidYMid meet'
                     }
                   }
                 }
@@ -153,7 +153,7 @@ class Confirmation extends React.Component {
                   autoplay: true,
                   animationData: require('./animation_sad_cross.json'),
                   rendererSettings: {
-                    preserveAspectRatio: 'xMidYMid slice'
+                    preserveAspectRatio: 'xMidYMid meet'
                   }
                 }
               }

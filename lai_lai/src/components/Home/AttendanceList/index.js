@@ -94,23 +94,23 @@ class AttendanceList extends React.Component {
           let uncertain = 0
 
           attendees.forEach(data => {
-            let status = 'blank'
+            let status = 'Have not sent link.'
             attendance.forEach(attendance => {
               if (data.id === attendance.attendee_id) {
                 if (attendance.status) {
                   status = 'confirmed'
                   confirmed ++
                 }
-                else if (!attendance.status) {
+                else if (attendance.status === null) {
+                  status = 'Have not answered.'
+                  uncertain ++
+                }
+                else if (attendance.status === false) {
                   status = 'declined'
                   declined ++
                 }
               }
             })
-            if (status === 'blank') {
-              status = 'Have not answered.'
-              uncertain ++
-            }
             data['status'] = status
           })
           this.setState({attendees: attendees, confirmed: confirmed, declined: declined, uncertain: uncertain})

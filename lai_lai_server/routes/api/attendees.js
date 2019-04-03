@@ -9,11 +9,20 @@ router.get('/test', (req, res) => {
   res.send('hi')
 });
 
-router.get('/getAttendees', (req, res) => {
-  return Attendees
+router.get('/getAttendees/:group_id', (req, res) => {
+  let { group_id } = req.params
+  console.log(group_id);
+  return Attendees_Groups
     .query()
+    .where({group_id})
+    .eager('attendees')
     .then(table => {
-      res.send(table)
+      let attendeeArr = []
+      table.forEach(data => {
+        attendeeArr.push(data.attendees)
+      })
+
+      res.send(attendeeArr)
     })
 });
 

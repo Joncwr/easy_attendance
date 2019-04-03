@@ -1,5 +1,5 @@
 .addAttendeeModal,
-.changeEventModal {
+.editInputModal {
   width: 350px;
   display: flex;
   flex-direction: column;
@@ -9,20 +9,21 @@
 }
 
 .addAttendeeModal-input,
-.changeEventModal-input {
+.editInputModal-input {
 }
 
-.changeEventModal-input-name,
+.editInputModal-input-name,
 .addAttendeeModal-input-name,
 .addAttendeeModal-input-number {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  margin: 40px 20px;
+  text-transform: capitalize;
+  margin: 20px;
 }
 
-.changeEventModal-input-name-header,
+.editInputModal-input-name-header,
 .addAttendeeModal-input-number-header,
 .addAttendeeModal-input-name-header {
   flex: 1;

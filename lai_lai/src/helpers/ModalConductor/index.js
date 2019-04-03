@@ -1,7 +1,7 @@
 import React from 'react'
 
 import AddAttendeeModal from '../../common/Modals/AddAttendeeModal'
-import ChangeEventModal from '../../common/Modals/ChangeEventModal'
+import EditInputModal from '../../common/Modals/EditInputModal'
 import ConfirmationModal from '../../common/Modals/ConfirmationModal'
 
 import './index.css'
@@ -15,8 +15,8 @@ class ModalComponent extends React.Component {
                   setModal={this.props.setModal}
                />
 
-             case "ChangeEventModal":
-       return <ChangeEventModal
+     case "EditInputModal":
+       return <EditInputModal
                  modalProps={this.props.modalProps}
                  setModal={this.props.setModal}
               />

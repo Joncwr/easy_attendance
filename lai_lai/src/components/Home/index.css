@@ -26,35 +26,55 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
 }
 
-.home-period {
+.home-header {
+  height: 10%;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 20px;
+  border-bottom: 5px solid #ffd9b3;
 }
 
-.home-period-text {
-  font-size: 1.5em;
+.home-header-period-text,
+.home-header-text {
+  font-size: 1.8em;
   font-weight: 700;
-  padding: 20px 40px;
-  border-radius: 50px;
-  background-color: #ffe6cc;
-  box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
-  border: 4px solid #ffd9b3;
 }
 
-.home-attendees{
+.home-header-period {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.home-header-period-text {
+  margin-right: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.home-header-period-icon {
+  height: 30px;
+  width: 30px;
+  background: url('/img/icon_edit@3x.png') no-repeat center center/ contain;
+}
+
+.home-attendees,
+.home-groups {
   flex: 1;
   padding: 20px;
-  margin-top: 20px;
   background-color: #ffe6cc;
-  border-top: 4px solid #ffd9b3;
-  border-bottom: 4px solid #ffd9b3;
+  border-bottom: 5px solid #ffd9b3;
+  box-sizing: border-box;
   overflow: auto;
   position: relative;
 }
 
+.home-groups-headers,
 .home-attendees-headers {
   font-weight: 700;
   display: flex;
@@ -62,9 +82,14 @@
   margin-bottom: 10px;
 }
 
+.home-groups-headers,
 .home-attendees-info,
 .home-attendees-headers {
   display: flex;
+}
+
+.home-attendees-info,
+.home-attendees-headers {
   font-size: 1.3em;
 }
 
@@ -100,21 +125,15 @@
   background: url('/img/icon_delete@3x.png') no-repeat center center/ contain;
 }
 
-.home-sendButton {
-  width: 50%;
-  height: 40px;
-  margin: 30px 10px;
+.home-actions {
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50px;
-  box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
-  font-size: 1.3em;
-  font-family: Fjalla One;
-  font-weight: 600;
-  background-color: #ffc299;
-  border: 5px solid #ff8533;
-  align-self: center;
+}
+
+.home-actions.home-actions--home {
+  padding: 0 15%;
 }
 
 .home-tabs {
@@ -122,30 +141,35 @@
   width: 100%;
   display: flex;
   border-top: 5px solid #ffd9b3;
+  box-sizing: border-box;
   background-color: #ffe6cc;
 }
 
 .home-tabs-home,
-.home-tabs-attendance {
+.home-tabs-attendance,
+.home-tabs-groups {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.home-tabs-home {
+.home-tabs-home,
+.home-tabs-attendance {
   border-right: 5px solid #ffd9b3;
 }
 
 .home-tabs-home-icon,
-.home-tabs-attendance-icon {
+.home-tabs-attendance-icon,
+.home-tabs-groups-icon {
   height: 40px;
   width: 40px;
   opacity: .3;
 }
 
 .home-tabs-home-icon.home,
-.home-tabs-attendance-icon.attendance {
+.home-tabs-attendance-icon.attendance,
+.home-tabs-groups-icon.groups  {
   opacity: 1;
 }
 
@@ -157,14 +181,6 @@
   background: url('/img/icon_attendance@3x.png') no-repeat center center/ contain;
 }
 
-/* Attendance Page */
-.home-attendance {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.home-attendance-list {
-  flex: 1;
-  display: flex;
+.home-tabs-groups-icon {
+  background: url('/img/icon_group@3x.png') no-repeat center center/ contain;
 }

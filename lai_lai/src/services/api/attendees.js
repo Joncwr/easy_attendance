@@ -1,9 +1,9 @@
 const jwtMiddleware = require('../jwtMiddleware')
 
 module.exports = {
-  getAttendees: () => {
+  getAttendees: (group_id) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('get', 'api/attendees/getAttendees')
+      jwtMiddleware.jwtFetch('get', 'api/attendees/getAttendees/' + group_id)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
