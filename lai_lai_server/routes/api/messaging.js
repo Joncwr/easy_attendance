@@ -17,7 +17,7 @@ router.post('/broadcast', (req, res) => {
     let { name, id, number } = data
     return Attendance
     .query()
-    .where({attendee_id: id})
+    .where({attendee_id: id, event_id})
     .then(([row]) => {
       let link = `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?attendee_id=${id}&event_id=${event_id}, please click on the link to confirm your attendance!`
       if (!row) {
