@@ -11,4 +11,24 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
+  editGroup: (groupDict) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('put', 'api/groups/editGroup', groupDict)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
+  deleteGroup: (groupId) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('delete', 'api/groups/deleteGroup/' + groupId)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
 }

@@ -7,7 +7,7 @@ const authToken = '33c1b87b673af4cb521989e6b27e42e2';
 const client = require('twilio')(accountSid, authToken);
 
 router.post('/broadcast', (req, res) => {
-  let { attendeesData, event_id } = req.body
+  let { attendeesData, event_id, message } = req.body
   console.log(attendeesData, event_id);
   let attendees = req.body
   let result = []
@@ -19,6 +19,7 @@ router.post('/broadcast', (req, res) => {
     .query()
     .where({attendee_id: id})
     .then(([row]) => {
+      let link = `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?attendee_id=${id}&event_id=${event_id}, please click on the link to confirm your attendance!`
       if (!row) {
         return Attendance
         .query()
@@ -26,7 +27,7 @@ router.post('/broadcast', (req, res) => {
         .then(attendance => {
           client.messages
             .create({
-               body: `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?attendee_id=${id}&event_id=${event_id} Hi ${name}! Please click on the link to confirm your attendance for the upcoming bible study!`,
+               body: `Your ${message} code is ${link}`,
                from: 'whatsapp:+14155238886',
                to: `whatsapp:${number}`
              })
@@ -46,7 +47,7 @@ router.post('/broadcast', (req, res) => {
       else {
         client.messages
           .create({
-             body: `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?attendee_id=${id}&event_id=${event_id} Hi ${name}! Please click on the link to confirm your attendance for the upcoming bible study!`,
+             body: `Your ${message} code is ${link}`,
              from: 'whatsapp:+14155238886',
              to: `whatsapp:${number}`
            })
@@ -64,7 +65,7 @@ router.post('/broadcast', (req, res) => {
       }
     })
     .catch(err => {
-      console.log('error!');
+      console.log('error => ', err);
       result.push({
         name: data.name,
         message: err
@@ -74,20 +75,46 @@ router.post('/broadcast', (req, res) => {
 });
 
 router.post('/single', (req, res) => {
-  let { name, id, number, event_id } = req.body
-  client.messages
-    .create({
-       body: `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?attendee_id=${id}&event_id=${event_id} Hi ${name}! Please click on the link to confirm your attendance for the upcoming bible study!`,
-       from: 'whatsapp:+14155238886',
-       to: `whatsapp:${number}`
-     })
-    .then(message => {
-      res.sendStatus(200)
+  let { name, id, number, event_id, message } = req.body
+  return Attendance
+    .query()
+    .where({attendee_id: id, event_id})
+    .then(([row]) => {
+      let link = `http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/confirmation?attendee_id=${id}&event_id=${event_id}, please click on the link to confirm your attendance!`
+      if (!row) {
+        return Attendance
+        .query()
+        .insert({attendee_id: id, event_id, status: null})
+        .then(attendance => {
+          client.messages
+            .create({
+               body: `Your ${message} code is ${link}`,
+               from: 'whatsapp:+14155238886',
+               to: `whatsapp:${number}`
+             })
+            .then(message => {
+              res.send(message)
+            })
+            .done();
+        })
+      }
+      else {
+        client.messages
+          .create({
+             body: `Your ${message} code is ${link}`,
+             from: 'whatsapp:+14155238886',
+             to: `whatsapp:${number}`
+           })
+          .then(message => {
+            res.send(message)
+          })
+          .done();
+      }
     })
     .catch(err => {
-      res.sendStatus(400)
+      console.log('error => ', err);
+      res.send(err)
     })
-    .done();
 });
 
 module.exports = router

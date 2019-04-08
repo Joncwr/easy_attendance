@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import AttendanceList from './AttendanceList'
 import Groups from './Groups'
 import Button from '../../common/Button'
+import DropDownComponent from './DropDownComponent'
 import AttendeesApi from '../../services/api/attendees'
 import MessageApi from '../../services/api/messaging'
 import UsersApi from '../../services/api/users'
@@ -21,6 +22,7 @@ class Home extends Component {
       user: {},
       groups: [],
       currentGroup: {},
+      showDropDown: false,
     }
     this.addAttendee=this.addAttendee.bind(this)
     this.getAttendees=this.getAttendees.bind(this)
@@ -32,6 +34,7 @@ class Home extends Component {
     this.getUser=this.getUser.bind(this)
     this.openSetEventModal=this.openSetEventModal.bind(this)
     this.groupActions=this.groupActions.bind(this)
+    this.onDropDown=this.onDropDown.bind(this)
   }
 
   componentDidMount() {
@@ -74,7 +77,11 @@ class Home extends Component {
     .then(([res]) => {
       this.setState({user: res},() => {
         if (res.groups.length > 0) {
-          this.setState({groups: res.groups, currentGroup: res.groups[0]},() => {
+          let groupIndex = 0
+          res.groups.forEach((data, index) => {
+            if (data.id === res.default_group) groupIndex = index
+          })
+          this.setState({groups: res.groups, currentGroup: res.groups[groupIndex]},() => {
             // Only after getting user then i can get attendees thats in the groups
             this.getAttendees()
           })
@@ -82,6 +89,12 @@ class Home extends Component {
           if (groups.events) {
             this.props.setDate(groups.events.name)
           }
+          else {
+            this.props.setDate('')
+          }
+        }
+        else {
+          this.setState({groups: [], currentGroup: {}})
         }
       })
     })
@@ -140,13 +153,13 @@ class Home extends Component {
   }
 
   onSend() {
-    console.log(this.state.attendeesData);
-    if (this.state.attendeesData.length > 0) {
+    if (this.state.attendeesData.length > 0 && this.props.date) {
       let messageDict = {
         text: 'Broadcast invitation?',
         value: {
           attendeesData: this.state.attendeesData,
           event_id: this.state.currentGroup.current_event,
+          message: 'bible study coming up! Your'
         },
         function: this.broadcastMessageApi.bind(this)
       }
@@ -154,7 +167,7 @@ class Home extends Component {
     }
     else {
       this.props.setSnackbar('show', {
-        text: "No attendees present."
+        text: "No attendees/event present."
       })
     }
   }
@@ -162,7 +175,6 @@ class Home extends Component {
   broadcastMessageApi(messageDict) {
     MessageApi.sendBroadcastMessage(messageDict)
     .then(res => {
-      console.log(res);
       this.props.setSnackbar('show', {
         text: "Message broadcasted."
       })
@@ -177,21 +189,19 @@ class Home extends Component {
   }
 
   openSetEventModal() {
-    let setEventDict = {
-      text: 'event',
-      function: this.setEvent
-    }
+    let setEventDict = {}
+    setEventDict['text'] = 'event'
+    setEventDict['function'] = this.setEvent
+
     this.props.setModal('show', 'EditInputModal', setEventDict)
   }
 
   setEvent(method, event) {
     if (event !== '') {
-      console.log(method, event);
       let user = Object.assign({}, this.state.user)
-      let [group] = user.groups
-      if (group.events && method === 'update') {
+      if (user && method === 'update') {
         let updateEventDict = {
-          current_event: group.current_event,
+          current_event: this.state.currentGroup.current_event,
           event_name: event
         }
         EventsApi.updateEvent(updateEventDict)
@@ -208,7 +218,7 @@ class Home extends Component {
       }
       else {
         let createEventsDict = {
-          group_id: group.id,
+          group_id: this.state.currentGroup.id,
           event_name: event
         }
         EventsApi.createEvent(createEventsDict)
@@ -231,21 +241,55 @@ class Home extends Component {
     }
   }
 
+  onDropDown() {
+    this.setState({showDropDown: !this.state.showDropDown})
+  }
+
+  onChangeGroup(groupIndex) {
+    let groups = Object.assign([], this.state.user.groups)
+    if (groups.length > 0) {
+      this.setState({currentGroup: groups[groupIndex], showDropDown: false},() => {
+        this.getAttendees()
+        if (this.state.currentGroup.events) {
+          this.props.setDate(this.state.currentGroup.events.name)
+        }
+        else {
+          this.props.setDate('')
+        }
+      })
+    }
+  }
+
+  renderDropDown() {
+    if (this.state.showDropDown) {
+      return  <DropDownComponent
+                onChangeGroup={this.onChangeGroup.bind(this)}
+                user={this.state.user}
+              />
+    }
+  }
+
   renderScreen() {
     let { screen } = this.state
     let date = this.props.date || 'Create New Event'
+    let groupName = this.state.currentGroup.group_name || 'Please create a group.'
     if (screen === 'home') {
       return (
         <div className="home--mainWrapper">
           <div className="home-header">
-            <div className="home-header-period">
-              <div className="home-header-period-text">
-                {date}
-              </div>
-              <div className="home-header-period-icon" onClick={this.openSetEventModal} />
+            <div className="home-header-group">
+              <div className="home-header-group-text">{groupName}</div>
+              <div className="home-header-group-icon" onClick={this.onDropDown}/>
             </div>
           </div>
           <div className="home-attendees">
+            {this.renderDropDown()}
+            <div className="home-attendees-event">
+              <div className="home-attendees-event-text">
+                {date}
+              </div>
+              <div className="home-attendees-event-icon" onClick={this.openSetEventModal} />
+            </div>
             <div className="home-attendees-headers">
               <div className="home-attendees-headers-name">Name</div>
               <div className="home-attendees-headers-number">Contact Number</div>
@@ -280,6 +324,7 @@ class Home extends Component {
             setModal={this.props.setModal}
             attendeesData={this.state.attendeesData}
             setSnackbar={this.props.setSnackbar}
+            getUser={this.getUser}
           />
         </div>
       )
@@ -302,7 +347,7 @@ class Home extends Component {
     }
   }
 
-  onGroupAction(method) {
+  onGroupAction(method, groupId) {
     let groupAction = {}
     if (method === 'create') {
       groupAction['text'] = 'create group'
@@ -310,10 +355,40 @@ class Home extends Component {
 
       this.props.setModal('show', 'EditInputModal', groupAction)
     }
+    if (method === 'edit') {
+      groupAction['text'] = 'edit group'
+      groupAction['function'] = this.groupActions
+      groupAction['otherProps'] = groupId
+
+      this.props.setModal('show', 'EditInputModal', groupAction)
+    }
+    if (method === 'delete') {
+      groupAction['text'] = 'Delete Group?'
+      groupAction['value'] = groupId
+      groupAction['source'] = 'groupActions'
+      groupAction['method'] = 'delete'
+      groupAction['function'] = this.groupActions
+
+      this.props.setModal('show', 'ConfirmationModal', groupAction)
+    }
   }
 
-  groupActions(method, name) {
-    if (name) {
+  groupActions(method, name, otherProps) {
+    if (method === 'default') {
+      let defaultGroupDict = {
+        user_id: this.state.user.id,
+        group_id: otherProps
+      }
+
+      UsersApi.setDefaultGroup(defaultGroupDict)
+      .then(res => {
+        this.getUser()
+      })
+      .catch(err => this.props.setSnackbar('show', {
+        text: "Could'nt set default group."
+      }))
+    }
+    else if (name) {
       let groupDict = {}
       if (method === 'create') {
         groupDict['user_id'] = this.state.user.id
@@ -321,10 +396,33 @@ class Home extends Component {
 
         GroupsApi.createGroup(groupDict)
         .then(res => {
-          console.log(res);
+          this.getUser()
         })
         .catch(err => this.props.setSnackbar('show', {
           text: "Could'nt create group."
+        }))
+      }
+      else if (method === 'update') {
+        groupDict['group_id'] = otherProps
+        groupDict['group_name'] = name
+
+        GroupsApi.editGroup(groupDict)
+        .then(res => {
+          this.getUser()
+        })
+        .catch(err => this.props.setSnackbar('show', {
+          text: "Could'nt edit group."
+        }))
+      }
+      else if (method === 'delete') {
+        let groupId = otherProps
+
+        GroupsApi.deleteGroup(groupId)
+        .then(res => {
+          this.getUser()
+        })
+        .catch(err => this.props.setSnackbar('show', {
+          text: "Could'nt delete group."
         }))
       }
     }

@@ -22,13 +22,15 @@ class Groups extends React.Component {
       let groupsArr = Object.assign([], this.props.groups)
 
       groupsArr.forEach((data,index) => {
+        let groupId = data.id
+
         renderGroups.push(
           <div className="home-groups-info-group" key={index}>
             <div className="home-groups-info-group-id">{index + 1}.</div>
             <div className="home-groups-info-group-name">{data.group_name}</div>
             <div className="home-groups-info-group-actions">
-              <div className="home-groups-info-group-actions-edit" onClick={() => this.props.onGroupAction('edit')}/>
-              <div className="home-groups-info-group-actions-delete" onClick={() => this.props.onGroupAction('delete')}/>
+              <div className="home-groups-info-group-actions-edit" onClick={() => this.props.onGroupAction('edit', groupId)}/>
+              <div className="home-groups-info-group-actions-delete" onClick={() => this.props.onGroupAction('delete', groupId)}/>
             </div>
           </div>
         )

@@ -37,43 +37,27 @@ class AttendanceList extends React.Component {
     this.props.setModal('show', 'ConfirmationModal', manualSendDict)
   }
 
-  onSave() {
-    let saveAttendanceDict = {
-      text: 'Save attendance?',
-      value: this.state.attendees,
-      function: this.saveAttendance.bind(this)
-    }
-
-    this.props.setModal('show', 'ConfirmationModal', saveAttendanceDict)
-  }
-
-  saveAttendance(attendanceDict) {
-    let saveAttendanceDict = {
-      group_id: this.props.currentGroup.id,
-      event_id: this.props.currentGroup.current_event,
-      attendanceDict
-    }
-    console.log(saveAttendanceDict);
-  }
-
   manualSendLink(name) {
     let attendeesData = Object.assign([], this.props.attendeesData)
     let userDict
     attendeesData.forEach(data => {
       let event_id
       if (this.props.currentGroup) event_id = this.props.currentGroup.current_event
+      console.log(event_id);
       if (data.name === name) {
         userDict = {
           name: data.name,
           number: data.number,
           id: data.id,
-          event_id: event_id
+          event_id: event_id,
+          message: 'bible study coming up! Your'
         }
       }
     })
     MessageApi.sendMessage(userDict)
     .then(res => {
       console.log(res);
+      this.props.getUser()
       this.props.setSnackbar('show', {
         text: "Message sent."
       })
@@ -84,43 +68,54 @@ class AttendanceList extends React.Component {
   }
 
   getAttendees() {
-    AttendeesApi.getAttendees()
-    .then(attendees => {
-      if (this.props.currentGroup) {
-        AttendanceApi.getAttendance(this.props.currentGroup.current_event)
-        .then(attendance => {
-          let confirmed = 0
-          let declined = 0
-          let uncertain = 0
+    let currentGroupId = this.props.currentGroup.id || ''
+    let currentEventId = this.props.currentGroup.current_event || ''
+    if (currentGroupId) {
+      AttendeesApi.getAttendees(currentGroupId)
+      .then(attendees => {
+        if (currentEventId) {
+          AttendanceApi.getAttendance(currentEventId)
+          .then(attendance => {
+            let confirmed = 0
+            let declined = 0
+            let uncertain = 0
 
-          attendees.forEach(data => {
-            let status = 'Have not sent link.'
-            attendance.forEach(attendance => {
-              if (data.id === attendance.attendee_id) {
-                if (attendance.status) {
-                  status = 'confirmed'
-                  confirmed ++
+            attendees.forEach(data => {
+              let status = 'Have not sent link.'
+              attendance.forEach(attendance => {
+                if (data.id === attendance.attendee_id) {
+                  if (attendance.status) {
+                    status = 'confirmed'
+                    confirmed ++
+                  }
+                  else if (attendance.status === null) {
+                    status = 'Have not answered.'
+                    uncertain ++
+                  }
+                  else if (attendance.status === false) {
+                    status = 'declined'
+                    declined ++
+                  }
                 }
-                else if (attendance.status === null) {
-                  status = 'Have not answered.'
-                  uncertain ++
-                }
-                else if (attendance.status === false) {
-                  status = 'declined'
-                  declined ++
-                }
-              }
+              })
+              data['status'] = status
             })
-            data['status'] = status
+            this.setState({attendees: attendees, confirmed: confirmed, declined: declined, uncertain: uncertain})
           })
-          this.setState({attendees: attendees, confirmed: confirmed, declined: declined, uncertain: uncertain})
-        })
-        .catch(err => this.props.setSnackbar('show', {
-          text: "Could'nt get attendance."
-        }))
-      }
-    })
-    .catch(err => console.log(err))
+          .catch(err => this.props.setSnackbar('show', {
+            text: "Could'nt get attendance."
+          }))
+        }
+      })
+      .catch(err => this.props.setSnackbar('show', {
+        text: "Please refresh the page."
+      }))
+    }
+    else {
+      this.props.setSnackbar('show', {
+        text: "Please refresh the page."
+      })
+    }
   }
 
   renderAttendees() {

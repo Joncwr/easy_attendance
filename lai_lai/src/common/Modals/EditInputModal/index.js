@@ -25,7 +25,13 @@ class EditInputModal extends React.Component {
   }
 
   onSubmit(method) {
-    this.props.modalProps.function(method, this.state.name)
+    let otherProps = this.props.modalProps.otherProps
+    if (method === 'default') {
+      this.props.modalProps.function(method, null, otherProps)
+    }
+    else {
+      this.props.modalProps.function(method, this.state.name, otherProps)
+    }
     this.props.setModal('hide')
   }
 
@@ -41,6 +47,22 @@ class EditInputModal extends React.Component {
           style={{
             backgroundColor: '#ffddcc',
             borderColor: '#ff884d',
+            height: '50px',
+            flex: 1,
+            margin: '0 10px'
+          }}
+        />
+      )
+    }
+    if (text === 'edit group') {
+      renderButtons.push(
+        <Button
+          key='Set default'
+          onClick={() => this.onSubmit('default')}
+          name='Set default'
+          style={{
+            backgroundColor: '#ccffee',
+            borderColor: '#33ffbb',
             height: '50px',
             flex: 1,
             margin: '0 10px'

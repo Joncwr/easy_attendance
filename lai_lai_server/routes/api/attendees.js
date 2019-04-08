@@ -11,7 +11,6 @@ router.get('/test', (req, res) => {
 
 router.get('/getAttendees/:group_id', (req, res) => {
   let { group_id } = req.params
-  console.log(group_id);
   return Attendees_Groups
     .query()
     .where({group_id})
@@ -23,6 +22,10 @@ router.get('/getAttendees/:group_id', (req, res) => {
       })
 
       res.send(attendeeArr)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
     })
 });
 
@@ -36,9 +39,8 @@ router.post('/addAttendee', (req, res) => {
       .query()
       .insert({attendee_id: attendee.id, group_id: group_id})
       .then(attendees_groups => {
-        res.send(200)
+        res.sendStatus(200)
       })
-      .catch(err => res.sendStatus(400))
     })
     .catch(err => res.sendStatus(400))
 });

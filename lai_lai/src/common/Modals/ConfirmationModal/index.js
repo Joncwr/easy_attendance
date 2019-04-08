@@ -13,7 +13,12 @@ class DeleteAttendeeModal extends React.Component {
   }
 
   onConfirm() {
-    this.props.modalProps.function(this.props.modalProps.value)
+    if (this.props.modalProps.source) {
+      if (this.props.modalProps.source === 'groupActions') this.props.modalProps.function(this.props.modalProps.method, 'delete', this.props.modalProps.value)
+    }
+    else {
+      this.props.modalProps.function(this.props.modalProps.value)
+    }
     this.props.setModal('hide')
   }
 
