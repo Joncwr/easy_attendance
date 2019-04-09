@@ -29,6 +29,33 @@
   text-transform: capitalize;
 }
 
+.attendanceList-contact-messageStatus {
+  width: 50px;
+  height: 100%;
+  padding: .8em;
+  box-sizing: border-box;
+  border-right: 5px solid #ffd9b3;
+}
+
+.attendanceList-contact-messageStatus-icon.read,
+.attendanceList-contact-messageStatus-icon.delivered,
+.attendanceList-contact-messageStatus-icon.failed {
+  height: 100%;
+  width: 100%;
+}
+
+.attendanceList-contact-messageStatus-icon.read {
+	background: url('/img/icon_read@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceList-contact-messageStatus-icon.delivered {
+	background: url('/img/icon_delivered@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceList-contact-messageStatus-icon.failed {
+	background: url('/img/icon_error@3x.png') no-repeat center center/ contain;
+}
+
 .attendanceList-contact-name {
   flex: 2;
 }

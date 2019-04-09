@@ -16,6 +16,28 @@ router.get('/getEvent/:event_id', (req, res) => {
     .catch(err => res.sendStatus(400))
 });
 
+router.post('/twilio/statusCallback', (req, res) => {
+  let { MessageSid, MessageStatus, EventType } = req.body
+  let message_status
+  if (MessageStatus === 'delivered') {
+    if (EventType === 'READ') message_status = 'read'
+    else message_status = 'delivered'
+  }
+  else message_status = 'failed'
+  return Attendance
+  .query()
+  .where({message_sid: MessageSid})
+  .patch({ message_status })
+  .then(attendance => {
+    console.log(attendance)
+    res.sendStatus(200)
+  })
+  .catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
+});
+
 router.get('/getAttendee/:attendee_id', (req, res) => {
   const { attendee_id } = req.params
   return Attendees

@@ -96,6 +96,7 @@ class AttendanceList extends React.Component {
                     status = 'declined'
                     declined ++
                   }
+                  data['message_status'] = attendance.message_status
                 }
               })
               data['status'] = status
@@ -121,10 +122,12 @@ class AttendanceList extends React.Component {
   renderAttendees() {
     let renderAttendees = []
     let attendeesArr = Object.assign([], this.state.attendees)
-
     attendeesArr.forEach((data,index) => {
       renderAttendees.push(
         <div className="attendanceList-contact" key={index}>
+          <div className="attendanceList-contact-messageStatus">
+            <div className={"attendanceList-contact-messageStatus-icon " + data.message_status} / >
+          </div>
           <div className="attendanceList-contact-name">
             {data.name}
           </div>

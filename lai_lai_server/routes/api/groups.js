@@ -63,15 +63,19 @@ router.put('/editGroup', (req, res) => {
 
 router.delete('/deleteGroup/:group_id', (req, res) => {
   const { group_id } = req.params
-  return Groups
+  return Events
   .query()
-  .where({id: group_id})
-  .then(([groups]) => {
+  .where({group_id})
+  .then(events => {
+    let eventsIdArr = []
+    events.forEach(data => {
+      eventsIdArr.push(data.id)
+    })
     return Attendance
     .query()
-    .where({event_id: groups.current_event})
+    .whereIn('event_id', eventsIdArr)
     .del()
-    .then(Attendance => {
+    .then(attendance => {
       return Groups
       .query()
       .patchAndFetchById(group_id, {current_event: null})
