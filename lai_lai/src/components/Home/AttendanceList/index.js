@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Button from '../../../common/Button'
 import AttendeesApi from '../../../services/api/attendees'
 import MessageApi from '../../../services/api/messaging'
 import AttendanceApi from '../../../services/api/attendance'
+import EventsApi from '../../../services/api/events'
 
 import './index.css'
 
@@ -20,10 +20,20 @@ class AttendanceList extends React.Component {
     this.getAttendees=this.getAttendees.bind(this)
     this.renderAttendees=this.renderAttendees.bind(this)
     this.onPress=this.onPress.bind(this)
+    this.openEventsModal=this.openEventsModal.bind(this)
   }
 
   componentDidMount() {
     this.getAttendees()
+
+    // DELETE!!!
+    // this.props.setModal('show', 'MoreEventOptionsModal', this.props.currentGroup.events)
+  }
+
+  componentWillUpdate(prevProps) {
+    if (prevProps.currentGroup !== this.props.currentGroup) {
+      this.getAttendees()
+    }
   }
 
   onPress(name) {
@@ -56,7 +66,6 @@ class AttendanceList extends React.Component {
     })
     MessageApi.sendMessage(userDict)
     .then(res => {
-      console.log(res);
       this.props.getUser()
       this.props.setSnackbar('show', {
         text: "Message sent."
@@ -134,9 +143,7 @@ class AttendanceList extends React.Component {
           <div className="attendanceList-contact-status">
             {data.status}
           </div>
-          <div className="attendanceList-contact-action" onClick={() => this.onPress(data.name)}>
-            <div className="attendanceList-contact-action-icon" />
-          </div>
+          {this.renderActions(data.name)}
         </div>
       )
     })
@@ -144,10 +151,89 @@ class AttendanceList extends React.Component {
     return renderAttendees
   }
 
+  renderActions(name) {
+    let currentGroup = Object.assign({}, this.props.currentGroup)
+    if (currentGroup.events) {
+      if (!currentGroup.events.closed) {
+        return (
+          <div className="attendanceList-contact-action" onClick={() => this.onPress(name)}>
+            <div className="attendanceList-contact-action-icon" />
+          </div>
+        )
+      }
+    }
+  }
+
+  openEventsModal() {
+    let groupId = this.props.currentGroup.id || ''
+    if (groupId) {
+      let eventModalDict = {
+        groupId,
+        setSnackbar: this.props.setSnackbar,
+        getUser: this.props.getUser,
+      }
+      this.props.setModal('show', 'EventsModal', eventModalDict)
+    }
+    else {
+      this.props.setSnackbar('show', {
+        text: "Please refresh the page."
+      })
+    }
+  }
+
+  openEventStatusModal(status) {
+    let text
+    if (status === 'open') text = 'Close event?'
+    if (status === 'closed') text = 'Open event again?'
+    let setEventStatusDict = {
+      text,
+      value: status,
+      function: this.setEventsStatus.bind(this),
+    }
+
+    this.props.setModal('show', 'ConfirmationModal', setEventStatusDict)
+  }
+
+  setEventsStatus(status) {
+    if (this.props.currentGroup.events) {
+      let isEventClosed
+      if (status === 'closed') isEventClosed = false
+      if (status === 'open') isEventClosed = true
+
+      let setEventStatusDict = {
+        event_id: this.props.currentGroup.events.id,
+        isEventClosed
+      }
+
+      EventsApi.setEventStatus(setEventStatusDict)
+      .then(res => {
+        this.props.getUser()
+      })
+      .catch(err => this.props.setSnackbar('show', {
+        text: "Could'nt set event status."
+      }))
+    }
+  }
+
   render() {
     let { confirmed, declined, uncertain } = this.state
+    let currentEventName = ' - '
+    let isEventClosed = 'blank'
+    if (this.props.currentGroup.events) {
+      currentEventName = this.props.currentGroup.events.name
+      if (!this.props.currentGroup.events.closed) isEventClosed = 'open'
+      else if (this.props.currentGroup.events.closed) isEventClosed = 'closed'
+    }
     return (
       <div className="attendanceList">
+        <div className="attendanceList-header">
+          <div className="attendanceList-header-eventInfo">
+            <div className="attendanceList-header-eventInfo-text">
+              {currentEventName}
+            </div>
+            <div className="attendanceList-header-eventInfo-eventsIcon" onClick={this.openEventsModal}/>
+          </div>
+        </div>
         <div className="attendanceList--mainWrapper">
           {this.renderAttendees()}
         </div>
@@ -175,6 +261,14 @@ class AttendanceList extends React.Component {
             <div className="attendanceList-stats-value">
               {uncertain}
             </div>
+          </div>
+        </div>
+        <div className="attendanceList-options">
+          <div className="attendanceList-options-extraOptions">
+            <div className="attendanceList-options-extraOptions-icon" onClick={() => this.props.setModal('show', 'MoreEventOptionsModal', this.props.currentGroup.events)}/>
+          </div>
+          <div className="attendanceList-options-save">
+            <div className={"attendanceList-options-save-icon " + isEventClosed} onClick={() => this.openEventStatusModal(isEventClosed)}/>
           </div>
         </div>
       </div>

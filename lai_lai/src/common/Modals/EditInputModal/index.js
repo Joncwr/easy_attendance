@@ -21,7 +21,12 @@ class EditInputModal extends React.Component {
     let name = event.target.name
     let value = event.target.value
 
-    this.setState({[name]: value})
+    if (this.props.modalProps.text === 'event') {
+      if (value.length < 20) this.setState({[name]: value})
+    }
+    else {
+      this.setState({[name]: value})
+    }
   }
 
   onSubmit(method) {
@@ -102,7 +107,7 @@ class EditInputModal extends React.Component {
             <Input
               handleChange={this.handleChange}
               name='name'
-              state={this.props.period}
+              state={this.state.name}
             />
           </div>
         </div>

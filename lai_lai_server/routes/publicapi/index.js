@@ -11,7 +11,11 @@ router.get('/getEvent/:event_id', (req, res) => {
     .query()
     .where({id: event_id})
     .then(([event]) => {
-      res.send(event.name)
+      res.send({
+        name: event.name,
+        closed: event.closed,
+        schema: event.event_schema
+      })
     })
     .catch(err => res.sendStatus(400))
 });
@@ -52,7 +56,7 @@ router.get('/getAttendee/:attendee_id', (req, res) => {
 });
 
 router.post('/attendance', (req, res) => {
-  const { attendee_id, event_id, status } = req.body
+  const { attendee_id, event_id, status, eventOptions } = req.body
   // Check to see if the event exists
   return Events
     .query()
@@ -79,7 +83,7 @@ router.post('/attendance', (req, res) => {
               if (attendance) {
                 return Attendance
                 .query()
-                .patchAndFetchById(attendance.id, {status})
+                .patchAndFetchById(attendance.id, {status, conditions: eventOptions})
                 .then(sumbitAttendance => {
                   res.send(sumbitAttendance)
                 })
@@ -87,7 +91,7 @@ router.post('/attendance', (req, res) => {
               else {
                 return Attendance
                 .query()
-                .insert({attendee_id, event_id, status})
+                .insert({attendee_id, event_id, status, conditions: eventOptions})
                 .then(sumbitAttendance => {
                   res.send(sumbitAttendance)
                 })

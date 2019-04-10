@@ -41,7 +41,9 @@ class Home extends Component {
     this.getUser()
 
     // DELETE THISSSSS
-    // this.changeScreen('groups')
+    setTimeout(() => {
+      this.changeScreen('attendance')
+    }, 500)
   }
 
   addAttendee() {
@@ -297,19 +299,7 @@ class Home extends Component {
             </div>
             {this.renderAttendees()}
           </div>
-          <div className="home-actions home-actions--home">
-            <Button
-              onClick={this.onSend}
-              name='Send'
-              style={{
-                backgroundColor: '#ffddcc',
-                borderColor: '#ff884d',
-                height: '50px',
-                flex: 1,
-                margin: '0 10px'
-              }}
-            />
-          </div>
+          {this.renderBroadcastButton()}
         </div>
       )
     }
@@ -344,6 +334,30 @@ class Home extends Component {
           />
         </div>
       )
+    }
+  }
+
+  renderBroadcastButton() {
+    let currentGroup = Object.assign({}, this.state.currentGroup)
+    if (currentGroup.events) {
+      if (!currentGroup.events.closed) {
+        return (
+          <div className="home-actions home-actions--home">
+            <Button
+              onClick={this.onSend}
+              disabled={true}
+              name='Send'
+              style={{
+                backgroundColor: '#ffddcc',
+                borderColor: '#ff884d',
+                height: '50px',
+                flex: 1,
+                margin: '0 10px'
+              }}
+            />
+          </div>
+        )
+      }
     }
   }
 

@@ -6,6 +6,43 @@
   background-color: #fff;
 }
 
+.attendanceList-header {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 15px 0 20px;
+  box-sizing: border-box;
+  border-bottom: 5px solid #ffd9b3;
+}
+
+.attendanceList-header-eventInfo {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.attendanceList-header-eventInfo-text {
+  font-size: 1.5em;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.attendanceList-header-eventInfo-eventsIcon {
+  position: relative;
+  bottom: 1px;
+  margin-left: 10px;
+  height: 1.7em;
+  width: 1.7em;
+}
+
+.attendanceList-header-eventInfo-eventsIcon {
+	background: url('/img/icon_calender@3x.png') no-repeat center center/ contain;
+}
 .attendanceList--mainWrapper {
   height: 100%;
   overflow: auto;
@@ -79,9 +116,8 @@
 }
 
 .attendanceList-stats {
-  height: 75px;
+  height: 60px;
   display: flex;
-  border-top: 5px solid #ff8533;
   box-sizing: border-box;
   background-color: rgba(255, 230, 204, .2);
 }
@@ -100,10 +136,48 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.3em;
+  font-size: 1em;
   flex: 1;
 }
 
 .attendanceList-stats-value {
   font-weight: 700;
+}
+
+.attendanceList-options {
+  height: 60px;
+  display: flex;
+  border-top: 5px solid #ffd9b3;
+  box-sizing: border-box;
+  background-color: rgba(255, 230, 204, .2);
+}
+
+.attendanceList-options-extraOptions,
+.attendanceList-options-save {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.attendanceList-options-extraOptions {
+  border-right: 5px solid #ffd9b3;
+}
+
+.attendanceList-options-save-icon,
+.attendanceList-options-extraOptions-icon {
+  height: 1.7em;
+  width: 1.7em;
+}
+
+.attendanceList-options-extraOptions-icon {
+	background: url('/img/icon_more_options@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceList-options-save-icon.open {
+	background: url('/img/icon_save@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceList-options-save-icon.closed {
+	background: url('/img/icon_unsave@3x.png') no-repeat center center/ contain;
 }

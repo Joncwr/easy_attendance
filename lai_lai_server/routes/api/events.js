@@ -4,6 +4,50 @@ const router = express.Router()
 const Events = require('../../models/events')
 const Groups = require('../../models/groups')
 
+router.get('/getEvents/:group_id', (req, res) => {
+  const { group_id } = req.params
+  return Events
+    .query()
+    .where({ group_id })
+    .then(events => {
+      res.send(events)
+    })
+    .catch(err => res.sendStatus(400))
+});
+
+router.put('/setCurrentEvent', (req, res) => {
+  const { group_id, event_id } = req.body
+  return Groups
+    .query()
+    .patchAndFetchById(group_id, {current_event: event_id})
+    .then(group => {
+      res.send(group)
+    })
+    .catch(err => res.sendStatus(400))
+});
+
+router.put('/setEventStatus', (req, res) => {
+  const { event_id, isEventClosed } = req.body
+  return Events
+    .query()
+    .patchAndFetchById(event_id, {closed: isEventClosed})
+    .then(event => {
+      res.send(event)
+    })
+    .catch(err => res.sendStatus(400))
+});
+
+router.put('/setEventSchema', (req, res) => {
+  const { event_id, eventSchema } = req.body
+  return Events
+    .query()
+    .patchAndFetchById(event_id, {event_schema: eventSchema})
+    .then(event => {
+      res.send(event)
+    })
+    .catch(err => res.sendStatus(400))
+});
+
 router.post('/createEvent', (req, res) => {
   const { group_id, event_name } = req.body
   return Events

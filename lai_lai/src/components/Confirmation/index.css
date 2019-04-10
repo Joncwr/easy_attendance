@@ -8,8 +8,11 @@
 
 .confirmation {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow:
+
 }
 
 .confirmation-header {
@@ -63,7 +66,7 @@
 }
 
 .confirmation-content-message-text {
-  font-size: 1.4em;
+  font-size: 1.2em;
 }
 
 .confirmation-content-message-text.error {
@@ -75,6 +78,32 @@
   font-weight: 700;
   font-size: 1.5em;
   text-align: center;
+}
+
+.confirmation-options {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-options-text,
+.confirmation-options-radioButton {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-options-text {
+  font-size: 1.2em;
+}
+
+.confirmation-options-radioButton-container {
+  height: 100%;
+  width: 40px;
 }
 
 .confirmation-actions {

@@ -1,0 +1,83 @@
+.eventsModal {
+  width: 80vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff2e6;
+}
+
+.eventsModal-top {
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 5px solid #ffd9b3;
+}
+
+.eventsModal-top-options {
+  height: 55px;
+  width: 200px;
+  border-radius: 50px;
+  display: flex;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #ffd9b3;
+  border: 5px solid #ffa64d;
+}
+
+.eventsModal-top-options-open,
+.eventsModal-top-options-closed {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+  color: #ffc299;
+}
+
+.eventsModal-top-options-open.open,
+.eventsModal-top-options-closed.closed {
+  background-color: #ffa64d;
+  color: #404040;
+}
+
+.eventsModal-list {
+  flex: 1;
+  background-color: #fff;
+  overflow: scroll;
+}
+
+.eventsModal-list-event {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.eventsModal-list-event:nth-child(even) {
+  background-color: rgba(255, 204, 153, .1);
+}
+
+.eventsModal-list-event-text {
+  flex: 1;
+  font-size: 1.3em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.eventsModal-list-event-icon {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  background: url('/img/icon_forward@3x.png') no-repeat center center/ contain;
+}
+
+.eventsModal-bottom {
+  height: 50px;
+  width: 100%;
+  border-top: 5px solid #ffd9b3;
+}
