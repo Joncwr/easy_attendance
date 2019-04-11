@@ -4,6 +4,7 @@ import AttendeesApi from '../../../services/api/attendees'
 import MessageApi from '../../../services/api/messaging'
 import AttendanceApi from '../../../services/api/attendance'
 import EventsApi from '../../../services/api/events'
+import AttendanceStatsDrawer from './AttendanceStatsDrawer'
 
 import './index.css'
 
@@ -16,11 +17,14 @@ class AttendanceList extends React.Component {
       confirmed: 0,
       declined: 0,
       uncertain: 0,
+      isDrawerOpen: false,
+      extraOptions: {},
     }
     this.getAttendees=this.getAttendees.bind(this)
     this.renderAttendees=this.renderAttendees.bind(this)
     this.onPress=this.onPress.bind(this)
     this.openEventsModal=this.openEventsModal.bind(this)
+    this.getExtraOptions=this.getExtraOptions.bind(this)
   }
 
   componentDidMount() {
@@ -53,7 +57,6 @@ class AttendanceList extends React.Component {
     attendeesData.forEach(data => {
       let event_id
       if (this.props.currentGroup) event_id = this.props.currentGroup.current_event
-      console.log(event_id);
       if (data.name === name) {
         userDict = {
           name: data.name,
@@ -93,6 +96,8 @@ class AttendanceList extends React.Component {
               let status = 'Have not sent link.'
               attendance.forEach(attendance => {
                 if (data.id === attendance.attendee_id) {
+                data['eventOptions'] = attendance.conditions
+                data['extraComments'] = attendance.extra_comments
                   if (attendance.status) {
                     status = 'confirmed'
                     confirmed ++
@@ -110,7 +115,7 @@ class AttendanceList extends React.Component {
               })
               data['status'] = status
             })
-            this.setState({attendees: attendees, confirmed: confirmed, declined: declined, uncertain: uncertain})
+            this.setState({attendees: attendees, confirmed: confirmed, declined: declined, uncertain: uncertain},() => this.getExtraOptions(attendees))
           })
           .catch(err => this.props.setSnackbar('show', {
             text: "Could'nt get attendance."
@@ -125,6 +130,34 @@ class AttendanceList extends React.Component {
       this.props.setSnackbar('show', {
         text: "Please refresh the page."
       })
+    }
+  }
+
+  getExtraOptions(attendees) {
+    let { currentGroup } = this.props
+    if (currentGroup.events) {
+      let eventSchema = currentGroup.events.event_schema
+      if (eventSchema) {
+        let extraOptions = {}
+        let isValue1True = 0
+        let isValue1False = 0
+
+        attendees.forEach(data => {
+          if (data.eventOptions) {
+            if (data.status === "confirmed") {
+              if (data.eventOptions.value) isValue1True ++
+              else isValue1False ++
+            }
+            else isValue1False ++
+          }
+          else isValue1False ++
+        })
+        extraOptions['values'] = ['valueOne']
+        extraOptions['valueOne'] = eventSchema.fieldName
+        extraOptions['valueOneTrueCounter'] = isValue1True
+        extraOptions['valueOneFalseCounter'] = isValue1False
+        this.setState({extraOptions})
+      }
     }
   }
 
@@ -215,8 +248,12 @@ class AttendanceList extends React.Component {
     }
   }
 
+  setDrawer(state) {
+    this.setState({isDrawerOpen: state})
+  }
+
   render() {
-    let { confirmed, declined, uncertain } = this.state
+    let { confirmed, declined, uncertain, isDrawerOpen, extraOptions } = this.state
     let currentEventName = ' - '
     let isEventClosed = 'blank'
     if (this.props.currentGroup.events) {
@@ -237,32 +274,14 @@ class AttendanceList extends React.Component {
         <div className="attendanceList--mainWrapper">
           {this.renderAttendees()}
         </div>
-        <div className="attendanceList-stats">
-          <div className="attendanceList-stats-confirm">
-            <div className="attendanceList-stats-header">
-              Confirmed:
-            </div>
-            <div className="attendanceList-stats-value">
-              {confirmed}
-            </div>
-          </div>
-          <div className="attendanceList-stats-declined">
-            <div className="attendanceList-stats-header">
-              Declined:
-            </div>
-            <div className="attendanceList-stats-value">
-              {declined}
-            </div>
-          </div>
-          <div className="attendanceList-stats-null">
-            <div className="attendanceList-stats-header">
-              Uncertain:
-            </div>
-            <div className="attendanceList-stats-value">
-              {uncertain}
-            </div>
-          </div>
-        </div>
+        <AttendanceStatsDrawer
+          confirmed={confirmed}
+          declined={declined}
+          uncertain={uncertain}
+          isDrawerOpen={isDrawerOpen}
+          extraOptions={extraOptions}
+          setDrawer={this.setDrawer.bind(this)}
+        />
         <div className="attendanceList-options">
           <div className="attendanceList-options-extraOptions">
             <div className="attendanceList-options-extraOptions-icon" onClick={() => this.props.setModal('show', 'MoreEventOptionsModal', this.props.currentGroup.events)}/>

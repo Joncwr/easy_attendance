@@ -1,0 +1,124 @@
+.attendanceStatsDrawer {
+  background-color: #fff2e6;
+}
+
+.attendanceStatsDrawer.false {
+  animation: transitionYOut .3s linear forwards;
+}
+
+.attendanceStatsDrawer.true {
+  animation: transitionYIn .3s linear forwards;
+}
+
+.attendanceStatsDrawer-drawerIcon {
+  height: 10px;
+  background-color: rgba(255, 230, 204, .8);
+}
+
+.attendanceStatsDrawer-drawerIcon-icon.false {
+  height: 100%;
+	background: url('/img/icon_drawer@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceStatsDrawer-drawerIcon-icon.true {
+  height: 100%;
+	background: url('/img/icon_drawer@3x.png') no-repeat center center/ contain;
+  -moz-transform: scaleY(-1);
+  -o-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+}
+
+.attendanceStatsDrawer-basic {
+  height: 60px;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.attendanceStatsDrawer-basic-confirm,
+.attendanceStatsDrawer-basic-declined,
+.attendanceStatsDrawer-basic-null {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.attendanceStatsDrawer-basic-header,
+.attendanceStatsDrawer-basic-value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  flex: 1;
+}
+
+.attendanceStatsDrawer-basic-value {
+  font-weight: 700;
+}
+
+.attendanceStatsDrawer-extraOptions {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgba(255, 204, 102, .2);
+  box-sizing: border-box;
+}
+
+.attendanceStatsDrawer-extraOptions-scrollable {
+  width: 100%;
+  overflow: scroll;
+}
+
+.attendanceStatsDrawer-extraOptions-scrollable-option {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.attendanceStatsDrawer-extraOptions-scrollable-option-name,
+.attendanceStatsDrawer-extraOptions-scrollable-option-true,
+.attendanceStatsDrawer-extraOptions-scrollable-option-false {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.attendanceStatsDrawer-extraOptions-scrollable-option-name {
+  flex: 1;
+}
+
+.attendanceStatsDrawer-extraOptions-scrollable-option-true {
+  flex: 1;
+}
+
+.attendanceStatsDrawer-extraOptions-scrollable-option-false {
+  flex: 1;
+}
+
+
+@keyframes transitionYOut {
+  0% {
+    transform: translateY(0px);
+  }
+  
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+@keyframes transitionYIn {
+  0% {
+    transform: translateY(50px);
+  }
+
+  90% {
+    transform: translateY(0px);
+  }
+
+  100% {
+    transform: translateY(5px);
+  }
+}

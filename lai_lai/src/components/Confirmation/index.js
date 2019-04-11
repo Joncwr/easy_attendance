@@ -67,8 +67,6 @@ class Confirmation extends React.Component {
       eventOptions
     }
 
-    console.log(attendanceDict);
-
     PublicApi.postAttendance(attendanceDict)
     .then((res) => {
       this.props.setSnackbar('show', {

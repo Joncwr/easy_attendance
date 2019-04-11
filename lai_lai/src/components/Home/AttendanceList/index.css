@@ -6,6 +6,11 @@
   background-color: #fff;
 }
 
+.attendanceList--mainWrapper {
+  flex: 1;
+  overflow: auto;
+}
+
 .attendanceList-header {
   height: 60px;
   width: 100%;
@@ -42,10 +47,6 @@
 
 .attendanceList-header-eventInfo-eventsIcon {
 	background: url('/img/icon_calender@3x.png') no-repeat center center/ contain;
-}
-.attendanceList--mainWrapper {
-  height: 100%;
-  overflow: auto;
 }
 
 .attendanceList-contact:nth-child(even) {
@@ -115,41 +116,13 @@
 	background: url('/img/icon_send_link@3x.png') no-repeat center center/ contain;
 }
 
-.attendanceList-stats {
-  height: 60px;
-  display: flex;
-  box-sizing: border-box;
-  background-color: rgba(255, 230, 204, .2);
-}
-
-.attendanceList-stats-confirm,
-.attendanceList-stats-declined,
-.attendanceList-stats-null {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0;
-}
-
-.attendanceList-stats-header,
-.attendanceList-stats-value {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1em;
-  flex: 1;
-}
-
-.attendanceList-stats-value {
-  font-weight: 700;
-}
-
 .attendanceList-options {
-  height: 60px;
+  height: 50px;
   display: flex;
   border-top: 5px solid #ffd9b3;
   box-sizing: border-box;
-  background-color: rgba(255, 230, 204, .2);
+  background-color: #fff2e6;
+  z-index: 100;
 }
 
 .attendanceList-options-extraOptions,

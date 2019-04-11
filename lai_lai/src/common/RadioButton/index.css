@@ -9,9 +9,32 @@
 .radioButton-container {
   height: 100%;
   width: 100%;
+  position: relative;
+  display: inline-block;
   border-radius: 8px;
   background-color: #fff;
-  box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.08);
+}
+
+.radioButton-container.true::after,
+.radioButton-container.false::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  transition: all .5s ease-in-out;
+}
+
+.radioButton-container.true::after {
+  opacity: 0;
+}
+
+.radioButton-container.false::after {
+  opacity: 1;
+  border-radius: 5px;
+  box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.15);
 }
 
 .radioButton-container-icon {
@@ -32,8 +55,8 @@
 @-webkit-keyframes zoomInDown {
   from {
     opacity: 0;
-    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -200px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -200px, 0);
     -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
     animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
@@ -50,8 +73,8 @@
 @keyframes zoomInDown {
   from {
     opacity: 0;
-    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
-    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -200px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -200px, 0);
     -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
     animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
@@ -81,8 +104,8 @@
 
   to {
     opacity: 0;
-    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -600px, 0);
-    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -600px, 0);
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -300px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -300px, 0);
     -webkit-transform-origin: center bottom;
     transform-origin: center bottom;
     -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
@@ -101,8 +124,8 @@
 
   to {
     opacity: 0;
-    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -600px, 0);
-    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -600px, 0);
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -300px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -300px, 0);
     -webkit-transform-origin: center bottom;
     transform-origin: center bottom;
     -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
