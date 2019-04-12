@@ -1,4 +1,4 @@
-.radioButton {
+.checkBox {
   height: 100%;
   width: 100%;
   /* background-color: green; */
@@ -6,7 +6,7 @@
   box-sizing: border-box;
 }
 
-.radioButton-container {
+.checkBox-container {
   height: 100%;
   width: 100%;
   position: relative;
@@ -16,8 +16,8 @@
   box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.08);
 }
 
-.radioButton-container.true::after,
-.radioButton-container.false::after {
+.checkBox-container.true::after,
+.checkBox-container.false::after {
   content: '';
   position: absolute;
   top: 0;
@@ -27,27 +27,27 @@
   transition: all .5s ease-in-out;
 }
 
-.radioButton-container.true::after {
+.checkBox-container.true::after {
   opacity: 0;
 }
 
-.radioButton-container.false::after {
+.checkBox-container.false::after {
   opacity: 1;
   border-radius: 5px;
   box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.15);
 }
 
-.radioButton-container-icon {
+.checkBox-container-icon {
   height: 100%;
   width: 100%;
 }
 
-.radioButton-container-icon.true {
+.checkBox-container-icon.true {
   background: url('/img/icon_checkbox_tick@3x.png') no-repeat center center/ contain;
   animation: zoomInDown .5s linear forwards;
 }
 
-.radioButton-container-icon.false {
+.checkBox-container-icon.false {
   background: url('/img/icon_checkbox_tick@3x.png') no-repeat center center/ contain;
   animation: zoomOutUp .2s linear forwards;
 }

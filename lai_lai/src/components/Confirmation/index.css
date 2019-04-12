@@ -89,7 +89,7 @@
 }
 
 .confirmation-options-text,
-.confirmation-options-radioButton {
+.confirmation-options-checkBox {
   flex: 1;
   height: 100%;
   display: flex;
@@ -101,7 +101,7 @@
   font-size: 1.2em;
 }
 
-.confirmation-options-radioButton-container {
+.confirmation-options-checkBox-container {
   height: 100%;
   width: 40px;
 }

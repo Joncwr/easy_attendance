@@ -35,15 +35,17 @@ class Home extends Component {
     this.openSetEventModal=this.openSetEventModal.bind(this)
     this.groupActions=this.groupActions.bind(this)
     this.onDropDown=this.onDropDown.bind(this)
+    this.openAttendanceStatistics=this.openAttendanceStatistics.bind(this)
   }
 
   componentDidMount() {
     this.getUser()
 
     // DELETE THISSSSS
-    // setTimeout(() => {
-    //   this.changeScreen('attendance')
-    // }, 500)
+    setTimeout(() => {
+      this.changeScreen('attendance')
+      this.openAttendanceStatistics()
+    }, 200)
   }
 
   addAttendee() {
@@ -112,6 +114,22 @@ class Home extends Component {
     })
   }
 
+  broadcastMessageApi(messageDict) {
+    MessageApi.sendBroadcastMessage(messageDict)
+    .then(res => {
+      this.props.setSnackbar('show', {
+        text: "Message broadcasted."
+      })
+    })
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Could'nt broadcast message."
+    }))
+  }
+
+  changeScreen(screen) {
+    this.setState({screen: screen})
+  }
+
   renderAttendees() {
     let renderAttendees = []
     let attendeesArr = Object.assign([], this.state.attendeesData)
@@ -172,22 +190,6 @@ class Home extends Component {
         text: "No attendees/event present."
       })
     }
-  }
-
-  broadcastMessageApi(messageDict) {
-    MessageApi.sendBroadcastMessage(messageDict)
-    .then(res => {
-      this.props.setSnackbar('show', {
-        text: "Message broadcasted."
-      })
-    })
-    .catch(err => this.props.setSnackbar('show', {
-      text: "Could'nt broadcast message."
-    }))
-  }
-
-  changeScreen(screen) {
-    this.setState({screen: screen})
   }
 
   openSetEventModal() {
@@ -262,6 +264,15 @@ class Home extends Component {
     }
   }
 
+  openAttendanceStatistics() {
+    let groupId = this.state.currentGroup.id
+    let statisticsDict = {
+      groupId,
+      setSnackbar: this.props.setSnackbar
+    }
+    this.props.setModal('show', 'AttendanceStatisticsModal', statisticsDict)
+  }
+
   renderDropDown() {
     if (this.state.showDropDown) {
       return  <DropDownComponent
@@ -307,10 +318,12 @@ class Home extends Component {
       return (
         <div className="home--mainWrapper">
           <div className="home-header">
-            <div className="home-header-text">Attendance</div>
+            <div className="home-header-text home-header-text--attendance">Attendance</div>
+            <div className="home-header-text-icon--attendance" onClick={this.openAttendanceStatistics}/>
           </div>
           <AttendanceList
             currentGroup={this.state.currentGroup}
+            user={this.state.user}
             setModal={this.props.setModal}
             attendeesData={this.state.attendeesData}
             setSnackbar={this.props.setSnackbar}

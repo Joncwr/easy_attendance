@@ -4,6 +4,7 @@
   flex-direction: column;
   box-sizing: border-box;
   background-color: #fff;
+  position: relative;
 }
 
 .attendanceList--mainWrapper {
@@ -126,21 +127,28 @@
 }
 
 .attendanceList-options-extraOptions,
-.attendanceList-options-save {
+.attendanceList-options-save,
+.attendanceList-options-tags {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.attendanceList-options-extraOptions {
+.attendanceList-options-tags,
+.attendanceList-options-save {
   border-right: 5px solid #ffd9b3;
 }
 
 .attendanceList-options-save-icon,
-.attendanceList-options-extraOptions-icon {
+.attendanceList-options-extraOptions-icon,
+.attendanceList-options-tags-icon {
   height: 1.7em;
   width: 1.7em;
+}
+
+.attendanceList-options-tags-icon {
+	background: url('/img/icon_tags@3x.png') no-repeat center center/ contain;
 }
 
 .attendanceList-options-extraOptions-icon {

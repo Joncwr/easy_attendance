@@ -1,9 +1,9 @@
 const jwtMiddleware = require('../jwtMiddleware')
 
 module.exports = {
-  getAttendance: (eventId) => {
+  getPast5Events: (groupId) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('get', 'api/attendance/getAttendance/' + eventId)
+      jwtMiddleware.jwtFetch('get', 'api/statistics/past5Events/' + groupId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)
@@ -11,9 +11,9 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
-  updateAttendance: (updateAttendanceDict) => {
+  getAllAttendance: (groupId) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.jwtFetch('put', 'api/attendance/updateAttendance', updateAttendanceDict)
+      jwtMiddleware.jwtFetch('get', 'api/statistics/getAllAttendance/' + groupId)
       .then(res => {
         if (res) resolve(res)
         else reject(res)

@@ -1,0 +1,72 @@
+.editTagsModal {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff2e6;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.editTagsModal-header {
+  width: 100%;
+  align-self: flex-start;
+  font-size: 1.3em;
+  font-weight: 600;
+  font-family: Fjalla One;
+  margin: 30px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.editTagsModal-tags {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.editTagsModal-tags-tag {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.editTagsModal-tags-tag-text {
+  width: calc(100% - 30px);
+  font-size: 1.2em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.editTagsModal-tags-tag-actions {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  margin-right: 5px;
+  background: url('/img/icon_delete@3x.png') no-repeat center center/ contain;
+}
+
+.editTagsModal-input {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editTagsModal-input-action {
+  height: 40px;
+  width: 40px;
+  margin-left: 15px;
+  background: url('/img/icon_add@3x.png') no-repeat center center/ contain;
+}
+
+.editTagsModal-actions {
+  display: flex;
+  width: 100%;
+  padding: 0 25px;
+  margin: 30px 0;
+  box-sizing: border-box;
+}

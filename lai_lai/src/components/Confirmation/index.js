@@ -3,7 +3,7 @@ import queryString from 'query-string'
 import Lottie from 'react-lottie';
 
 import Button from '../../common/Button'
-import RadioButton from '../../common/RadioButton'
+import CheckBox from '../../common/CheckBox'
 import LoadingOverlay from '../../common/LoadingOverlay'
 import PublicApi from '../../services/api/publicapi'
 
@@ -24,7 +24,7 @@ class Confirmation extends React.Component {
       isLoading: false,
       isStopped: false,
       isPaused: false,
-      radioButton: 'blank',
+      checkBox: 'blank',
       eventOptions: {},
     }
     this.onPress=this.onPress.bind(this)
@@ -47,7 +47,7 @@ class Confirmation extends React.Component {
           eventOptions['fieldType'] = res.schema.fieldType
           eventOptions['type'] = res.schema.type
           eventOptions['value'] = false
-          if (res.schema.comments) eventOptions['comments'] = ' - '
+          if (res.schema.tags) eventOptions['tags'] = ' - '
         }
         this.setState({event: res.name, eventClosed: res.closed, eventOptions})
       })
@@ -81,17 +81,17 @@ class Confirmation extends React.Component {
 
   renderOptions() {
     let eventOptions = Object.assign({}, this.state.eventOptions)
-    let { fieldType, fieldName, type, comments } = eventOptions
+    let { fieldType, fieldName, type, tags } = eventOptions
 
-    if (type === 'single' && fieldType === 'boolean' && !comments) {
+    if (type === 'single' && fieldType === 'boolean' && !tags) {
       return (
         <div className="confirmation-options">
           <div className="confirmation-options-text">{fieldName}</div>
-          <div className="confirmation-options-radioButton">
-            <div className="confirmation-options-radioButton-container">
-              <RadioButton
-                setRadioButton={this.setRadioButton.bind(this)}
-                radioButton={this.state.radioButton}
+          <div className="confirmation-options-checkBox">
+            <div className="confirmation-options-checkBox-container">
+              <CheckBox
+                setCheckBox={this.setCheckBox.bind(this)}
+                checkBox={this.state.checkBox}
               />
             </div>
           </div>
@@ -100,16 +100,16 @@ class Confirmation extends React.Component {
     }
   }
 
-  setRadioButton() {
+  setCheckBox() {
     let eventOptions = Object.assign({}, this.state.eventOptions)
     eventOptions['value'] = false
-    if (this.state.radioButton === 'blank') {
+    if (this.state.checkBox === 'blank') {
       eventOptions['value'] = true
-      this.setState({radioButton: true, eventOptions})
+      this.setState({checkBox: true, eventOptions})
     }
     else {
-      eventOptions['value'] = !this.state.radioButton
-      this.setState({radioButton: !this.state.radioButton, eventOptions})
+      eventOptions['value'] = !this.state.checkBox
+      this.setState({checkBox: !this.state.checkBox, eventOptions})
     }
   }
 

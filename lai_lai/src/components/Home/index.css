@@ -54,6 +54,16 @@
   background: url('/img/icon_drop_down@3x.png') no-repeat center center/ contain;
 }
 
+.home-header-text.home-header-text--attendance {
+  flex: 1;
+}
+
+.home-header-text-icon--attendance {
+  height: 35px;
+  width: 35px;
+  background: url('/img/icon_statistics@3x.png') no-repeat center center/ contain;
+}
+
 .home-attendees-event-text,
 .home-header-text {
   font-size: 1.8em;

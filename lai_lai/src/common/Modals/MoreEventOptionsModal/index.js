@@ -42,7 +42,7 @@ class MoreEventOptionsModal extends React.Component {
         fieldName,
         type: 'single',
         fieldType: 'boolean',
-        comments: false
+        tags: false
       }
       let eventOptionsDict = {
         event_id: this.props.modalProps.id,

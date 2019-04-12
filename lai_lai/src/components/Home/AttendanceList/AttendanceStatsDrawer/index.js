@@ -41,7 +41,7 @@ class AttendanceStatsDrawer extends React.Component {
   }
 
   render() {
-    let { confirmed, declined, uncertain, isDrawerOpen, extraOptions } = this.props
+    let { confirmed, declined, uncertain, isDrawerOpen, extraOptions, drawerDisplay } = this.props
     return (
       <div className={"attendanceStatsDrawer " + isDrawerOpen} onClick={() => this.props.setDrawer(!this.props.isDrawerOpen)}>
         <div className="attendanceStatsDrawer-drawerIcon">
@@ -73,7 +73,7 @@ class AttendanceStatsDrawer extends React.Component {
             </div>
           </div>
         </div>
-        <div className="attendanceStatsDrawer-extraOptions">
+        <div className="attendanceStatsDrawer-extraOptions" style={{display: drawerDisplay}}>
           <div className="attendanceStatsDrawer-extraOptions-scrollable">
             {this.renderExtraOptions(extraOptions)}
           </div>

@@ -17,8 +17,9 @@ class AttendanceList extends React.Component {
       confirmed: 0,
       declined: 0,
       uncertain: 0,
-      isDrawerOpen: false,
+      isDrawerOpen: 'blank',
       extraOptions: {},
+      drawerDisplay: 'none',
     }
     this.getAttendees=this.getAttendees.bind(this)
     this.renderAttendees=this.renderAttendees.bind(this)
@@ -97,7 +98,7 @@ class AttendanceList extends React.Component {
               attendance.forEach(attendance => {
                 if (data.id === attendance.attendee_id) {
                 data['eventOptions'] = attendance.conditions
-                data['extraComments'] = attendance.extra_comments
+                data['tags'] = attendance.tags
                   if (attendance.status) {
                     status = 'confirmed'
                     confirmed ++
@@ -161,42 +162,6 @@ class AttendanceList extends React.Component {
     }
   }
 
-  renderAttendees() {
-    let renderAttendees = []
-    let attendeesArr = Object.assign([], this.state.attendees)
-    attendeesArr.forEach((data,index) => {
-      renderAttendees.push(
-        <div className="attendanceList-contact" key={index}>
-          <div className="attendanceList-contact-messageStatus">
-            <div className={"attendanceList-contact-messageStatus-icon " + data.message_status} / >
-          </div>
-          <div className="attendanceList-contact-name">
-            {data.name}
-          </div>
-          <div className="attendanceList-contact-status">
-            {data.status}
-          </div>
-          {this.renderActions(data.name)}
-        </div>
-      )
-    })
-
-    return renderAttendees
-  }
-
-  renderActions(name) {
-    let currentGroup = Object.assign({}, this.props.currentGroup)
-    if (currentGroup.events) {
-      if (!currentGroup.events.closed) {
-        return (
-          <div className="attendanceList-contact-action" onClick={() => this.onPress(name)}>
-            <div className="attendanceList-contact-action-icon" />
-          </div>
-        )
-      }
-    }
-  }
-
   openEventsModal() {
     let groupId = this.props.currentGroup.id || ''
     if (groupId) {
@@ -227,6 +192,38 @@ class AttendanceList extends React.Component {
     this.props.setModal('show', 'ConfirmationModal', setEventStatusDict)
   }
 
+  openEditAttendeesModal(attendee) {
+    let { currentGroup } = this.props
+    if (currentGroup.events) {
+      let editAttendanceDict = {
+        attendee,
+        tags: this.props.user.tags,
+        eventId: currentGroup.events.id,
+        function: this.editAttendance.bind(this),
+        setSnackbar: this.props.setSnackbar,
+        getUser: this.props.getUser,
+      }
+
+      this.props.setModal('show', 'EditAttendanceModal', editAttendanceDict)
+    }
+  }
+
+  openTagsModal() {
+    if (this.props.user) {
+      let tagsDict = {
+        tags: this.props.user.tags,
+        setSnackbar: this.props.setSnackbar,
+        userId: this.props.user.id,
+        getUser: this.props.getUser,
+      }
+      this.props.setModal('show', 'EditTagsModal', tagsDict)
+    }
+  }
+
+  editAttendance() {
+
+  }
+
   setEventsStatus(status) {
     if (this.props.currentGroup.events) {
       let isEventClosed
@@ -249,11 +246,56 @@ class AttendanceList extends React.Component {
   }
 
   setDrawer(state) {
-    this.setState({isDrawerOpen: state})
+    if (state || this.state.isDrawerOpen === 'blank') {
+      this.setState({isDrawerOpen: true, drawerDisplay: 'flex'})
+    }
+    else {
+      this.setState({isDrawerOpen: false}, () => {
+        setTimeout(() => {
+          this.setState({drawerDisplay: 'none'})
+        }, 290)
+      })
+    }
+  }
+
+  renderAttendees() {
+    let renderAttendees = []
+    let attendeesArr = Object.assign([], this.state.attendees)
+    attendeesArr.forEach((data,index) => {
+      renderAttendees.push(
+        <div className="attendanceList-contact" key={index}>
+          <div className="attendanceList-contact-messageStatus">
+            <div className={"attendanceList-contact-messageStatus-icon " + data.message_status} / >
+          </div>
+          <div className="attendanceList-contact-name" onClick={() => this.openEditAttendeesModal(data)}>
+            {data.name}
+          </div>
+          <div className="attendanceList-contact-status" onClick={() => this.openEditAttendeesModal(data)}>
+            {data.status}
+          </div>
+          {this.renderActions(data.name)}
+        </div>
+      )
+    })
+
+    return renderAttendees
+  }
+
+  renderActions(name) {
+    let currentGroup = Object.assign({}, this.props.currentGroup)
+    if (currentGroup.events) {
+      if (!currentGroup.events.closed) {
+        return (
+          <div className="attendanceList-contact-action" onClick={() => this.onPress(name)}>
+            <div className="attendanceList-contact-action-icon" />
+          </div>
+        )
+      }
+    }
   }
 
   render() {
-    let { confirmed, declined, uncertain, isDrawerOpen, extraOptions } = this.state
+    let { confirmed, declined, uncertain, isDrawerOpen, extraOptions, drawerDisplay } = this.state
     let currentEventName = ' - '
     let isEventClosed = 'blank'
     if (this.props.currentGroup.events) {
@@ -280,14 +322,18 @@ class AttendanceList extends React.Component {
           uncertain={uncertain}
           isDrawerOpen={isDrawerOpen}
           extraOptions={extraOptions}
+          drawerDisplay={drawerDisplay}
           setDrawer={this.setDrawer.bind(this)}
         />
         <div className="attendanceList-options">
-          <div className="attendanceList-options-extraOptions">
-            <div className="attendanceList-options-extraOptions-icon" onClick={() => this.props.setModal('show', 'MoreEventOptionsModal', this.props.currentGroup.events)}/>
+          <div className="attendanceList-options-tags">
+            <div className="attendanceList-options-tags-icon" onClick={this.openTagsModal.bind(this)}/>
           </div>
           <div className="attendanceList-options-save">
             <div className={"attendanceList-options-save-icon " + isEventClosed} onClick={() => this.openEventStatusModal(isEventClosed)}/>
+          </div>
+          <div className="attendanceList-options-extraOptions">
+            <div className="attendanceList-options-extraOptions-icon" onClick={() => this.props.setModal('show', 'MoreEventOptionsModal', this.props.currentGroup.events)}/>
           </div>
         </div>
       </div>

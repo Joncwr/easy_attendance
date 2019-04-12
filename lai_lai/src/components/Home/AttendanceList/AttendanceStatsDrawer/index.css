@@ -15,7 +15,8 @@
   background-color: rgba(255, 230, 204, .8);
 }
 
-.attendanceStatsDrawer-drawerIcon-icon.false {
+.attendanceStatsDrawer-drawerIcon-icon.false,
+.attendanceStatsDrawer-drawerIcon-icon.blank {
   height: 100%;
 	background: url('/img/icon_drawer@3x.png') no-repeat center center/ contain;
 }
@@ -103,9 +104,12 @@
   0% {
     transform: translateY(0px);
   }
-  
-  100% {
+
+  99% {
     transform: translateY(50px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }
 

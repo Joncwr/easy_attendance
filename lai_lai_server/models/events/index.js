@@ -5,7 +5,7 @@ class Events extends Model {
   static get tableName() {
     return 'events';
   }
-  
+
   static get relationMappings () {
     return {
       attendance: {

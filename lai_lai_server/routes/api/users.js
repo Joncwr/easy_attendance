@@ -45,4 +45,19 @@ router.put('/setDefaultGroup', (req, res) => {
     })
 });
 
+router.put('/setTags', (req, res) => {
+  const { user_id, tags } = req.body
+  return Users
+    .query()
+    .patchAndFetchById(user_id, {tags})
+    .then(user => {
+      res.send(user)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
+});
+
+
 module.exports = router
