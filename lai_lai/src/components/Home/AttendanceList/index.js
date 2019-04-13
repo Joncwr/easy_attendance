@@ -199,7 +199,6 @@ class AttendanceList extends React.Component {
         attendee,
         tags: this.props.user.tags || [],
         eventId: currentGroup.events.id,
-        function: this.editAttendance.bind(this),
         setSnackbar: this.props.setSnackbar,
         getUser: this.props.getUser,
       }
