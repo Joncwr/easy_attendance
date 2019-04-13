@@ -89,9 +89,9 @@ class Home extends Component {
             // Only after getting user then i can get attendees thats in the groups
             this.getAttendees()
           })
-          let [groups] = res.groups
-          if (groups.events) {
-            this.props.setDate(groups.events.name)
+          let groups = res.groups
+          if (groups[groupIndex].events) {
+            this.props.setDate(groups[groupIndex].events.name)
           }
           else {
             this.props.setDate('')
