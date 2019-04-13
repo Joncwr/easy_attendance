@@ -14,16 +14,18 @@ router.get('/past5Events/:group_id', (req, res) => {
   .eager('attendance')
   .orderBy('id','asce')
   .then(events => {
-    let last5Events = events.slice(Math.max(events.length - 5, 1))
+    let last5Events
+    if (events.length <= 5) last5Events = events
+    else last5Events = events.slice(Math.max(events.length - 5, 1))
     let attendanceDict = {}
     last5Events.forEach((data,index) => {
-      attendanceDict[events[index].id] = {}
-      attendanceDict[events[index].id]['name'] = data.name
-      attendanceDict[events[index].id]['true'] = 0
-      attendanceDict[events[index].id]['false'] = 0
+      attendanceDict[last5Events[index].id] = {}
+      attendanceDict[last5Events[index].id]['name'] = data.name
+      attendanceDict[last5Events[index].id]['true'] = 0
+      attendanceDict[last5Events[index].id]['false'] = 0
       last5Events[index].attendance.forEach(data => {
-        if (data.status) attendanceDict[events[index].id]['true']++
-        else attendanceDict[events[index].id]['false']++
+        if (data.status) attendanceDict[last5Events[index].id]['true']++
+        else attendanceDict[last5Events[index].id]['false']++
       })
     })
     res.send(attendanceDict)

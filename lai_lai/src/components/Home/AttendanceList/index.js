@@ -197,7 +197,7 @@ class AttendanceList extends React.Component {
     if (currentGroup.events) {
       let editAttendanceDict = {
         attendee,
-        tags: this.props.user.tags,
+        tags: this.props.user.tags || [],
         eventId: currentGroup.events.id,
         function: this.editAttendance.bind(this),
         setSnackbar: this.props.setSnackbar,
@@ -211,17 +211,13 @@ class AttendanceList extends React.Component {
   openTagsModal() {
     if (this.props.user) {
       let tagsDict = {
-        tags: this.props.user.tags,
+        tags: this.props.user.tags || [],
         setSnackbar: this.props.setSnackbar,
         userId: this.props.user.id,
         getUser: this.props.getUser,
       }
       this.props.setModal('show', 'EditTagsModal', tagsDict)
     }
-  }
-
-  editAttendance() {
-
   }
 
   setEventsStatus(status) {
