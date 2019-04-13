@@ -1,8 +1,11 @@
 .overallAttendeesAttendance {
   width: 100%;
   margin-bottom: 50px;
-  overflow: scroll;
   height: 300px;
+  overflow: scroll;
+}
+
+.overallAttendeesAttendance-container {
   display: flex;
   justify-content: center;
   align-items: center;

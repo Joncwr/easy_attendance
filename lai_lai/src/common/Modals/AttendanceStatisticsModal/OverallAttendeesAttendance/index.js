@@ -26,38 +26,40 @@ class overallAttendeesAttendance extends React.Component {
             percentage: percentage || 0
           }
           overallAttendeesAttendance.push(eventAttendance)
+          overallAttendeesAttendance.push(eventAttendance)
+          overallAttendeesAttendance.push(eventAttendance)
         }
       }
       let sortOverallAttendeesAttendance = overallAttendeesAttendance.sort((a,b) => {
         return b.percentage - a.percentage
       })
-      let height = overallAttendeesAttendance.length * 45
+      let height = overallAttendeesAttendance.length * 40
       this.setState({overallAttendeesAttendance: sortOverallAttendeesAttendance, height})
     }
   }
-  
+
   render() {
     return (
       <div className="overallAttendeesAttendance">
-        <ResponsiveContainer  width="100%" height={this.state.height}>
-        	<BarChart
-            width={500}
-            height={100}
-            data={this.state.overallAttendeesAttendance}
-            margin={{ top: 10, right: 20, left: 20, bottom: 0 }}
-            layout="vertical">
-            <XAxis type="number" domain={[0, 100]} unit="%"/>
-            <YAxis type="category" dataKey='name'/>
-            <Bar
-              background='#fff'
-              label={label => {
-                return label.value.toFixed(1) + '%'
-              }}
-              dataKey="percentage"
-              fill="#ff9999"/>
-          </BarChart>
-
-        </ResponsiveContainer>
+        <div className="overallAttendeesAttendance-container" style={{height: this.state.height + 'px'}}>
+          <ResponsiveContainer  width="100%" height='100%'>
+          	<BarChart
+              width={500}
+              data={this.state.overallAttendeesAttendance}
+              margin={{ top: 10, right: 20, left: 20, bottom: 0 }}
+              layout="vertical">
+              <XAxis type="number" domain={[0, 100]} unit="%"/>
+              <YAxis type="category" dataKey='name'/>
+              <Bar
+                background='#fff'
+                label={label => {
+                  return label.value.toFixed(1) + '%'
+                }}
+                dataKey="percentage"
+                fill="#ff9999"/>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     )
   }
