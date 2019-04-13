@@ -26,8 +26,6 @@ class overallAttendeesAttendance extends React.Component {
             percentage: percentage || 0
           }
           overallAttendeesAttendance.push(eventAttendance)
-          overallAttendeesAttendance.push(eventAttendance)
-          overallAttendeesAttendance.push(eventAttendance)
         }
       }
       let sortOverallAttendeesAttendance = overallAttendeesAttendance.sort((a,b) => {
