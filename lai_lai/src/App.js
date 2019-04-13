@@ -10,7 +10,6 @@ import ModalConductor from './helpers/ModalConductor'
 import Snackbar from './helpers/Snackbar'
 import LoadingOverlay from './common/LoadingOverlay'
 import jwtMiddleware from './services/jwtMiddleware'
-import DateApi from './services/api/date'
 
 import './App.css';
 

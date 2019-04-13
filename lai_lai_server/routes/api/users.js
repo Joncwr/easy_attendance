@@ -31,4 +31,33 @@ router.get('/getUsers', (req, res) => {
     })
 });
 
+router.put('/setDefaultGroup', (req, res) => {
+  const { group_id, user_id } = req.body
+  return Users
+    .query()
+    .patchAndFetchById(user_id, {default_group: group_id})
+    .then(users => {
+      res.send(users)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
+});
+
+router.put('/setTags', (req, res) => {
+  const { user_id, tags } = req.body
+  return Users
+    .query()
+    .patchAndFetchById(user_id, {tags})
+    .then(user => {
+      res.send(user)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
+});
+
+
 module.exports = router

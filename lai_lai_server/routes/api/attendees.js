@@ -9,11 +9,23 @@ router.get('/test', (req, res) => {
   res.send('hi')
 });
 
-router.get('/getAttendees', (req, res) => {
-  return Attendees
+router.get('/getAttendees/:group_id', (req, res) => {
+  let { group_id } = req.params
+  return Attendees_Groups
     .query()
+    .where({group_id})
+    .eager('attendees')
     .then(table => {
-      res.send(table)
+      let attendeeArr = []
+      table.forEach(data => {
+        attendeeArr.push(data.attendees)
+      })
+
+      res.send(attendeeArr)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
     })
 });
 
@@ -27,9 +39,8 @@ router.post('/addAttendee', (req, res) => {
       .query()
       .insert({attendee_id: attendee.id, group_id: group_id})
       .then(attendees_groups => {
-        res.send(200)
+        res.sendStatus(200)
       })
-      .catch(err => res.sendStatus(400))
     })
     .catch(err => res.sendStatus(400))
 });

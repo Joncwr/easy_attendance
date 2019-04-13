@@ -1,0 +1,65 @@
+.home-groups--mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-groups-headers {
+  font-size: 1.5em;
+}
+
+.home-groups-headers-index,
+.home-groups-info-group-id {
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  /* background-color: red; */
+}
+
+.home-groups-headers-name,
+.home-groups-info-group-name {
+  flex: 4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  /* background-color: green; */
+}
+
+.home-groups-headers-actions,
+.home-groups-info-group-actions {
+  width: 80px;
+}
+
+.home-groups-info-group {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: orange; */
+  font-size: 1.5em;
+}
+
+.home-groups-info-group-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.home-groups-info-group-actions-edit,
+.home-groups-info-group-actions-delete {
+  height: 25px;
+  width: 25px;
+  background-color: green;
+}
+
+.home-groups-info-group-actions-edit {
+  background: url('/img/icon_edit@3x.png') no-repeat center center/ contain;
+}
+
+.home-groups-info-group-actions-delete {
+  background: url('/img/icon_delete@3x.png') no-repeat center center/ contain;
+}
+
+.home-actions.home-actions--groups {
+  padding: 0 15%;
+}

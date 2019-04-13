@@ -1,0 +1,24 @@
+.attendanceStatisticsModal {
+  width: 90vw;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff2e6;
+}
+
+.attendanceStatisticsModal-header {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.attendanceStatisticsModal-header-text {
+  font-size: 1.4em;
+}
+
+.attendanceStatisticsModal-carousel {
+  width: 100%;
+  margin-top: 20px;
+}

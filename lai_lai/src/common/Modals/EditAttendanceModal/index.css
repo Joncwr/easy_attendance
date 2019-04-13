@@ -1,0 +1,136 @@
+.editAttendanceModal {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff2e6;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.editAttendanceModal-header {
+  width: 100%;
+  align-self: flex-start;
+  font-size: 1.3em;
+  font-weight: 600;
+  font-family: Fjalla One;
+  margin: 30px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.editAttendanceModal-options {
+  width: 100%;
+}
+
+.editAttendanceModal-options-attendance,
+.editAttendanceModal-options-tags {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.editAttendanceModal-options-attendance {
+  margin-bottom: 10px;
+}
+
+.editAttendanceModal-options-attendance-input {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editAttendanceModal-options-attendance-input-container {
+  width: 40px;
+  height: 40px;
+}
+
+.editAttendanceModal-options-tags {
+
+}
+
+.editAttendanceModal-options-header {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.editAttendanceModal-options-attendance-input,
+.editAttendanceModal-options-tags-input {
+  width: 70%;
+}
+
+.editAttendanceModal-options-tags-input {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.editAttendanceModal-options-tags-input-selector {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.editAttendanceModal-options-tags-input-selector-text {
+  width: 100%;
+  text-align: center;
+  margin: 0 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.editAttendanceModal-options-tags-input-selector-container {
+  position: absolute;
+  top: 32px;
+  border-radius: 0px 0px 24px 24px;
+  z-index: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 20px 10px;
+  box-sizing: border-box;
+}
+
+.editAttendanceModal-options-tags-input-selector-container-tag {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editAttendanceModal-options-tags-input-selector-container-name {
+  width: 100%;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.editAttendanceModal-options-tags-input-selector-container.false {
+  display: none;
+}
+
+.editAttendanceModal-actions {
+  display: flex;
+  width: 100%;
+  padding: 0 25px;
+  margin: 30px 0;
+  box-sizing: border-box;
+}

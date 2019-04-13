@@ -1,5 +1,6 @@
 const { Model } = require('../../db')
 const Groups = require('../groups')
+const Attendance = require('../attendance')
 
 class Attendees extends Model {
   static get tableName() {
@@ -18,6 +19,14 @@ class Attendees extends Model {
             to: 'attendees_groups.group_id'
           },
           to: 'groups.id'
+        }
+      },
+      attendance: {
+        relation: Model.HasManyRelation,
+        modelClass: Attendance,
+        join: {
+          from: 'attendees.id',
+          to: 'attendance.attendee_id'
         }
       }
     }
