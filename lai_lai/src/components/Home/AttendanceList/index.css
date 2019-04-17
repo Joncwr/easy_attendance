@@ -104,17 +104,32 @@
   font-weight: 600;
 }
 
-.attendanceList-contact-action {
-  width: 50px;
+.attendanceList-contact-actions {
+  width: 70px;
   height: 100%;
-  padding: 1em;
+  display: flex;
+}
+
+.attendanceList-contact-actions-message,
+.attendanceList-contact-actions-whatsapp {
+  width: 30px;
+  height: 100%;
+  padding: .3em;
   box-sizing: border-box;
 }
 
-.attendanceList-contact-action-icon {
+.attendanceList-contact-actions-message-icon,
+.attendanceList-contact-actions-whatsapp-icon {
   height: 100%;
   width: 100%;
-	background: url('/img/icon_send_link@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceList-contact-actions-message-icon {
+  background: url('/img/icon_send_link@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceList-contact-actions-whatsapp-icon {
+  background: url('/img/icon_whatsapp@3x.png') no-repeat center center/ contain;
 }
 
 .attendanceList-options {

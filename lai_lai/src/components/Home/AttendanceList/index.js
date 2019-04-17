@@ -253,6 +253,11 @@ class AttendanceList extends React.Component {
     }
   }
 
+  onWhatsapp(number) {
+    let whatsappUrl = 'https://wa.me/' + number
+    window.open(whatsappUrl)
+  }
+
   renderAttendees() {
     let renderAttendees = []
     let attendeesArr = Object.assign([], this.state.attendees)
@@ -268,7 +273,7 @@ class AttendanceList extends React.Component {
           <div className="attendanceList-contact-status" onClick={() => this.openEditAttendeesModal(data)}>
             {data.status}
           </div>
-          {this.renderActions(data.name)}
+          {this.renderActions(data.name, data.number)}
         </div>
       )
     })
@@ -276,13 +281,18 @@ class AttendanceList extends React.Component {
     return renderAttendees
   }
 
-  renderActions(name) {
+  renderActions(name, number) {
     let currentGroup = Object.assign({}, this.props.currentGroup)
     if (currentGroup.events) {
       if (!currentGroup.events.closed) {
         return (
-          <div className="attendanceList-contact-action" onClick={() => this.onPress(name)}>
-            <div className="attendanceList-contact-action-icon" />
+          <div className="attendanceList-contact-actions">
+            <div className="attendanceList-contact-actions-whatsapp" onClick={() => this.onWhatsapp(number)}>
+              <div className="attendanceList-contact-actions-whatsapp-icon" />
+            </div>
+            <div className="attendanceList-contact-actions-message" onClick={() => this.onPress(name)}>
+              <div className="attendanceList-contact-actions-message-icon" />
+            </div>
           </div>
         )
       }

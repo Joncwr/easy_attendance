@@ -68,6 +68,15 @@
   box-sizing: border-box;
 }
 
+.attendanceStatsDrawer-extraOptions-null {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4c4c4c;
+  font-style: italic;
+  font-size: .9em;
+}
+
 .attendanceStatsDrawer-extraOptions-scrollable {
   width: 100%;
   overflow: scroll;

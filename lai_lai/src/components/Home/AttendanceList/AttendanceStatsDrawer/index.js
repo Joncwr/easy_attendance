@@ -38,6 +38,13 @@ class AttendanceStatsDrawer extends React.Component {
 
       return renderExtraOptions
     }
+    else {
+      return (
+        <div className="attendanceStatsDrawer-extraOptions-null">
+          No extra options available
+        </div>
+      )
+    }
   }
 
   render() {
