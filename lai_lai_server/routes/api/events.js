@@ -45,7 +45,10 @@ router.put('/setEventSchema', (req, res) => {
     .then(event => {
       res.send(event)
     })
-    .catch(err => res.sendStatus(400))
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
 });
 
 router.post('/createEvent', (req, res) => {

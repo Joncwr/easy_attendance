@@ -24,10 +24,11 @@ class Confirmation extends React.Component {
       isLoading: false,
       isStopped: false,
       isPaused: false,
-      checkBox: 'blank',
-      eventOptions: {},
+      checkbox: [],
+      eventOptions: [],
     }
     this.onPress=this.onPress.bind(this)
+    this.setCheckbox=this.setCheckbox.bind(this)
   }
 
   componentDidMount() {
@@ -41,15 +42,35 @@ class Confirmation extends React.Component {
 
       PublicApi.getEvent(query.event_id)
       .then((res) => {
-        let eventOptions = {}
-        if (res.schema) {
-          eventOptions['fieldName'] = res.schema.fieldName
-          eventOptions['fieldType'] = res.schema.fieldType
-          eventOptions['type'] = res.schema.type
-          eventOptions['value'] = false
-          if (res.schema.tags) eventOptions['tags'] = ' - '
+        let eventOptions = []
+        let checkbox = []
+        let schema = res.schema
+        if (schema) {
+          schema.forEach(data => {
+            let extraFields
+            if (data.extraFields) {
+              if (data.extraFields.length > 0) {
+                extraFields = []
+                data.extraFields.forEach(data => {
+                  extraFields.push({
+                    name: data,
+                    value: false,
+                  })
+                })
+              }
+            }
+            eventOptions.push({
+              fieldName: data.fieldName,
+              fieldType: data.fieldType,
+              type: data.type,
+              value: false,
+              extraFields: extraFields,
+              tags: ' - ',
+            })
+            checkbox.push('blank')
+          })
         }
-        this.setState({event: res.name, eventClosed: res.closed, eventOptions})
+        this.setState({event: res.name, eventClosed: res.closed, eventOptions, checkbox},() => console.log(this.state.eventOptions))
       })
       .catch(err => console.log(err))
     })
@@ -57,7 +78,7 @@ class Confirmation extends React.Component {
 
   onPress(status) {
     let eventOptions
-    if (this.state.eventOptions) {
+    if (this.state.eventOptions.length > 0) {
       eventOptions = this.state.eventOptions
     }
     let attendanceDict = {
@@ -79,51 +100,127 @@ class Confirmation extends React.Component {
     }))
   }
 
-  renderOptions() {
-    let eventOptions = Object.assign({}, this.state.eventOptions)
-    let { fieldType, fieldName, type, tags } = eventOptions
+  renderOptions(options) {
+    if (options) {
+      let eventOptions = Object.assign([], this.state.eventOptions)
+      if (eventOptions.length > 0) {
+        let renderOptions = []
+        eventOptions.forEach((data, index) => {
+          let { fieldName, fieldType } = data
+          if (fieldType === 'boolean') {
+            renderOptions.push(
+              <div className="confirmation-content-info-options-container" key={index}>
+                <div className="confirmation-content-info-options-container-text">{fieldName}</div>
+                <div className="confirmation-content-info-options-container-checkBox">
+                  <div className="confirmation-content-info-options-container-checkBox-container">
+                    <CheckBox
+                      setCheckbox={this.setCheckbox}
+                      checkbox={this.state.checkbox[index]}
+                      index={index}
+                    />
+                  </div>
+                </div>
+              </div>
+            )
+          }
+        })
+        return renderOptions
+      }
+    }
+  }
 
-    if (type === 'single' && fieldType === 'boolean' && !tags) {
+  setCheckbox(index) {
+    let eventOptions = this.state.eventOptions
+    let checkbox = Object.assign([], this.state.checkbox)
+    if (this.state.checkbox[index] === 'blank' || !this.state.checkbox[index]) {
+      eventOptions[index].value = true
+      checkbox[index] = true
+      this.setState({checkbox, eventOptions})
+    }
+    else {
+      eventOptions[index].value = false
+      checkbox[index] = false
+      this.setState({checkbox, eventOptions})
+    }
+  }
+
+  renderActions(actions) {
+    if (actions) {
       return (
-        <div className="confirmation-options">
-          <div className="confirmation-options-text">{fieldName}</div>
-          <div className="confirmation-options-checkBox">
-            <div className="confirmation-options-checkBox-container">
-              <CheckBox
-                setCheckBox={this.setCheckBox.bind(this)}
-                checkBox={this.state.checkBox}
-              />
-            </div>
-          </div>
+        <div className='confirmation-actions-container'>
+          <Button
+            onClick={() => this.onPress(false)}
+            name='Decline'
+            style={{
+              backgroundColor: '#ffd1b3',
+              borderColor: '#ff8533',
+              margin: '0 10px',
+              flex: 1,
+            }}
+          />
+          <Button
+            onClick={() => this.onPress(true)}
+            name='Confirm'
+            style={{
+              backgroundColor: '#e6ffe6',
+              borderColor: '#4feb8b',
+              margin: '0 10px',
+              flex: 1,
+            }}
+          />
         </div>
       )
     }
   }
 
-  setCheckBox() {
-    let eventOptions = Object.assign({}, this.state.eventOptions)
-    eventOptions['value'] = false
-    if (this.state.checkBox === 'blank') {
-      eventOptions['value'] = true
-      this.setState({checkBox: true, eventOptions})
-    }
-    else {
-      eventOptions['value'] = !this.state.checkBox
-      this.setState({checkBox: !this.state.checkBox, eventOptions})
-    }
+  renderText(name) {
+    return (
+      <div>
+        Hai <span style={{fontWeight: '700', color: '#ff8000'}}>{name}</span>, will you be joining us for the next bible study dated above?
+      </div>
+    )
   }
 
   renderScreen(event,name) {
+    let text
+    let animation
+    let actions = false
+    let messageStatus = 'done'
+    let options = false
     if (this.state.eventClosed) {
-      return (
-        <div className="confirmation--mainWrapper">
-          <div className="confirmation-content">
+      text = "I'm sorry, this event has ended."
+      animation = require('./animation_sad_cross.json')
+    }
+    else {
+      if (this.state.name) {
+        if (!this.state.hasAnswered) {
+          text = this.renderText(name)
+          actions = true
+          animation = require('./animation_sad_cross.json')
+          messageStatus = ''
+          options = true
+        }
+        else {
+          text = "Thanks! Your attendance has been saved!"
+          animation = require('./animation_happy_cross.json')
+        }
+      }
+      else {
+        text = "Hai, was not able to get your name, please open the link from whatsapp again. If this continues, please contact your host."
+        animation = require('./animation_sad_cross.json')
+      }
+    }
+
+    return (
+      <div className="confirmation--mainWrapper">
+        <div className="confirmation-content">
+          <div className="confirmation-content-graphic">
             <Lottie
               options={
                 {
                   loop: true,
                   autoplay: true,
-                  animationData: require('./animation_sad_cross.json'),
+                  animationData: animation,
                   rendererSettings: {
                     preserveAspectRatio: 'xMidYMid meet'
                   }
@@ -131,128 +228,23 @@ class Confirmation extends React.Component {
               }
               isStopped={this.state.isStopped}
               isPaused={this.state.isPaused}/>
-            <div className="confirmation-content-message">
-              <div className="confirmation-content-message-text done">
-                I'm sorry, this event has ended.
-              </div>
+          </div>
+          <div className="confirmation-content-info">
+          <div className="confirmation-content-info-message">
+            <div className={"confirmation-content-info-message-text " + messageStatus} >
+              {text}
             </div>
           </div>
-          <div className="confirmation-actions">
+          <div className="confirmation-content-info-options">
+            {this.renderOptions(options)}
+          </div>
           </div>
         </div>
-      )
-    }
-    else {
-      if (this.state.name && !this.state.hasAnswered) {
-        return (
-          <div className="confirmation--mainWrapper">
-            <div className="confirmation-content">
-              <div className="confirmation-content-graphic">
-                <Lottie
-                  options={
-                    {
-                      loop: true,
-                      autoplay: true,
-                      animationData: require('./animation_sad_cross.json'),
-                      rendererSettings: {
-                        preserveAspectRatio: 'xMidYMid meet'
-                      }
-                    }
-                  }
-                  isStopped={this.state.isStopped}
-                  isPaused={this.state.isPaused}/>
-              </div>
-              <div className="confirmation-content-message">
-                <div className="confirmation-content-message-text">
-                  Hai <span style={{fontWeight: '700', color: '#ff8000'}}>{name}</span>, will you be joining us for the next bible study dated above?
-                </div>
-              </div>
-            </div>
-            {this.renderOptions()}
-            <div className="confirmation-actions">
-              <Button
-                onClick={() => this.onPress(false)}
-                name='Decline'
-                style={{
-                  backgroundColor: '#ffd1b3',
-                  borderColor: '#ff8533',
-                  margin: '0 10px',
-                  flex: 1,
-                }}
-              />
-              <Button
-                onClick={() => this.onPress(true)}
-                name='Confirm'
-                style={{
-                  backgroundColor: '#e6ffe6',
-                  borderColor: '#4feb8b',
-                  margin: '0 10px',
-                  flex: 1,
-                }}
-              />
-            </div>
-          </div>
-        )
-      }
-      else if (this.state.name && this.state.hasAnswered) {
-        return (
-          <div className="confirmation--mainWrapper">
-            <div className="confirmation-content">
-              <div className="confirmation-content-graphic">
-                <Lottie
-                  options={
-                    {
-                      loop: true,
-                      autoplay: true,
-                      animationData: require('./animation_happy_cross.json'),
-                      rendererSettings: {
-                        preserveAspectRatio: 'xMidYMid meet'
-                      }
-                    }
-                  }
-                  isStopped={this.state.isStopped}
-                  isPaused={this.state.isPaused}/>
-              </div>
-              <div className="confirmation-content-message">
-                <div className="confirmation-content-message-text done">
-                  Thanks! Your attendance has been saved!
-                </div>
-              </div>
-            </div>
-            <div className="confirmation-actions">
-            </div>
-          </div>
-        )
-      }
-      else if (!this.state.name) {
-        return (
-          <div className="confirmation--mainWrapper">
-            <div className="confirmation-content">
-              <Lottie
-                options={
-                  {
-                    loop: true,
-                    autoplay: true,
-                    animationData: require('./animation_sad_cross.json'),
-                    rendererSettings: {
-                      preserveAspectRatio: 'xMidYMid meet'
-                    }
-                  }
-                }
-                isStopped={this.state.isStopped}
-                isPaused={this.state.isPaused}/>
-              <div className="confirmation-content-message">
-                <div className="confirmation-content-message-text error">
-                  Hai, was not able to get your name, please open the link from whatsapp again. If this continues, please contact your host.
-                </div>
-              </div>
-            </div>
-            <div className="confirmation-actions">
-            </div>
-          </div>
-        )
-      }
-    }
+        <div className="confirmation-actions">
+          {this.renderActions(actions)}
+        </div>
+      </div>
+    )
   }
 
   render() {

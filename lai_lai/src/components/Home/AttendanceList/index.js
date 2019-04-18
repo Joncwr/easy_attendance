@@ -5,6 +5,7 @@ import MessageApi from '../../../services/api/messaging'
 import AttendanceApi from '../../../services/api/attendance'
 import EventsApi from '../../../services/api/events'
 import AttendanceStatsDrawer from './AttendanceStatsDrawer'
+import ExtraOptionsHelper from '../../../helpers/ExtraOptionsHelper'
 
 import './index.css'
 
@@ -18,7 +19,7 @@ class AttendanceList extends React.Component {
       declined: 0,
       uncertain: 0,
       isDrawerOpen: 'blank',
-      extraOptions: {},
+      extraOptions: [],
       drawerDisplay: 'none',
     }
     this.getAttendees=this.getAttendees.bind(this)
@@ -32,7 +33,7 @@ class AttendanceList extends React.Component {
     this.getAttendees()
 
     // DELETE!!!
-    // this.props.setModal('show', 'MoreEventOptionsModal', this.props.currentGroup.events)
+    // this.openEventsOptionsModal()
   }
 
   componentWillUpdate(prevProps) {
@@ -139,24 +140,7 @@ class AttendanceList extends React.Component {
     if (currentGroup.events) {
       let eventSchema = currentGroup.events.event_schema
       if (eventSchema) {
-        let extraOptions = {}
-        let isValue1True = 0
-        let isValue1False = 0
-
-        attendees.forEach(data => {
-          if (data.eventOptions) {
-            if (data.status === "confirmed") {
-              if (data.eventOptions.value) isValue1True ++
-              else isValue1False ++
-            }
-            else isValue1False ++
-          }
-          else isValue1False ++
-        })
-        extraOptions['values'] = ['valueOne']
-        extraOptions['valueOne'] = eventSchema.fieldName
-        extraOptions['valueOneTrueCounter'] = isValue1True
-        extraOptions['valueOneFalseCounter'] = isValue1False
+        let extraOptions = ExtraOptionsHelper.getExtraOptions(eventSchema, attendees)
         this.setState({extraOptions})
       }
     }
@@ -216,6 +200,16 @@ class AttendanceList extends React.Component {
         getUser: this.props.getUser,
       }
       this.props.setModal('show', 'EditTagsModal', tagsDict)
+    }
+  }
+
+  openEventsOptionsModal() {
+    if (this.props.currentGroup) {
+      let eventsOptionsDict = {
+        event: this.props.currentGroup.events,
+        setSnackbar: this.props.setSnackbar,
+      }
+      this.props.setModal('show', 'MoreEventOptionsModal', eventsOptionsDict)
     }
   }
 
@@ -338,7 +332,7 @@ class AttendanceList extends React.Component {
             <div className={"attendanceList-options-save-icon " + isEventClosed} onClick={() => this.openEventStatusModal(isEventClosed)}/>
           </div>
           <div className="attendanceList-options-extraOptions">
-            <div className="attendanceList-options-extraOptions-icon" onClick={() => this.props.setModal('show', 'MoreEventOptionsModal', this.props.currentGroup.events)}/>
+            <div className="attendanceList-options-extraOptions-icon" onClick={this.openEventsOptionsModal.bind(this)}/>
           </div>
         </div>
       </div>

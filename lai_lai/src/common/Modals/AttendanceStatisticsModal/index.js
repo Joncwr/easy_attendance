@@ -38,7 +38,6 @@ class AttendanceStatisticsModal extends React.Component {
   }
 
   setPageName(index) {
-    console.log(index);
     if (index === 0) this.setState({page: 'Overall Attendance'})
     else if (index === 1) this.setState({page: "Overall Attendee's Attendance"})
   }

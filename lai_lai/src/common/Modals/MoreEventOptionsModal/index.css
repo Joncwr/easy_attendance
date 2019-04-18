@@ -1,5 +1,6 @@
 .moreEventOptions {
   width: 350px;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,6 +8,7 @@
   background-color: #fff2e6;
   padding: 0 40px;
   box-sizing: border-box;
+  overflow: scroll;
 }
 
 .moreEventOptions-header {
@@ -16,6 +18,74 @@
   font-weight: 600;
   font-family: Fjalla One;
   margin: 20px 0;
+}
+
+.moreEventOptions-fields {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.moreEventOptions-fields-main {
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.moreEventOptions-fields-main-text {
+  font-size: 1.2em;
+}
+
+.moreEventOptions-fields-main-deleteField {
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  background: url('/img/icon_delete@3x.png') no-repeat center center/ contain;
+}
+
+.moreEventOptions-fields-subfields {
+  margin-left: 20px;
+  white-space: nowrap;
+  overflow: scroll;
+}
+
+.moreEventOptions-textInput {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.moreEventOptions-textInput-mainField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.moreEventOptions-textInput-mainField-addButton {
+  height: 40px;
+  width: 40px;
+  background: url('/img/icon_add@3x.png') no-repeat center center/ contain;
+}
+
+.moreEventOptions-textInput-subfield {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.moreEventOptions-textInput-addSubField {
+  height: 30px;
+  width: 30px;
+  background: url('/img/icon_sub_add@3x.png') no-repeat center center/ contain;
+}
+
+.moreEventOptions-textInput-subfield-deleteButton {
+  height: 25px;
+  width: 25px;
+  margin-left: 10px;
+  background: url('/img/icon_delete@3x.png') no-repeat center center/ contain;
 }
 
 .moreEventOptions-actions {

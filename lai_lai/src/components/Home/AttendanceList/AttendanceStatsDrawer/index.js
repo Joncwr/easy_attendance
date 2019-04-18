@@ -1,4 +1,5 @@
 import React from 'react'
+import Carousel from 'nuka-carousel';
 
 import './index.css'
 
@@ -12,14 +13,18 @@ class AttendanceStatsDrawer extends React.Component {
 
   }
 
+  componentDidMount() {
+    // delete this!!!
+    this.props.setDrawer(true)
+  }
+
   renderExtraOptions(extraOptions) {
-    if (extraOptions.values) {
+    if (extraOptions.length > 0) {
       let renderExtraOptions = []
-      extraOptions.values.forEach((data, index) => {
-        let valueKey = data
-        let fieldName = extraOptions[valueKey]
-        let trueCounter = extraOptions[valueKey+'TrueCounter']
-        let falseCounter = extraOptions[valueKey+'FalseCounter']
+      extraOptions.forEach((data, index) => {
+        let fieldName = data.value
+        let trueCounter = data.valueTrueCounter
+        let falseCounter = data.valueFalseCounter
 
         renderExtraOptions.push(
           <div className="attendanceStatsDrawer-extraOptions-scrollable-option" key={index}>
@@ -36,7 +41,16 @@ class AttendanceStatsDrawer extends React.Component {
         )
       })
 
-      return renderExtraOptions
+      return (
+        <Carousel
+          renderCenterLeftControls={null}
+          renderCenterRightControls={null}
+          renderBottomCenterControls={null}
+          heightMode='first'
+        >
+          {renderExtraOptions}
+        </Carousel>
+      )
     }
     else {
       return (

@@ -115,7 +115,7 @@ class EditAttendanceModal extends React.Component {
           />
         <div className="editTagsModal-input-action" onClick={this.addTag.bind(this)}/>
         </div>
-      <div className="editTagsModal-actions">
+        <div className="editTagsModal-actions">
           <Button
             key='Update'
             onClick={this.onSubmit}

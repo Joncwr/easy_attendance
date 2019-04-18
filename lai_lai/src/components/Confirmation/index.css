@@ -48,48 +48,56 @@
   /* background-color: red; */
 }
 
-.confirmation-content-graphic{
-  height: 60%;
+.confirmation-content-graphic {
+  height: 50%;
   width: 100%;
   margin-top: 10%;
   padding: 0 20px;
   box-sizing: border-box;
 }
 
-.confirmation-content-message {
+.confirmation-content-info {
+  flex: 1;
+  overflow: scroll;
+  padding: 20px 0;
+  box-sizing: border-box;
+  /* background-color: red; */
+}
+
+.confirmation-content-info-message {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 10%;
+  padding: 10px 10%;
   /* background-color: yellow; */
 }
 
-.confirmation-content-message-text {
+.confirmation-content-info-message-text {
   font-size: 1.2em;
 }
 
-.confirmation-content-message-text.error {
-  font-weight: 700;
-  color: #ff3300;
-}
-
-.confirmation-content-message-text.done {
+.confirmation-content-info-message-text.done {
   font-weight: 700;
   font-size: 1.5em;
   text-align: center;
 }
 
-.confirmation-options {
+.confirmation-content-info-options {
+  /* background-color: green; */
+}
+
+.confirmation-content-info-options-container {
   height: 40px;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
 }
 
-.confirmation-options-text,
-.confirmation-options-checkBox {
+.confirmation-content-info-options-container-text,
+.confirmation-content-info-options-container-checkBox {
   flex: 1;
   height: 100%;
   display: flex;
@@ -97,11 +105,11 @@
   align-items: center;
 }
 
-.confirmation-options-text {
+.confirmation-content-info-options-container-text {
   font-size: 1.2em;
 }
 
-.confirmation-options-checkBox-container {
+.confirmation-content-info-options-container-checkBox-container {
   height: 100%;
   width: 40px;
 }
@@ -109,10 +117,15 @@
 .confirmation-actions {
   height: 150px;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 0 10px;
   box-sizing: border-box;
   /* background-color: green; */
+}
+
+.confirmation-actions-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

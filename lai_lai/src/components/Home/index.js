@@ -42,10 +42,10 @@ class Home extends Component {
     this.getUser()
 
     // DELETE THISSSSS
-    // setTimeout(() => {
-    //   this.changeScreen('attendance')
-    //   this.openAttendanceStatistics()
-    // }, 200)
+    setTimeout(() => {
+      this.changeScreen('attendance')
+      // this.openAttendanceStatistics()
+    }, 200)
   }
 
   addAttendee() {
