@@ -4,7 +4,6 @@ import Lottie from 'react-lottie';
 
 import Button from '../../common/Button'
 import CheckBox from '../../common/CheckBox'
-import LoadingOverlay from '../../common/LoadingOverlay'
 import PublicApi from '../../services/api/publicapi'
 
 import './index.css'
@@ -21,7 +20,6 @@ class Confirmation extends React.Component {
       eventSchema: {},
       eventClosed: 'blank',
       hasAnswered: false,
-      isLoading: false,
       isStopped: false,
       isPaused: false,
       checkbox: [],
@@ -106,7 +104,11 @@ class Confirmation extends React.Component {
       if (eventOptions.length > 0) {
         let renderOptions = []
         eventOptions.forEach((data, index) => {
-          let { fieldName, fieldType } = data
+          let { fieldName, fieldType, extraFields } = data
+          let extraFieldsArr = []
+          if (extraFields) {
+            extraFieldsArr = extraFields
+          }
           if (fieldType === 'boolean') {
             renderOptions.push(
               <div className="confirmation-content-info-options-container" key={index}>
@@ -115,33 +117,72 @@ class Confirmation extends React.Component {
                   <div className="confirmation-content-info-options-container-checkBox-container">
                     <CheckBox
                       setCheckbox={this.setCheckbox}
-                      checkbox={this.state.checkbox[index]}
+                      checkbox={data.value}
                       index={index}
                     />
                   </div>
                 </div>
+              </div>,
+              <div className={"confirmation-content-info-options-container-extraFields " + data.value} key={'extraFields' + index}>
+                {this.renderExtraFields(extraFieldsArr, index)}
               </div>
             )
           }
         })
-        return renderOptions
+        return (
+          <div className="confirmation-content-info-options">
+            {renderOptions}
+          </div>
+        )
       }
     }
   }
 
-  setCheckbox(index) {
-    let eventOptions = this.state.eventOptions
-    let checkbox = Object.assign([], this.state.checkbox)
-    if (this.state.checkbox[index] === 'blank' || !this.state.checkbox[index]) {
-      eventOptions[index].value = true
-      checkbox[index] = true
-      this.setState({checkbox, eventOptions})
+  renderExtraFields(extraFields, eventOptionsIndex) {
+    if (extraFields.length > 0) {
+      let renderExtraFields = []
+      extraFields.forEach((data,index) => {
+        renderExtraFields.push(
+          <div className="confirmation-content-info-options-container-extraFields-field" key={index}>
+            <div className="confirmation-content-info-options-container-extraFields-field-text">
+              {data.name}
+            </div>
+            <div className="confirmation-content-info-options-container-extraFields-field-text-checkbox">
+              <CheckBox
+                setCheckbox={this.setCheckbox}
+                checkbox={data.value}
+                index={index}
+                extraFields={true}
+                eventOptionsIndex={eventOptionsIndex}
+              />
+            </div>
+          </div>
+        )
+      })
+
+      return renderExtraFields
+    }
+  }
+
+  setCheckbox(index, method, options) {
+    let eventOptions = Object.assign([],this.state.eventOptions)
+    if (method === 'extraFields') {
+      if (!eventOptions[index].extraFields[options].value) {
+        eventOptions[index].extraFields[options].value = true
+      }
+      else {
+        eventOptions[index].extraFields[options].value = false
+      }
     }
     else {
-      eventOptions[index].value = false
-      checkbox[index] = false
-      this.setState({checkbox, eventOptions})
+      if (!eventOptions[index].value) {
+        eventOptions[index].value = true
+      }
+      else {
+        eventOptions[index].value = false
+      }
     }
+    this.setState({eventOptions})
   }
 
   renderActions(actions) {
@@ -235,9 +276,7 @@ class Confirmation extends React.Component {
               {text}
             </div>
           </div>
-          <div className="confirmation-content-info-options">
-            {this.renderOptions(options)}
-          </div>
+          {this.renderOptions(options)}
           </div>
         </div>
         <div className="confirmation-actions">
@@ -252,9 +291,6 @@ class Confirmation extends React.Component {
     let name = this.state.name
     return (
       <div className="confirmation">
-        <LoadingOverlay
-          isLoading={this.state.isLoading}
-        />
         <div className="confirmation-header">
           <div className="confirmation-header-text">
             {event}

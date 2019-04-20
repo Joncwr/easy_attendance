@@ -43,7 +43,7 @@ class Home extends Component {
 
     // DELETE THISSSSS
     setTimeout(() => {
-      this.changeScreen('attendance')
+      // this.changeScreen('attendance')
       // this.openAttendanceStatistics()
     }, 200)
   }
