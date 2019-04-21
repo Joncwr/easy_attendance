@@ -133,9 +133,8 @@
 
 .confirmation-content-info-options-container-extraFields-field-text {
   flex: 1;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .confirmation-content-info-options-container-extraFields-field {
