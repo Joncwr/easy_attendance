@@ -34,6 +34,7 @@ class AttendanceList extends React.Component {
 
     // DELETE!!!
     // this.openEventsOptionsModal()
+    this.openSummaryModal()
   }
 
   componentWillUpdate(prevProps) {
@@ -213,6 +214,10 @@ class AttendanceList extends React.Component {
     }
   }
 
+  openSummaryModal() {
+    this.props.setModal('show', 'SummaryModal')
+  }
+
   setEventsStatus(status) {
     if (this.props.currentGroup.events) {
       let isEventClosed
@@ -333,6 +338,9 @@ class AttendanceList extends React.Component {
           </div>
           <div className="attendanceList-options-extraOptions">
             <div className="attendanceList-options-extraOptions-icon" onClick={this.openEventsOptionsModal.bind(this)}/>
+          </div>
+          <div className="attendanceList-options-summary">
+            <div className="attendanceList-options-summary-icon" onClick={this.openSummaryModal.bind(this)}/>
           </div>
         </div>
       </div>

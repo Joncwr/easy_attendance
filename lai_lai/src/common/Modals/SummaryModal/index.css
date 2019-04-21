@@ -1,0 +1,18 @@
+.summaryModal {
+  width: 90vw;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff2e6;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.summaryModal-header {
+  margin: 30px 0;
+  box-sizing: border-box;
+  font-size: 1.5em;
+  font-weight: 700;
+  font-family: Fjalla One;
+}
