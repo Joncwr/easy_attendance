@@ -49,7 +49,7 @@
 
 .checkBox-container-icon.false {
   background: url('/img/icon_checkbox_tick@3x.png') no-repeat center center/ contain;
-  animation: zoomOut .2s linear forwards;
+  animation: zoomOut .5s linear forwards;
 }
 
 @-webkit-keyframes zoomInDown {
