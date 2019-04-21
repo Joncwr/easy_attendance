@@ -27,8 +27,10 @@ class MoreEventOptionsModal extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.modalProps.event.event_schema.length > 0) {
-      this.setState({haveSchema: true, eventSchema: this.props.modalProps.event.event_schema})
+    if (this.props.modalProps.event.event_schema) {
+      if (this.props.modalProps.event.event_schema.length > 0) {
+        this.setState({haveSchema: true, eventSchema: this.props.modalProps.event.event_schema})
+      }
     }
   }
 
