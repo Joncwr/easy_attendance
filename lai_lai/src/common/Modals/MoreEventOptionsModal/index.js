@@ -27,7 +27,7 @@ class MoreEventOptionsModal extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.modalProps.event.event_schema) {
+    if (this.props.modalProps.event.event_schema.length > 0) {
       this.setState({haveSchema: true, eventSchema: this.props.modalProps.event.event_schema})
     }
   }
@@ -38,7 +38,7 @@ class MoreEventOptionsModal extends React.Component {
     let field = Object.assign({}, this.state.field)
 
     if (name === 'subfield') {
-      if (value.length < 15) {
+      if (value.length < 20) {
         field.subfields[index] = value
         this.setState({field})
       }
@@ -99,7 +99,7 @@ class MoreEventOptionsModal extends React.Component {
 
   addSubField() {
     let field = Object.assign({}, this.state.field)
-    if (field.subfields.length < 4) {
+    if (field.subfields.length < 6) {
       field.subfields.push('')
       this.setState({field})
     }
