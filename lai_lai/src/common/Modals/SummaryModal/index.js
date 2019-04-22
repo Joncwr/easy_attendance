@@ -180,7 +180,7 @@ class SummaryModal extends React.Component {
     let attendees = Object.assign([], this.props.modalProps.attendees)
     let renderAttendees = []
     attendees.forEach((data, index) => {
-      let attendeesOptions
+      let attendeesOptions = []
       if (data.eventOptions) attendeesOptions = data.eventOptions
       renderAttendees.push(
         <div className="summaryModal-main-attendees-attendee" key={index}>
