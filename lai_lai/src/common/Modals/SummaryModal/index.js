@@ -172,7 +172,6 @@ class SummaryModal extends React.Component {
 
         return renderExtraFields
       }
-      console.log(extraFields);
     }
   }
 
@@ -180,23 +179,25 @@ class SummaryModal extends React.Component {
     let attendees = Object.assign([], this.props.modalProps.attendees)
     let renderAttendees = []
     attendees.forEach((data, index) => {
-      let attendeesOptions = []
-      if (data.eventOptions) attendeesOptions = data.eventOptions
-      renderAttendees.push(
-        <div className="summaryModal-main-attendees-attendee" key={index}>
-          <div className="summaryModal-main-attendees-attendee-info">
-            <div className="summaryModal-main-attendees-attendee-info-name">
-              {data.name}
+      if (data.status === 'confirmed') {
+        let attendeesOptions = []
+        if (data.eventOptions) attendeesOptions = data.eventOptions
+        renderAttendees.push(
+          <div className="summaryModal-main-attendees-attendee" key={index}>
+            <div className="summaryModal-main-attendees-attendee-info">
+              <div className="summaryModal-main-attendees-attendee-info-name">
+                {data.name}
+              </div>
+              <div className="summaryModal-main-attendees-attendee-info-actions">
+                <div className="summaryModal-main-attendees-attendee-info-actions-whatsapp" onClick={() => this.onWhatsapp(data.number)}/>
+              </div>
             </div>
-            <div className="summaryModal-main-attendees-attendee-info-actions">
-              <div className="summaryModal-main-attendees-attendee-info-actions-whatsapp" onClick={() => this.onWhatsapp(data.number)}/>
+            <div className="summaryModal-main-attendees-attendee-options">
+              {this.renderAttendeesOptions(attendeesOptions, data.name)}
             </div>
           </div>
-          <div className="summaryModal-main-attendees-attendee-options">
-            {this.renderAttendeesOptions(attendeesOptions, data.name)}
-          </div>
-        </div>
-      )
+        )
+      }
     })
 
     return renderAttendees
