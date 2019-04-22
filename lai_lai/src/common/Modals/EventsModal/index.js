@@ -108,7 +108,7 @@ class EventsModal extends React.Component {
         <div className="eventsModal-list">
           {this.renderEvents()}
         </div>
-        <div className="eventsModal-bottom"></div>
+        <div className="modal-bottom--default" />
       </div>
     )
   }

@@ -3,16 +3,271 @@
   height: 70vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   background-color: #fff2e6;
-  padding: 0 20px;
   box-sizing: border-box;
 }
 
 .summaryModal-header {
-  margin: 30px 0;
+  padding: 20px;
+  border-bottom: 5px solid #ffd9b3;
   box-sizing: border-box;
   font-size: 1.5em;
   font-weight: 700;
   font-family: Fjalla One;
+}
+
+.summaryModal-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.summaryModal-main-mainSummary {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  background-color: rgba(255, 242, 230,.3);
+  border-bottom: 2px solid #ffd9b3;
+}
+
+.summaryModal-main-mainSummary-item {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  overflow: scroll;
+}
+
+.summaryModal-main-optionsSummary {
+  width: 100%;
+  background-color: rgba(255, 242, 230,.3);
+  border-bottom: 5px solid #ffd9b3;
+  padding: 0 25px;
+  box-sizing: border-box;
+}
+
+.summaryModal-main-mainSummary-options {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ffd9b3;
+  padding: 2px 5px;
+  box-sizing: border-box;
+}
+
+.summaryModal-main-mainSummary-options:nth-last-child(2) {
+  border-bottom: none;
+}
+
+.summaryModal-main-mainSummary-options-true {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.summaryModal-main-mainSummary-options-nullIcon,
+.summaryModal-main-mainSummary-options-icon {
+  width: 30px;
+  height: 100%;
+  margin-left: 20px;
+}
+
+.summaryModal-main-mainSummary-options-icon {
+  background: url('/img/icon_drop_down@3x.png') no-repeat center center/ contain;
+}
+
+.summaryModal-main-mainSummary-options-subfieldSummary {
+  height: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.summaryModal-main-mainSummary-options-subfieldSummary.true {
+  animation: drawDown .3s ease-out forwards;
+}
+
+.summaryModal-main-mainSummary-options-subfieldSummary.false {
+  animation: drawUp .3s ease-out forwards;
+}
+
+.summaryModal-main-mainSummary-options-subfieldSummary-subfield {
+  width: 33.3%;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: .8em;
+  overflow: hidden;
+}
+
+.summaryModal-main-mainSummary-options-subfieldSummary-subfield-header,
+.summaryModal-main-mainSummary-options-subfieldSummary-subfield-value {
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+
+.summaryModal-main-mainSummary-options-subfieldSummary-subfield-value {
+  font-weight: 700;
+}
+
+.summaryModal-main-attendees {
+  flex: 1;
+  overflow: scroll;
+}
+
+.summaryModal-main-attendees-attendee {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px 10px 20px;
+  box-sizing: border-box;
+}
+
+.summaryModal-main-attendees-attendee:nth-child(even) {
+  background-color: rgba(255, 255, 204,.2);
+}
+
+.summaryModal-main-attendees-attendee-info {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.summaryModal-main-attendees-attendee-info-name {
+  flex: 1;
+  padding-right: 10px;
+  box-sizing: border-box;
+  font-size: 1.1em;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.summaryModal-main-attendees-attendee-info-actions {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.summaryModal-main-attendees-attendee-info-actions-whatsapp {
+  height: 24px;
+  width: 24px;
+  background: url('/img/icon_whatsapp@3x.png') no-repeat center center/ contain;
+}
+
+.summaryModal-main-attendees-attendee-options {
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.summaryModal-main-attendees-attendee-options-option {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ffd9b3;
+  padding: 1px 5px;
+}
+
+.summaryModal-main-attendees-attendee-options-option-value {
+  display: flex;
+}
+
+.summaryModal-main-attendees-attendee-options-value-icon,
+.summaryModal-main-attendees-attendee-options-value-nullIcon {
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+}
+
+.summaryModal-main-attendees-attendee-options-value-icon {
+  background: url('/img/icon_drop_down@3x.png') no-repeat center center/ contain;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields {
+  height: 0;
+  width: 100%;
+  display: flex;
+  overflow: scroll;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields.true {
+  animation: drawDown--small .3s ease-out forwards;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields.false {
+  animation: drawUp--small .3s ease-out forwards;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields-subfield {
+  width: auto;
+  font-size: .8em;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+  padding: 1px 5px;
+  box-sizing: border-box;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields-subfield-name {
+  width: auto;
+  white-space: nowrap;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields-subfield-icon {
+  height: 16px;
+  width: 16px;
+  margin-left: 2px;
+  background-color: green;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields-subfield-icon.true {
+  background: url('/img/icon_true@3x.png') no-repeat center center/ contain;
+}
+
+.summaryModal-main-attendees-attendee-options-subfields-subfield-icon.false {
+  background: url('/img/icon_false@3x.png') no-repeat center center/ contain;
+}
+
+@keyframes drawDown {
+  0% {
+    height: 0px;
+  }
+  100% {
+    height: 70px;
+  }
+}
+
+@keyframes drawUp {
+  0% {
+    height: 70px;
+  }
+  100% {
+    height: 0px;
+  }
+}
+
+@keyframes drawDown--small {
+  0% {
+    height: 0px;
+  }
+  100% {
+    height: 30px;
+  }
+}
+
+@keyframes drawUp--small {
+  0% {
+    height: 30px;
+  }
+  100% {
+    height: 0px;
+  }
 }

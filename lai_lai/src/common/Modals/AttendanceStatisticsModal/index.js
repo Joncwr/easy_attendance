@@ -62,6 +62,7 @@ class AttendanceStatisticsModal extends React.Component {
             />
           </Carousel>
         </div>
+        <div className="modal-bottom--default" />
       </div>
     )
   }

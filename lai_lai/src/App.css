@@ -9,6 +9,12 @@
   color: #404040;
 }
 
+.modal-bottom--default {
+  height: 50px;
+  width: 100%;
+  border-top: 5px solid #ffd9b3;
+}
+
 input:focus, textarea:focus, select:focus{
   outline: none;
 }

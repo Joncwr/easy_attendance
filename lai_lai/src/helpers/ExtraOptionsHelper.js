@@ -1,3 +1,5 @@
+const ObjectHelper = require('./ObjectHelper')
+
 let checkOption = (event, eventOptions) => {
   let status
   eventOptions.forEach(data => {
@@ -37,4 +39,35 @@ module.exports = {
 
     return extraOptions
   },
+
+  getSubfieldSummary: (attendees, fieldName) => {
+    let subfieldSummary = {}
+    attendees.forEach(attendeesData => {
+      if (attendeesData.eventOptions) {
+        let eventOptions = Object.assign([], attendeesData.eventOptions)
+        if (eventOptions.length > 0) {
+          eventOptions.forEach(eventOptionsData => {
+            if (eventOptionsData.fieldName === fieldName) {
+              if (eventOptionsData.extraFields) {
+                let subfields = Object.assign([], eventOptionsData.extraFields)
+                if (subfields.length > 0) {
+                  subfields.forEach(subfieldData => {
+                    if (subfieldData.value) {
+                      if (!subfieldSummary[subfieldData.name]) {
+                        subfieldSummary[subfieldData.name] = 1
+                      }
+                      else {
+                        subfieldSummary[subfieldData.name] ++
+                      }
+                    }
+                  })
+                }
+              }
+            }
+          })
+        }
+      }
+    })
+    if (!ObjectHelper.isEmpty(subfieldSummary)) return subfieldSummary
+  }
 }

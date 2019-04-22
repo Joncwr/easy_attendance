@@ -34,7 +34,9 @@ class AttendanceList extends React.Component {
 
     // DELETE!!!
     // this.openEventsOptionsModal()
-    this.openSummaryModal()
+    // setTimeout(() => {
+    //   this.openSummaryModal()
+    // }, 500)
   }
 
   componentWillUpdate(prevProps) {
@@ -215,7 +217,15 @@ class AttendanceList extends React.Component {
   }
 
   openSummaryModal() {
-    this.props.setModal('show', 'SummaryModal')
+    let { confirmed, declined, uncertain } = this.state
+    let attendanceSummary = { confirmed, declined, uncertain }
+    let summaryModalDict = {
+      attendanceSummary,
+      extraOptions: this.state.extraOptions,
+      attendees: this.state.attendees,
+      setSnackbar: this.props.setSnackbar,
+    }
+    this.props.setModal('show', 'SummaryModal', summaryModalDict)
   }
 
   setEventsStatus(status) {

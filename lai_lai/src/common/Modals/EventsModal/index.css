@@ -75,9 +75,3 @@
   margin-left: 10px;
   background: url('/img/icon_forward@3x.png') no-repeat center center/ contain;
 }
-
-.eventsModal-bottom {
-  height: 50px;
-  width: 100%;
-  border-top: 5px solid #ffd9b3;
-}
