@@ -135,12 +135,12 @@ class SummaryModal extends React.Component {
               {data.fieldName}
             </div>
             <div className="summaryModal-main-attendees-attendee-options-option-value">
-              {attending}
               {(data.value) ?
                 <div className="summaryModal-main-attendees-attendee-options-value-icon" onClick={() => this.openAttendeesSubfield(name, index)}/>
                 :
                 <div className="summaryModal-main-attendees-attendee-options-value-nullIcon" />
               }
+              {attending}
             </div>
           </div>
         )

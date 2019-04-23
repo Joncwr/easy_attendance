@@ -1,6 +1,6 @@
 .summaryModal {
   width: 90vw;
-  height: 70vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   background-color: #fff2e6;
@@ -25,10 +25,11 @@
 
 .summaryModal-main-mainSummary {
   width: 100%;
-  height: 30px;
+  height: 35px;
   display: flex;
   background-color: rgba(255, 242, 230,.3);
   border-bottom: 2px solid #ffd9b3;
+  box-sizing: border-box;
 }
 
 .summaryModal-main-mainSummary-item {
@@ -44,7 +45,7 @@
   width: 100%;
   background-color: rgba(255, 242, 230,.3);
   border-bottom: 5px solid #ffd9b3;
-  padding: 0 25px;
+  padding: 5px 25px;
   box-sizing: border-box;
 }
 
@@ -184,7 +185,7 @@
 .summaryModal-main-attendees-attendee-options-value-nullIcon {
   width: 18px;
   height: 18px;
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .summaryModal-main-attendees-attendee-options-value-icon {

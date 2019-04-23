@@ -31,6 +31,11 @@
   width: 80px;
 }
 
+.home-groups-info {
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
 .home-groups-info-group {
   height: 50px;
   display: flex;
