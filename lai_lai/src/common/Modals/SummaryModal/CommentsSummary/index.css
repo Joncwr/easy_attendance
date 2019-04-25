@@ -1,0 +1,60 @@
+.commentsSummary {
+  flex: 1;
+  overflow: scroll;
+}
+
+.commentsSummary-attendee {
+  padding: 0 20px 5px 20px;
+  box-sizing: border-box;
+}
+
+.commentsSummary-attendee:nth-child(even) {
+  background-color: rgba(255, 255, 204,.2);
+}
+
+.commentsSummary-attendee-info {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  box-sizing: border-box;
+}
+
+.commentsSummary-attendee-info-name {
+  margin-right: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.commentsSummary-attendee-info-whatsapp {
+  height: 20px;
+  width: 20px;
+  background: url('/img/icon_whatsapp@3x.png') no-repeat center center/ contain;
+}
+
+.commentsSummary-attendee-comments {
+  width: 100%;
+  display: flex;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.commentsSummary-attendee-comments-name,
+.commentsSummary-attendee-comments-comment {
+  box-sizing: border-box;
+  font-size: .8em;
+  padding: 2px 0;
+  white-space: nowrap;
+  overflow: scroll;
+}
+
+.commentsSummary-attendee-comments-name {
+  width: 30%;
+  margin-right: 10px;
+}
+
+.commentsSummary-attendee-comments-comment {
+  width: 70%;
+  font-weight: 600;
+}

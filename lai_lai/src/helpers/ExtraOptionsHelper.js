@@ -10,6 +10,16 @@ let checkOption = (event, eventOptions) => {
   return status
 }
 
+let checkType = (event, eventOptions) => {
+  let type
+  eventOptions.forEach(data => {
+    if (data.fieldName === event.fieldName) {
+      type = data.type
+    }
+  })
+  return type
+}
+
 module.exports = {
   getExtraOptions: (eventSchema, attendees) => {
     let extraOptions = []
@@ -18,11 +28,13 @@ module.exports = {
       let extraOptionsDict = {}
       let isValue1True = 0
       let isValue1False = 0
+      let type = null
 
       attendees.forEach(data => {
         if (data.eventOptions) {
           if (data.status === "confirmed") {
             let status = checkOption(event, data.eventOptions)
+            type = checkType(event, data.eventOptions)
             if (status) isValue1True ++
             else isValue1False ++
           }
@@ -33,6 +45,7 @@ module.exports = {
       extraOptionsDict['value'] = event.fieldName
       extraOptionsDict['valueTrueCounter'] = isValue1True
       extraOptionsDict['valueFalseCounter'] = isValue1False
+      extraOptionsDict['type'] = type
 
       extraOptions.push(extraOptionsDict)
     })
@@ -68,6 +81,34 @@ module.exports = {
         }
       }
     })
+
     if (!ObjectHelper.isEmpty(subfieldSummary)) return subfieldSummary
-  }
+  },
+
+  getCommentsSummary: (attendees, index) => {
+    let commentsSummary = {}
+    attendees.forEach(attendeesData => {
+      if (attendeesData.eventOptions) {
+        let eventOptions = Object.assign([], attendeesData.eventOptions)
+        if (eventOptions.length > 0) {
+          if (eventOptions[index].extraFields) {
+            if (eventOptions[index].value) {
+              let subfields = Object.assign([], eventOptions[index].extraFields)
+              if (subfields.length > 0) {
+                commentsSummary[attendeesData.id] = {}
+                commentsSummary[attendeesData.id]['name'] = attendeesData.name
+                commentsSummary[attendeesData.id]['number'] = attendeesData.number
+                commentsSummary[attendeesData.id]['comments'] = []
+                subfields.forEach(data => {
+                  commentsSummary[attendeesData.id]['comments'].push(data)
+                })
+              }
+            }
+          }
+        }
+      }
+    })
+
+    if (!ObjectHelper.isEmpty(commentsSummary)) return commentsSummary
+  },
 }

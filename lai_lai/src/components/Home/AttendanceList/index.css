@@ -184,3 +184,7 @@
 .attendanceList-options-save-icon.closed {
 	background: url('/img/icon_unsave@3x.png') no-repeat center center/ contain;
 }
+
+.attendanceList-options-summary-icon.disabled {
+  opacity: .3;
+}

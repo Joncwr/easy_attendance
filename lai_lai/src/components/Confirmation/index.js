@@ -4,6 +4,7 @@ import Lottie from 'react-lottie';
 
 import Button from '../../common/Button'
 import CheckBox from '../../common/CheckBox'
+import TextField from '../../common/TextField'
 import PublicApi from '../../services/api/publicapi'
 
 import './index.css'
@@ -47,13 +48,22 @@ class Confirmation extends React.Component {
           schema.forEach(data => {
             let extraFields
             if (data.extraFields) {
-              if (data.extraFields.length > 0) {
-                extraFields = []
-                data.extraFields.forEach(data => {
-                  extraFields.push({
-                    name: data,
-                    value: false,
+              if (data.type === 'multi' || data.type === 'single') {
+                if (data.extraFields.length > 0) {
+                  extraFields = []
+                  data.extraFields.forEach(data => {
+                    extraFields.push({
+                      name: data,
+                      value: false,
+                    })
                   })
+                }
+              }
+              else if (data.type === 'comments') {
+                extraFields = []
+                extraFields.push({
+                  name: data.extraFields,
+                  comment: '',
                 })
               }
             }
@@ -68,10 +78,23 @@ class Confirmation extends React.Component {
             checkbox.push('blank')
           })
         }
-        this.setState({event: res.name, eventClosed: res.closed, eventOptions, checkbox},() => console.log(this.state.eventOptions))
+        this.setState({event: res.name, eventClosed: res.closed, eventOptions, checkbox})
       })
       .catch(err => console.log(err))
     })
+  }
+
+  handleChange(event, index, eventOptionsIndex) {
+    let name = event.target.name
+    let value = event.target.value
+    let eventOptions = Object.assign([], this.state.eventOptions)
+
+    if (name === 'comments') {
+      if (value.length < 35) {
+        eventOptions[eventOptionsIndex].extraFields[index].comment = value
+        this.setState({eventOptions})
+      }
+    }
   }
 
   onPress(status) {
@@ -85,7 +108,6 @@ class Confirmation extends React.Component {
       status,
       eventOptions
     }
-
     PublicApi.postAttendance(attendanceDict)
     .then((res) => {
       this.props.setSnackbar('show', {
@@ -104,7 +126,7 @@ class Confirmation extends React.Component {
       if (eventOptions.length > 0) {
         let renderOptions = []
         eventOptions.forEach((data, index) => {
-          let { fieldName, fieldType, extraFields } = data
+          let { fieldName, fieldType, extraFields, type } = data
           let extraFieldsArr = []
           if (extraFields) {
             extraFieldsArr = extraFields
@@ -124,7 +146,7 @@ class Confirmation extends React.Component {
                 </div>
               </div>,
               <div className={"confirmation-content-info-options-container-extraFields " + data.value} key={'extraFields' + index}>
-                {this.renderExtraFields(extraFieldsArr, index)}
+                {this.renderExtraFields(type, extraFieldsArr, index)}
               </div>
             )
           }
@@ -138,10 +160,12 @@ class Confirmation extends React.Component {
     }
   }
 
-  renderExtraFields(extraFields, eventOptionsIndex) {
+  renderExtraFields(type, extraFields, eventOptionsIndex) {
     if (extraFields.length > 0) {
       let renderExtraFields = []
+
       extraFields.forEach((data,index) => {
+      if (type === 'multi' || type === 'single') {
         renderExtraFields.push(
           <div className="confirmation-content-info-options-container-extraFields-field" key={index}>
             <div className="confirmation-content-info-options-container-extraFields-field-text">
@@ -158,7 +182,28 @@ class Confirmation extends React.Component {
             </div>
           </div>
         )
-      })
+      }
+
+      else if (type === 'comments') {
+        let placeholder = `Enter for ${data.name}`
+        renderExtraFields.push(
+          <div className="confirmation-content-info-options-container-extraFields-comments" key={index}>
+            <div className="confirmation-content-info-options-container-extraFields-comments-header">
+              {data.name}:
+            </div>
+            <TextField
+              handleChange={e => this.handleChange(e, index, eventOptionsIndex)}
+              name={'comments'}
+              state={data.comment}
+              placeholder={placeholder}
+              style={{
+                height: '40px',
+              }}
+            />
+          </div>
+        )
+      }
+    })
 
       return renderExtraFields
     }
@@ -287,6 +332,7 @@ class Confirmation extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     let event = (this.state.event) ? this.state.event : 'No event name'
     let name = this.state.name
     return (

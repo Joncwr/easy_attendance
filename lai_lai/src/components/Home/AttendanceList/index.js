@@ -349,9 +349,15 @@ class AttendanceList extends React.Component {
           <div className="attendanceList-options-extraOptions">
             <div className="attendanceList-options-extraOptions-icon" onClick={this.openEventsOptionsModal.bind(this)}/>
           </div>
-          <div className="attendanceList-options-summary">
-            <div className="attendanceList-options-summary-icon" onClick={this.openSummaryModal.bind(this)}/>
-          </div>
+          {(extraOptions.length > 0) ?
+            <div className="attendanceList-options-summary">
+              <div className="attendanceList-options-summary-icon" onClick={this.openSummaryModal.bind(this)}/>
+            </div>
+          :
+            <div className="attendanceList-options-summary">
+              <div className="attendanceList-options-summary-icon disabled"/>
+            </div>
+          }
         </div>
       </div>
     )

@@ -74,8 +74,12 @@
   margin-left: 20px;
 }
 
-.summaryModal-main-mainSummary-options-icon {
+.summaryModal-main-mainSummary-options-icon.selector {
   background: url('/img/icon_drop_down@3x.png') no-repeat center center/ contain;
+}
+
+.summaryModal-main-mainSummary-options-icon.comments {
+  background: url('/img/icon_open_new@3x.png') no-repeat center center/ contain;
 }
 
 .summaryModal-main-mainSummary-options-subfieldSummary {
@@ -142,7 +146,6 @@
 }
 
 .summaryModal-main-attendees-attendee-info-name {
-  flex: 1;
   padding-right: 10px;
   box-sizing: border-box;
   font-size: 1.1em;
@@ -185,7 +188,7 @@
 .summaryModal-main-attendees-attendee-options-value-nullIcon {
   width: 18px;
   height: 18px;
-  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .summaryModal-main-attendees-attendee-options-value-icon {

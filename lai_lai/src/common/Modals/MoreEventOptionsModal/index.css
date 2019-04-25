@@ -1,10 +1,6 @@
 .moreEventOptions {
   width: 350px;
   max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: #fff2e6;
   padding: 0 40px;
   box-sizing: border-box;
@@ -38,9 +34,9 @@
 }
 
 .moreEventOptions-fields-main-deleteField {
-  height: 30px;
-  width: 30px;
-  margin-left: 10px;
+  height: 25px;
+  width: 25px;
+  margin-right: 5px;
   background: url('/img/icon_delete@3x.png') no-repeat center center/ contain;
 }
 
@@ -48,6 +44,44 @@
   margin-left: 20px;
   white-space: nowrap;
   overflow: scroll;
+}
+
+.moreEventOptions-divider {
+  width: 100%;
+  height: 5px;
+  margin: 10px 0;
+  background-color: rgb(255, 136, 77);
+}
+
+.moreEventOptions-inputSelector {
+  height: 30px;
+  width: 200px;
+  display: flex;
+  border-radius: 30px;
+  border: 3px solid rgb(255, 136, 77);
+  box-sizing: border-box;
+  background-color: rgba(255, 136, 77,.2);
+  overflow: hidden;
+}
+
+.moreEventOptions-inputSelector-selector,
+.moreEventOptions-inputSelector-comments {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 3px solid rgb(255, 136, 77);
+  box-sizing: border-box;
+  font-size: .9em;
+}
+
+.moreEventOptions-inputSelector-selector.selector,
+.moreEventOptions-inputSelector-comments.comments {
+  background-color: rgb(255, 136, 77);
+}
+
+.moreEventOptions-inputSelector-comments {
+  border-right: none;
 }
 
 .moreEventOptions-textInput {
@@ -63,8 +97,8 @@
 }
 
 .moreEventOptions-textInput-mainField-addButton {
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
   background: url('/img/icon_add@3x.png') no-repeat center center/ contain;
 }
 
@@ -86,6 +120,16 @@
   width: 25px;
   margin-left: 10px;
   background: url('/img/icon_delete@3x.png') no-repeat center center/ contain;
+}
+
+.moreEventOptions-textInput-comments {
+  margin-top: 10px;
+}
+
+.moreEventOptions-textInput-comments-text {
+  font-weight: 600;
+  margin-left: 2px;
+  margin-bottom: 5px;
 }
 
 .moreEventOptions-actions {

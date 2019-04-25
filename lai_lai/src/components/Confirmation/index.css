@@ -115,6 +115,7 @@
 }
 
 .confirmation-content-info-options-container-extraFields {
+  width: 100%;
   padding: 0 40px;
   box-sizing: border-box;
 }
@@ -126,6 +127,7 @@
 .confirmation-content-info-options-container-extraFields.true {
   width: 100%;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   animation: fadeIn .3s ease-out forwards;
   /* background-color: red; */
@@ -151,6 +153,21 @@
 .confirmation-content-info-options-container-extraFields-field-text-checkbox {
   height: 100%;
   width: 30px;
+}
+
+.confirmation-content-info-options-container-extraFields-comments {
+  width: 100%;
+  padding: 0 50px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  /* background-color: red; */
+}
+
+.confirmation-content-info-options-container-extraFields-comments-header {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-bottom: 10px;
 }
 
 .confirmation-actions {

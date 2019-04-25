@@ -11,9 +11,11 @@ class MoreEventOptionsModal extends React.Component {
     super()
 
     this.state = {
+      currentInput: 'selector',
       field: {
         name: '',
         subfields: [],
+        commentsHeader: '',
       },
       haveSchema: false,
       eventSchema: [],
@@ -46,6 +48,13 @@ class MoreEventOptionsModal extends React.Component {
       }
     }
 
+    else if (name === 'commentsHeader') {
+      if (value.length < 25) {
+        field.commentsHeader = value
+        this.setState({field})
+      }
+    }
+
     else if (value.length < 15) {
       field[name] = value
       this.setState({field})
@@ -73,23 +82,34 @@ class MoreEventOptionsModal extends React.Component {
     let eventSchema = Object.assign([], this.state.eventSchema)
     let field = Object.assign({}, this.state.field)
     if (eventSchema.length < 3 && field.name) {
-      let subfields
-      if (field.subfields.length > 0) {
-        let checkSubfields = []
-        field.subfields.forEach(data => {
-          if (data) checkSubfields.push(data)
+      if (this.state.currentInput === 'selector') {
+        let subfields
+        if (field.subfields.length > 0) {
+          let checkSubfields = []
+          field.subfields.forEach(data => {
+            if (data) checkSubfields.push(data)
+          })
+          if (checkSubfields.length > 0) subfields = checkSubfields
+        }
+        eventSchema.push({
+          fieldName: field.name,
+          fieldType: 'boolean',
+          tags: false,
+          type: (subfields) ? 'multi' : 'single',
+          extraFields: subfields || null,
         })
-        if (checkSubfields.length > 0) subfields = checkSubfields
       }
-      eventSchema.push({
-        fieldName: field.name,
-        fieldType: 'boolean',
-        tags: false,
-        type: (subfields) ? 'multi' : 'single',
-        extraFields: subfields || null,
-      })
+      else if (this.state.currentInput === 'comments') {
+        eventSchema.push({
+          fieldName: field.name,
+          fieldType: 'boolean',
+          tags: false,
+          type: 'comments',
+          extraFields: field.commentsHeader || null,
+        })
+      }
 
-      this.setState({eventSchema, field: {name: '',subfields: [],}})
+      this.setState({eventSchema, field: {name: '',subfields: [],commentsHeader: ''}})
     }
   }
 
@@ -119,11 +139,19 @@ class MoreEventOptionsModal extends React.Component {
     eventSchema.forEach((data,index) => {
       let renderSubfields
       if (data.extraFields) {
-        let extraFields = data.extraFields.join(', ');
-        renderSubfields =
-        <div className="moreEventOptions-fields-subfields">
-          {extraFields}
-        </div>
+        if (data.type === 'multi' || data.type === 'single') {
+          let extraFields = data.extraFields.join(', ');
+          renderSubfields =
+          <div className="moreEventOptions-fields-subfields">
+            {extraFields}
+          </div>
+        }
+        else if (data.type === 'comments') {
+          renderSubfields =
+          <div className="moreEventOptions-fields-subfields">
+            Comment header: {data.extraFields}
+          </div>
+        }
       }
       renderFields.push(
         <div className="moreEventOptions-fields" key={index}>
@@ -167,7 +195,46 @@ class MoreEventOptionsModal extends React.Component {
     }
   }
 
+  renderInputSelector() {
+    let currentInput = this.state.currentInput
+    return (
+      <div className="moreEventOptions-inputSelector">
+        <div className={"moreEventOptions-inputSelector-selector " + currentInput} onClick={() => this.setState({currentInput: 'selector'})} >Selector</div>
+        <div className={"moreEventOptions-inputSelector-comments " + currentInput} onClick={() => this.setState({currentInput: 'comments'})} >Comments</div>
+      </div>
+    )
+  }
+
   renderInputs() {
+    let { currentInput } = this.state
+    let renderSubfields = []
+    if (currentInput === 'selector') {
+      renderSubfields.push(
+        <div className="moreEventOptions-textInput--wrapper" key={currentInput}>
+          {this.renderSubfields()}
+          <div className="moreEventOptions-textInput-addSubField" onClick={this.addSubField}/>
+        </div>
+      )
+    }
+    else if (currentInput === 'comments') {
+      renderSubfields.push(
+        <div className="moreEventOptions-textInput--wrapper" key={currentInput}>
+          <div className="moreEventOptions-textInput-comments">
+            <div className="moreEventOptions-textInput-comments-text">Comments Header:</div>
+            <TextField
+              handleChange={this.handleChange}
+              name='commentsHeader'
+              state={this.state.field.commentsHeader}
+              style={{
+                height: '30px',
+                width: '150px',
+                fontSize: '0.9em'
+              }}
+            />
+          </div>
+        </div>
+      )
+    }
     return (
       <div className="moreEventOptions-textInput">
         <div className="moreEventOptions-textInput-mainField">
@@ -178,8 +245,7 @@ class MoreEventOptionsModal extends React.Component {
           />
           <div className="moreEventOptions-textInput-mainField-addButton" onClick={this.addField}/>
         </div>
-        {this.renderSubfields()}
-        <div className="moreEventOptions-textInput-addSubField" onClick={this.addSubField}/>
+        {renderSubfields}
       </div>
     )
   }
@@ -197,6 +263,8 @@ class MoreEventOptionsModal extends React.Component {
           More event options
         </div>
         {this.renderFields()}
+        <div className="moreEventOptions-divider" />
+        {this.renderInputSelector()}
         {this.renderInputs()}
         {this.renderWarning()}
         <div className="moreEventOptions-actions">

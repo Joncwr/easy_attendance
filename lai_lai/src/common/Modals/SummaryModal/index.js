@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ExtraOptionsHelper from '../../../helpers/ExtraOptionsHelper'
+import CommentsSummary from './CommentsSummary'
 import './index.css'
 
 class SummaryModal extends React.Component {
@@ -10,6 +11,8 @@ class SummaryModal extends React.Component {
     this.state = {
       isSubfieldDrawerOpen: ['blank','blank','blank'],
       attendeesDrawerStatus: {},
+      mainContent: 'attendees',
+      mainContentIndex: 0,
     }
   }
 
@@ -59,6 +62,16 @@ class SummaryModal extends React.Component {
       let renderExtraOptions = []
       extraOptions.forEach((data,index) => {
         let subfieldsSummary = ExtraOptionsHelper.getSubfieldSummary(attendees, data.value)
+        let renderSubfieldButtons = []
+        if (subfieldsSummary) renderSubfieldButtons.push(
+          <div className="summaryModal-main-mainSummary-options-icon selector" onClick={() => this.openSubfieldSummary(data.type, index)} key='selector'/>
+        )
+        else if (!subfieldsSummary && data.type === 'comments') renderSubfieldButtons.push(
+          <div className="summaryModal-main-mainSummary-options-icon comments" onClick={() => this.openSubfieldSummary(data.type, index)} key='comments'/>
+        )
+        else renderSubfieldButtons.push(
+          <div className="summaryModal-main-mainSummary-options-nullIcon" key='null'/>
+        )
         renderExtraOptions.push(
           <div className="summaryModal-main-mainSummary-options" key={index}>
             <div className="summaryModal-main-mainSummary-options-name">
@@ -66,11 +79,7 @@ class SummaryModal extends React.Component {
             </div>
             <div className="summaryModal-main-mainSummary-options-true">
               Yes: {data.valueTrueCounter}
-              {(subfieldsSummary) ?
-                <div className="summaryModal-main-mainSummary-options-icon" onClick={() => this.openSubfieldSummary(index)}/>
-              :
-                <div className="summaryModal-main-mainSummary-options-nullIcon" />
-              }
+              {renderSubfieldButtons}
             </div>
           </div>,
           <div className={"summaryModal-main-mainSummary-options-subfieldSummary " + this.state.isSubfieldDrawerOpen[index]} key={'subfield' + index}>
@@ -82,15 +91,21 @@ class SummaryModal extends React.Component {
     }
   }
 
-  openSubfieldSummary(index) {
-    let isSubfieldDrawerOpen = Object.assign([], this.state.isSubfieldDrawerOpen)
-    if (isSubfieldDrawerOpen[index] && isSubfieldDrawerOpen[index] !== 'blank') {
-      isSubfieldDrawerOpen[index] = false
+  openSubfieldSummary(dataType, index) {
+    if (dataType === 'comments') {
+      if (this.state.mainContent === 'attendees') this.setState({mainContent: 'commentsSummary', mainContentIndex: index})
+      else if (this.state.mainContent === 'commentsSummary') this.setState({mainContent: 'attendees'})
     }
     else {
-      isSubfieldDrawerOpen[index] = true
+      let isSubfieldDrawerOpen = Object.assign([], this.state.isSubfieldDrawerOpen)
+      if (isSubfieldDrawerOpen[index] && isSubfieldDrawerOpen[index] !== 'blank') {
+        isSubfieldDrawerOpen[index] = false
+      }
+      else {
+        isSubfieldDrawerOpen[index] = true
+      }
+      this.setState({isSubfieldDrawerOpen})
     }
-    this.setState({isSubfieldDrawerOpen})
   }
 
   openAttendeesSubfield(name, index) {
@@ -135,19 +150,19 @@ class SummaryModal extends React.Component {
               {data.fieldName}
             </div>
             <div className="summaryModal-main-attendees-attendee-options-option-value">
+              {attending}
               {(data.value) ?
                 <div className="summaryModal-main-attendees-attendee-options-value-icon" onClick={() => this.openAttendeesSubfield(name, index)}/>
                 :
                 <div className="summaryModal-main-attendees-attendee-options-value-nullIcon" />
               }
-              {attending}
             </div>
           </div>
         )
         if (this.state.attendeesDrawerStatus[name] && data.value) {
           renderAttendeesOptions.push(
             <div className={"summaryModal-main-attendees-attendee-options-subfields " + this.state.attendeesDrawerStatus[name][index]} key={name + index}>
-              {this.renderAttendeesSubfields(data.extraFields)}
+              {this.renderAttendeesSubfields(data.extraFields, data.type)}
             </div>
           )
         }
@@ -157,18 +172,30 @@ class SummaryModal extends React.Component {
     }
   }
 
-  renderAttendeesSubfields(extraFields) {
+  renderAttendeesSubfields(extraFields, dataType) {
     if (extraFields) {
       if (extraFields.length > 0) {
         let renderExtraFields = []
-        extraFields.forEach((data,index) => {
-          renderExtraFields.push(
-            <div className="summaryModal-main-attendees-attendee-options-subfields-subfield" key={index}>
-              <div className="summaryModal-main-attendees-attendee-options-subfields-subfield-name">{data.name}</div>
-              <div className={"summaryModal-main-attendees-attendee-options-subfields-subfield-icon " + data.value} />
-            </div>
-          )
-        })
+        if (dataType === 'multi' || dataType === 'single') {
+          extraFields.forEach((data,index) => {
+            renderExtraFields.push(
+              <div className="summaryModal-main-attendees-attendee-options-subfields-subfield" key={index}>
+                <div className="summaryModal-main-attendees-attendee-options-subfields-subfield-name">{data.name}</div>
+                <div className={"summaryModal-main-attendees-attendee-options-subfields-subfield-icon " + data.value} />
+              </div>
+            )
+          })
+        }
+        else if (dataType === 'comments') {
+          extraFields.forEach((data,index) => {
+            renderExtraFields.push(
+              <div className="summaryModal-main-attendees-attendee-options-subfields-subfield" key={index}>
+                <div className="summaryModal-main-attendees-attendee-options-subfields-subfield-name">{data.name}:</div>
+                <div className="summaryModal-main-attendees-attendee-options-subfields-subfield-name" style={{fontWeight: '600', marginLeft: '10px'}}>{data.comment}</div>
+              </div>
+            )
+          })
+        }
 
         return renderExtraFields
       }
@@ -203,6 +230,24 @@ class SummaryModal extends React.Component {
     return renderAttendees
   }
 
+  renderContent() {
+    if (this.state.mainContent === 'attendees') {
+      return (
+        <div className="summaryModal-main-attendees">
+          {this.renderAttendees()}
+        </div>
+      )
+    }
+    else if (this.state.mainContent === 'commentsSummary') {
+      return (
+        <CommentsSummary
+          attendees={this.props.modalProps.attendees}
+          index={this.state.mainContentIndex}
+        />
+      )
+    }
+  }
+
   render() {
     let style
     if (this.props.modalProps) {
@@ -220,9 +265,7 @@ class SummaryModal extends React.Component {
           <div className="summaryModal-main-optionsSummary">
             {this.getOptionsSummary()}
           </div>
-          <div className="summaryModal-main-attendees">
-            {this.renderAttendees()}
-          </div>
+          {this.renderContent()}
         </div>
         <div className="modal-bottom--default" />
       </div>
