@@ -40,6 +40,9 @@
 }
 
 .home-header-group-text {
+  display: flex;
+  align-items: center;
+  flex: 1;
   font-size: 2em;
   font-weight: 700;
   margin-right: 10px;
@@ -51,7 +54,14 @@
 .home-header-group-icon {
   height: 30px;
   width: 30px;
+  margin-left: 10px;
   background: url('/img/icon_drop_down@3x.png') no-repeat center center/ contain;
+}
+
+.home-attendees-group-message {
+  height: 30px;
+  width: 30px;
+  background: url('/img/icon_message@3x.png') no-repeat center center/ contain;
 }
 
 .home-header-text.home-header-text--attendance {
@@ -211,7 +221,7 @@
 
 .home-tabs-home-icon.home,
 .home-tabs-attendance-icon.attendance,
-.home-tabs-groups-icon.groups  {
+.home-tabs-groups-icon.groups {
   opacity: 1;
 }
 

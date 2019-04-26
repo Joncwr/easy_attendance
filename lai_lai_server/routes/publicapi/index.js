@@ -4,6 +4,7 @@ const router = express.Router()
 const Events = require('../../models/events')
 const Attendees = require('../../models/attendees')
 const Attendance = require('../../models/attendance')
+const Requested_Attendees = require('../../models/requested_attendees')
 
 router.get('/getEvent/:event_id', (req, res) => {
   const { event_id } = req.params
@@ -111,6 +112,22 @@ router.post('/attendance', (req, res) => {
       console.log(err)
       res.sendStatus(400)
     })
+});
+
+router.post('/request_add_attendee/:group_id', (req, res) => {
+  let { name, number, email } = req.body
+  let { group_id } = req.params
+  return Requested_Attendees
+  .query()
+  .insert({ name, number, email, group_id})
+  .then(requested_attendees => {
+    console.log(requested_attendees)
+    res.sendStatus(200)
+  })
+  .catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
 });
 
 module.exports = router

@@ -31,4 +31,14 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
+  requestAddAttendee: (groupId, requestAddAttendeeDict) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.publicFetch('post', 'publicapi/request_add_attendee/' + groupId, requestAddAttendeeDict)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
 }

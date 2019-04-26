@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import copy from 'copy-to-clipboard';
 
 import AttendanceList from './AttendanceList'
 import Groups from './Groups'
@@ -46,6 +47,18 @@ class Home extends Component {
     //   this.changeScreen('attendance')
     //   // this.openAttendanceStatistics()
     // }, 200)
+  }
+
+  joinMessageGroupCopy() {
+    if (this.state.currentGroup) {
+      let { id } = this.state.currentGroup
+      let url = 'http://18.191.78.79/registration?groupId=' + id
+
+      copy(url)
+      this.props.setSnackbar('show', {
+        text: 'Url copied to clipboard.'
+      })
+    }
   }
 
   addAttendee() {
@@ -291,8 +304,9 @@ class Home extends Component {
         <div className="home--mainWrapper">
           <div className="home-header">
             <div className="home-header-group">
-              <div className="home-header-group-text">{groupName}</div>
-              <div className="home-header-group-icon" onClick={this.onDropDown}/>
+              <div className="home-header-group-text">{groupName}
+              <div className="home-header-group-icon" onClick={this.onDropDown}/></div>
+              <div className="home-attendees-group-message" onClick={this.joinMessageGroupCopy.bind(this)} />
             </div>
           </div>
           <div className="home-attendees">

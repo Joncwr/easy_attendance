@@ -1,5 +1,4 @@
 .form-textarea {
-  flex: 1;
   height: 65px;
   border-radius: 50px;
   resize: none;
@@ -17,4 +16,8 @@
 
 .form-textarea:focus {
   border: 5px solid #ffb366;
+}
+
+.form-textarea.true:focus {
+  border: none;
 }

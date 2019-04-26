@@ -5,17 +5,16 @@ import './index.css'
 class Input extends React.Component {
   render() {
     return (
-      <div>
-        <input
-          className='form-textarea'
-          style={this.props.style}
-          name={this.props.name}
-          value={this.props.state}
-          type={this.props.type}
-          placeholder={this.props.placeholder}
-          onChange={this.props.handleChange}
-        />
-      </div>
+      <input
+        className={'form-textarea ' + this.props.readOnly}
+        style={this.props.style}
+        name={this.props.name}
+        value={this.props.state}
+        type={this.props.type}
+        placeholder={this.props.placeholder}
+        onChange={this.props.handleChange}
+        readOnly={this.props.readOnly}
+      />
     )
   }
 }

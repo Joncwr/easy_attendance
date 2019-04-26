@@ -1,0 +1,74 @@
+.registration {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.registration-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffe6cc;
+  border-radius: 8px;
+  padding: 30px;
+  box-sizing: border-box;
+  box-shadow: 5px 5px 30px 0 rgba(0, 0, 0, 0.15);
+}
+
+.registration-container-header {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 20px;
+  margin-left: 5px;
+}
+
+.registration-container-input {
+  width: 100%;
+}
+
+.registration-container-input-number {
+  display: flex;
+  width: 100%;
+}
+
+.registration-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.registration-actions-container {
+  width: 50%;
+  height: 60px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffd9b3;
+}
+
+.registration-actions-container-icon {
+  height: 40px;
+  width: 40px;
+  background: url('/img/icon_login@3x.png') no-repeat center center/ contain;
+}
+
+.registration-container-request-image {
+  height: 150px;
+  width: 100%;
+  background: url('/img/graphic_envelope@3x.png') no-repeat center center/ contain;
+}
+
+.registration-container-request-text {
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.registration-container-request-text.subtext {
+  font-weight: 400;
+}
+
+.registration-container-request-actions {
+  margin-top: 30px;
+}
