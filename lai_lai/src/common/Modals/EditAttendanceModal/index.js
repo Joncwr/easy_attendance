@@ -81,7 +81,7 @@ class EditAttendanceModal extends React.Component {
     )
   }
 
-  setCheckBox() {
+  setCheckbox() {
     this.setState({selectedAttendance: !this.state.selectedAttendance})
   }
 
@@ -99,8 +99,8 @@ class EditAttendanceModal extends React.Component {
             <div className="editAttendanceModal-options-attendance-input">
               <div className="editAttendanceModal-options-attendance-input-container">
                 <CheckBox
-                  setCheckBox={this.setCheckBox.bind(this)}
-                  checkBox={this.state.selectedAttendance}
+                  setCheckbox={this.setCheckbox.bind(this)}
+                  checkbox={this.state.selectedAttendance}
                 />
               </div>
             </div>

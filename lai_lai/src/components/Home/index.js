@@ -52,7 +52,7 @@ class Home extends Component {
   joinMessageGroupCopy() {
     if (this.state.currentGroup) {
       let { id } = this.state.currentGroup
-      let url = 'http://18.191.78.79/registration?groupId=' + id
+      let url = 'http://18.191.78.79/sharing?groupId=' + id
 
       copy(url)
       this.props.setSnackbar('show', {

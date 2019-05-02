@@ -15,6 +15,19 @@ class Groups extends Model {
           from: 'groups.current_event',
           to: 'events.id'
         }
+      },
+
+      attendees: {
+        relation: Model.ManyToManyRelation,
+        modelClass: require('../../models/attendees'),
+        join: {
+          from: 'groups.id',
+          through: {
+            from: 'attendees_groups.group_id',
+            to: 'attendees_groups.attendee_id'
+          },
+          to: 'attendees.id'
+        }
       }
     }
   }

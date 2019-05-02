@@ -5,6 +5,7 @@ import { createBrowserHistory } from 'history';
 import Home from './components/Home'
 import Login from './components/Login'
 import Confirmation from './components/Confirmation'
+import Sharing from './components/Sharing'
 import Registration from './components/Registration'
 import ModalConductor from './helpers/ModalConductor'
 import Snackbar from './helpers/Snackbar'
@@ -123,6 +124,12 @@ class App extends Component {
           )} />
           <Route path="/registration" render={() => (
             <Registration
+              history={history}
+              setSnackbar={this.setSnackbar}
+            />
+          )} />
+        <Route path="/sharing" render={() => (
+            <Sharing
               history={history}
               setSnackbar={this.setSnackbar}
             />

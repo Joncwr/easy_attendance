@@ -1,0 +1,98 @@
+@media (min-width:320px)  {
+  /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+
+}
+
+@media (min-width:1025px) {
+  /* big landscape tablets, laptops, and desktops */
+}
+
+.sharing {
+  height: 100vh;
+  width: 100vw;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sharing-header {
+  font-size: 1.8em;
+  font-weight: 700;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  border-bottom: 5px solid #ff8533;
+  background-color: #ffe0cc;
+}
+
+.sharing-input {
+  flex: 1;
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sharing-input-image {
+  height: 150px;
+  width: 60%;
+  display: inline-block;
+  background: url('/img/graphic_blessing@3x.png') no-repeat center center/ contain;
+  margin-bottom: 5px;
+}
+
+.sharing-input-attendees {
+  width: 60%;
+  font-size: 1.1em;
+}
+
+.sharing-dropDownControl {
+  border: none;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+
+.sharing-dropDownMenu {
+  border: none;
+  border-radius: 5px;
+}
+
+.sharing-input-textarea {
+  margin: 20px 0;
+  min-height: 150px;
+  border-radius: 20px;
+  border: none;
+  font-size: 1.1em;
+  font-family: Fjalla One;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.sharing-input-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+span.Dropdown-arrow {
+  top: 22px;
+  right: 15px;
+}
+
+.sharing-done {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 50px;
+  box-sizing: border-box;
+}
+
+.sharing-done-text {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 700;
+}

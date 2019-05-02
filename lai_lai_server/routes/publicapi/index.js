@@ -4,6 +4,8 @@ const router = express.Router()
 const Events = require('../../models/events')
 const Attendees = require('../../models/attendees')
 const Attendance = require('../../models/attendance')
+const Groups = require('../../models/groups')
+const Testimonials = require('../../models/testimonials')
 const Requested_Attendees = require('../../models/requested_attendees')
 
 router.get('/getEvent/:event_id', (req, res) => {
@@ -52,6 +54,23 @@ router.get('/getAttendee/:attendee_id', (req, res) => {
       res.send(user.name)
     })
     .catch(err => {
+      res.sendStatus(400)
+    })
+});
+
+router.get('/getAttendees/:groupId', (req, res) => {
+  const { groupId } = req.params
+  return Groups
+    .query()
+    .where({ id: groupId })
+    .eager('attendees')
+    .then(([group]) => {
+      if (group.attendees) {
+        res.send(group.attendees)
+      }
+    })
+    .catch(err => {
+      console.log(err);
       res.sendStatus(400)
     })
 });
@@ -122,6 +141,22 @@ router.post('/request_add_attendee/:group_id', (req, res) => {
   .insert({ name, number, email, group_id})
   .then(requested_attendees => {
     console.log(requested_attendees)
+    res.sendStatus(200)
+  })
+  .catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
+});
+
+router.post('/addTestimonial/:attendee_id', (req, res) => {
+  let { testimonial } = req.body
+  let { attendee_id } = req.params
+  return Testimonials
+  .query()
+  .insert({ testimonial, attendee_id })
+  .then(testimonial => {
+    console.log(testimonial)
     res.sendStatus(200)
   })
   .catch(err => {
