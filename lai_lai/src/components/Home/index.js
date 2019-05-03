@@ -37,22 +37,24 @@ class Home extends Component {
     this.groupActions=this.groupActions.bind(this)
     this.onDropDown=this.onDropDown.bind(this)
     this.openAttendanceStatistics=this.openAttendanceStatistics.bind(this)
+    this.openSetEventMessage=this.openSetEventMessage.bind(this)
   }
 
   componentDidMount() {
     this.getUser()
 
     // DELETE THISSSSS
-    // setTimeout(() => {
-    //   this.changeScreen('attendance')
-    //   // this.openAttendanceStatistics()
-    // }, 200)
+    setTimeout(() => {
+      // this.changeScreen('attendance')
+      // this.openAttendanceStatistics()
+      // this.openSetEventMessage()
+    }, 200)
   }
 
   joinMessageGroupCopy() {
     if (this.state.currentGroup) {
       let { id } = this.state.currentGroup
-      let url = 'http://18.191.78.79/sharing?groupId=' + id
+      let url = 'http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/sharing?groupId=' + id
 
       copy(url)
       this.props.setSnackbar('show', {
@@ -286,6 +288,26 @@ class Home extends Component {
     this.props.setModal('show', 'AttendanceStatisticsModal', statisticsDict)
   }
 
+  openTestimonials() {
+    let groupId = this.state.currentGroup.id
+    let testimonialsSummaryDict = {
+      groupId,
+      setSnackbar: this.props.setSnackbar
+    }
+    this.props.setModal('show', 'TestimonialsSummary', testimonialsSummaryDict)
+  }
+
+  openSetEventMessage() {
+    if (this.state.currentGroup.events) {
+      let event = this.state.currentGroup.events
+      let setEventsMessageDict = {
+        event,
+        setSnackbar: this.props.setSnackbar
+      }
+      this.props.setModal('show', 'SetEventsMessageModal', setEventsMessageDict)
+    }
+  }
+
   renderDropDown() {
     if (this.state.showDropDown) {
       return  <DropDownComponent
@@ -307,6 +329,7 @@ class Home extends Component {
               <div className="home-header-group-text">{groupName}
               <div className="home-header-group-icon" onClick={this.onDropDown}/></div>
               <div className="home-attendees-group-message" onClick={this.joinMessageGroupCopy.bind(this)} />
+              <div className="home-attendees-group-testimonials" onClick={this.openTestimonials.bind(this)} />
             </div>
           </div>
           <div className="home-attendees">
@@ -314,8 +337,9 @@ class Home extends Component {
             <div className="home-attendees-event">
               <div className="home-attendees-event-text">
                 {date}
+                <div className="home-attendees-event-icon" onClick={this.openSetEventModal} />
               </div>
-              <div className="home-attendees-event-icon" onClick={this.openSetEventModal} />
+              <div className="home-attendees-event-eventMessage" onClick={this.openSetEventMessage} />
             </div>
             <div className="home-attendees-headers">
               <div className="home-attendees-headers-name">Name</div>

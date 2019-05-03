@@ -6,6 +6,7 @@ const Events = require('../../models/events')
 const Users_Groups = require('../../models/users_groups')
 const Attendees_Groups = require('../../models/attendees_groups')
 const Attendance = require('../../models/attendance')
+const Testimonials = require('../../models/testimonials')
 
 router.post('/createGroup', (req, res) => {
   const { group_name, user_id } = req.body
@@ -45,7 +46,6 @@ router.post('/addUserToGroup', (req, res) => {
       res.sendStatus(400)
     })
 });
-
 
 router.put('/editGroup', (req, res) => {
   const { group_name, group_id } = req.body
@@ -112,6 +112,86 @@ router.delete('/deleteGroup/:group_id', (req, res) => {
     console.log(err)
     res.sendStatus(400)
   })
+});
+
+router.get('/getTestimonials/:groupId', (req, res) => {
+  const { groupId } = req.params
+  return Groups
+    .query()
+    .where({ id: groupId })
+    .eager('attendees.testimonials(orderByDate)')
+    .then(([group]) => {
+      if (group.attendees) {
+        let testimonialsArr = []
+        group.attendees.forEach(attendee => {
+          if (attendee.testimonials.length > 0)
+          testimonialsArr.push(attendee)
+        })
+        res.send(testimonialsArr)
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
+});
+
+router.get('/getOpenTestimonials/:groupId', (req, res) => {
+  const { groupId } = req.params
+  return Groups
+    .query()
+    .where({ id: groupId })
+    .eager('attendees.testimonials(getNotSeen)')
+    .then(([group]) => {
+      if (group.attendees) {
+        let testimonialsArr = []
+        group.attendees.forEach(attendee => {
+          if (attendee.testimonials.length > 0)
+          testimonialsArr.push(attendee)
+        })
+        res.send(testimonialsArr)
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
+});
+
+router.get('/getClosedTestimonials/:groupId', (req, res) => {
+  const { groupId } = req.params
+  return Groups
+    .query()
+    .where({ id: groupId })
+    .eager('attendees.testimonials(getSeen)')
+    .then(([group]) => {
+      if (group.attendees) {
+        let testimonialsArr = []
+        group.attendees.forEach(attendee => {
+          if (attendee.testimonials.length > 0)
+          testimonialsArr.push(attendee)
+        })
+        res.send(testimonialsArr)
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
+});
+
+router.put('/closeTestimonial/:testimonialId', (req, res) => {
+  const { testimonialId } = req.params
+  return Testimonials
+    .query()
+    .patchAndFetchById(testimonialId, {seen: true})
+    .then(testimonials => {
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
 });
 
 module.exports = router

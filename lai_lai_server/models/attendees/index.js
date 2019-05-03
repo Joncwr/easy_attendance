@@ -28,6 +28,14 @@ class Attendees extends Model {
           from: 'attendees.id',
           to: 'attendance.attendee_id'
         }
+      },
+      testimonials: {
+        relation: Model.HasManyRelation,
+        modelClass: require('../testimonials'),
+        join: {
+          from: 'attendees.id',
+          to: 'testimonials.attendee_id'
+        }
       }
     }
   }

@@ -31,4 +31,34 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
+  getOpenTestimonials: (groupId) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('get', 'api/groups/getOpenTestimonials/' + groupId)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
+  getClosedTestimonials: (groupId) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('get', 'api/groups/getClosedTestimonials/' + groupId)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
+  closeTestimonial: (testimonialId) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('put', 'api/groups/closeTestimonial/' + testimonialId)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
 }

@@ -1,0 +1,118 @@
+.testimonialsSummaryModal {
+  width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background-color: #fff2e6;
+}
+
+.testimonialsSummaryModal-header {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 5px solid #ffd9b3;
+  background-color: #fff2e6;
+  box-sizing: border-box;
+}
+
+.testimonialsSummaryModal-header-text {
+  font-size: 1.4em;
+  font-weight: 700;
+}
+
+.testimonialsSummaryModal-header-inputSelector {
+  width: 50%;
+  height: 40px;
+  display: flex;
+  border-radius: 40px;
+  border: 4px solid rgb(255, 136, 77);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.testimonialsSummaryModal-header-inputSelector-open,
+.testimonialsSummaryModal-header-inputSelector-closed {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  color: grey;
+}
+
+.testimonialsSummaryModal-header-inputSelector-open {
+  border-right: 4px solid rgb(255, 136, 77);
+  box-sizing: border-box;
+}
+
+.testimonialsSummaryModal-header-inputSelector-open.open,
+.testimonialsSummaryModal-header-inputSelector-closed.closed {
+  background-color: rgb(255, 136, 77);
+  color: #404040;
+}
+
+.testimonialsSummaryModal-testimonials {
+  flex: 1;
+  padding: 0 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow: scroll;
+}
+
+.testimonialsSummaryModal-testimonials-noTestimonials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 0;
+}
+
+.testimonialsSummaryModal-testimonials-attendee {
+  margin: 10px 0;
+  border-radius: 24px;
+  background-color: #ffeee6;
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.1);
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.testimonialsSummaryModal-testimonials-attendee-header {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #ff7733;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.testimonialsSummaryModal-testimonials-attendee-testimonial-date {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  font-size: .95em;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.testimonialsSummaryModal-testimonials-attendee-testimonial-text {
+  font-size: .85em;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.testimonialsSummaryModal-testimonials-attendee-testimonial-date-close {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  margin-bottom: 2px;
+  background: url('/img/icon_false@3x.png') no-repeat center center/ contain;
+}
+
+.testimonialsSummaryModal-testimonials-attendee-testimonial {
+  padding: 5px 0;
+  box-sizing: border-box;
+}
+
+.testimonialsSummaryModal-testimonials-attendee-testimonial:nth-child(odd) {
+  background-color: #ffddcc;
+}

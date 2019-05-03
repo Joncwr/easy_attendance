@@ -9,6 +9,8 @@ import EditAttendanceModal from '../../common/Modals/EditAttendanceModal'
 import EditTagsModal from '../../common/Modals/EditTagsModal'
 import AttendanceStatisticsModal from '../../common/Modals/AttendanceStatisticsModal'
 import SummaryModal from '../../common/Modals/SummaryModal'
+import TestimonialsSummary from '../../common/Modals/TestimonialsSummary'
+import SetEventsMessageModal from '../../common/Modals/SetEventsMessageModal'
 
 import './index.css'
 
@@ -59,6 +61,16 @@ class ModalComponent extends React.Component {
                 />
       case "SummaryModal" :
         return  <SummaryModal
+                  modalProps={this.props.modalProps}
+                  setModal={this.props.setModal}
+                />
+      case "TestimonialsSummary" :
+        return  <TestimonialsSummary
+                  modalProps={this.props.modalProps}
+                  setModal={this.props.setModal}
+                />
+      case "SetEventsMessageModal" :
+        return  <SetEventsMessageModal
                   modalProps={this.props.modalProps}
                   setModal={this.props.setModal}
                 />

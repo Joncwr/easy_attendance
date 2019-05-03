@@ -58,10 +58,19 @@
   background: url('/img/icon_drop_down@3x.png') no-repeat center center/ contain;
 }
 
-.home-attendees-group-message {
+.home-attendees-group-message,
+.home-attendees-group-testimonials {
   height: 30px;
   width: 30px;
+}
+
+.home-attendees-group-message {
   background: url('/img/icon_message@3x.png') no-repeat center center/ contain;
+  margin-right: 10px;
+}
+
+.home-attendees-group-testimonials {
+  background: url('/img/icon_testimonials@3x.png') no-repeat center center/ contain;
 }
 
 .home-header-text.home-header-text--attendance {
@@ -142,18 +151,27 @@
 }
 
 .home-attendees-event-text {
+  flex: 1;
+  display: flex;
   font-size: 1.5em;
   font-weight: 600;
-  margin-right: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
 .home-attendees-event-icon {
-  height: 1.7em;
-  width: 1.7em;
+  margin-left: 5px;
+  height: 1.2em;
+  width: 1.2em;
   background: url('/img/icon_edit@3x.png') no-repeat center center/ contain;
+}
+
+.home-attendees-event-eventMessage {
+  margin-left: 5px;
+  height: 30px;
+  width: 30px;
+  background: url('/img/icon_add_message@3x.png') no-repeat center center/ contain;
 }
 
 .home-attendees-info {

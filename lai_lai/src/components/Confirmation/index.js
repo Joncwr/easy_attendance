@@ -20,6 +20,7 @@ class Confirmation extends React.Component {
       eventId: '',
       eventSchema: {},
       eventClosed: 'blank',
+      eventMessage: '',
       hasAnswered: false,
       isStopped: false,
       isPaused: false,
@@ -78,7 +79,7 @@ class Confirmation extends React.Component {
             checkbox.push('blank')
           })
         }
-        this.setState({event: res.name, eventClosed: res.closed, eventOptions, checkbox})
+        this.setState({event: res.name, eventClosed: res.closed, eventOptions, checkbox, eventMessage: res.message})
       })
       .catch(err => console.log(err))
     })
@@ -242,6 +243,7 @@ class Confirmation extends React.Component {
               borderColor: '#ff8533',
               margin: '0 10px',
               flex: 1,
+              height: '60%',
             }}
           />
           <Button
@@ -252,6 +254,7 @@ class Confirmation extends React.Component {
               borderColor: '#4feb8b',
               margin: '0 10px',
               flex: 1,
+              height: '60%',
             }}
           />
         </div>
@@ -332,7 +335,6 @@ class Confirmation extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let event = (this.state.event) ? this.state.event : 'No event name'
     let name = this.state.name
     return (
@@ -341,6 +343,9 @@ class Confirmation extends React.Component {
           <div className="confirmation-header-text">
             {event}
           </div>
+        </div>
+        <div className="confirmation-message">
+          {this.state.eventMessage}
         </div>
         {this.renderScreen(event,name)}
       </div>

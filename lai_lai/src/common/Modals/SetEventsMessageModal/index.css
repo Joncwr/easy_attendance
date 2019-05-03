@@ -1,0 +1,61 @@
+.setEventsMessage {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff2e6;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.setEventsMessage-header {
+  width: 100%;
+  align-self: flex-start;
+  font-size: 1.4em;
+  font-weight: 600;
+  font-family: Fjalla One;
+  margin: 30px 0 20px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.setEventsMessage-message {
+  width: 100%;
+}
+
+.setEventsMessage-message-currentMessage-header {
+  font-weight: 700;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+}
+
+.setEventsMessage-message-null {
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.setEventsMessage-input {
+  width: 100%;
+}
+
+.setEventsMessage-input-textarea {
+  margin: 20px 0;
+  width: 100%;
+  min-height: 100px;
+  border-radius: 20px;
+  border: none;
+  font-size: 1.1em;
+  font-family: Fjalla One;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.setEventsMessage-actions {
+  display: flex;
+  width: 100%;
+  padding: 0 25px;
+  margin: 0 0 30px 0;
+  box-sizing: border-box;
+}

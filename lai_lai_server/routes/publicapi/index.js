@@ -17,7 +17,8 @@ router.get('/getEvent/:event_id', (req, res) => {
       res.send({
         name: event.name,
         closed: event.closed,
-        schema: event.event_schema
+        schema: event.event_schema,
+        message: event.message
       })
     })
     .catch(err => res.sendStatus(400))

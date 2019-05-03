@@ -92,4 +92,15 @@ router.delete('/deleteCurrentEvent/:group_id', (req, res) => {
     .catch(err => res.sendStatus(400))
 });
 
+router.put('/addEventMessage', (req, res) => {
+  const { eventId, message } = req.body
+  return Events
+    .query()
+    .patchAndFetchById(eventId, { message })
+    .then(event => {
+      res.send(event)
+    })
+    .catch(err => res.sendStatus(400))
+});
+
 module.exports = router

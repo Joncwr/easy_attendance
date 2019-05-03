@@ -66,4 +66,15 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
+
+  addEventMessage: (eventMessageDict) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('put', 'api/events/addEventMessage', eventMessageDict)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
 }

@@ -2,6 +2,13 @@
   /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
 }
 
+@media (max-width:350px)  {
+  /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+  .confirmation {
+    font-size: 13px;
+  }
+}
+
 @media (min-width:1025px) {
   /* big landscape tablets, laptops, and desktops */
 }
@@ -15,7 +22,7 @@
 }
 
 .confirmation-header {
-  height: 80px;
+  height: 10%;
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
@@ -34,6 +41,14 @@
   overflow: hidden;
 }
 
+.confirmation-message {
+  text-align: center;
+  max-height: 15%;
+  padding: 10px 40px;
+  font-style: italic;
+  overflow: scroll;
+}
+
 .confirmation--mainWrapper {
   flex: 1;
   display: flex;
@@ -48,9 +63,8 @@
 }
 
 .confirmation-content-graphic {
-  height: 50%;
+  height: 40%;
   width: 100%;
-  margin-top: 10%;
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -170,11 +184,10 @@
 }
 
 .confirmation-actions {
-  height: 150px;
+  height: 15%;
   width: 100%;
   padding: 0 10px;
   box-sizing: border-box;
-  /* background-color: green; */
 }
 
 .confirmation-actions-container {
