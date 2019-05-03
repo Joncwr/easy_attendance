@@ -28,7 +28,7 @@ class EditAttendanceModal extends React.Component {
     let name = event.target.name
     let value = event.target.value
 
-    if (value.length < 100) {
+    if (value.length < 255) {
       this.setState({[name]: value})
     }
   }
