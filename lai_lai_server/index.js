@@ -9,6 +9,7 @@ const cors = require('cors')
 const app = express();
 const passport    = require('passport');
 require('./auth/passport');
+require('./telebot');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
