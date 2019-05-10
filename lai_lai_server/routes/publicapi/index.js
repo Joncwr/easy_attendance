@@ -8,6 +8,63 @@ const Groups = require('../../models/groups')
 const Testimonials = require('../../models/testimonials')
 const Requested_Attendees = require('../../models/requested_attendees')
 
+function attendanceApi(attendee_id, event_id, status, eventOptions) {
+  return new Promise((resolve, reject) => {
+    return Events
+      .query()
+      .where({id: event_id})
+      .then(([event]) => {
+        if (event) {
+          // Check to see if attendees belong to the group of the event
+          return Attendees
+          .query()
+          .where({id: attendee_id})
+          .eager('groups')
+          .then(([attendee]) => {
+            let attendeeGroup = attendee.groups
+            let groupMatches = false
+            attendeeGroup.forEach(data => {
+              if (data.id = event.group_id) groupMatches = true
+            })
+            if (groupMatches) {
+              // Check to see if the attendee has confirmed their status yet, if havent insert, if not update
+              return Attendance
+              .query()
+              .where({attendee_id, event_id})
+              .then(([attendance]) => {
+                if (attendance) {
+                  return Attendance
+                  .query()
+                  .patchAndFetchById(attendance.id, {status, conditions: eventOptions})
+                  .then(sumbitAttendance => {
+                    resolve(sumbitAttendance)
+                  })
+                }
+                else {
+                  return Attendance
+                  .query()
+                  .insert({attendee_id, event_id, status, conditions: eventOptions})
+                  .then(sumbitAttendance => {
+                    resolve(sumbitAttendance)
+                  })
+                }
+              })
+            }
+            else {
+              resolve('Attendee doesnt belong in this group.')
+            }
+          })
+        }
+        else {
+          resolve('No event found')
+        }
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
 router.get('/getEvent/:event_id', (req, res) => {
   const { event_id } = req.params
   return Events
@@ -78,60 +135,15 @@ router.get('/getAttendees/:groupId', (req, res) => {
 
 router.post('/attendance', (req, res) => {
   const { attendee_id, event_id, status, eventOptions } = req.body
+  attendanceApi(attendee_id, event_id, status, eventOptions)
+  .then(result => {
+    res.send(result)
+  })
+  .catch(err => {
+    console.log(error)
+    res.sendStatus(400)
+  })
   // Check to see if the event exists
-  return Events
-    .query()
-    .where({id: event_id})
-    .then(([event]) => {
-      if (event) {
-        // Check to see if attendees belong to the group of the event
-        return Attendees
-        .query()
-        .where({id: attendee_id})
-        .eager('groups')
-        .then(([attendee]) => {
-          let attendeeGroup = attendee.groups
-          let groupMatches = false
-          attendeeGroup.forEach(data => {
-            if (data.id = event.group_id) groupMatches = true
-          })
-          if (groupMatches) {
-            // Check to see if the attendee has confirmed their status yet, if havent insert, if not update
-            return Attendance
-            .query()
-            .where({attendee_id, event_id})
-            .then(([attendance]) => {
-              if (attendance) {
-                return Attendance
-                .query()
-                .patchAndFetchById(attendance.id, {status, conditions: eventOptions})
-                .then(sumbitAttendance => {
-                  res.send(sumbitAttendance)
-                })
-              }
-              else {
-                return Attendance
-                .query()
-                .insert({attendee_id, event_id, status, conditions: eventOptions})
-                .then(sumbitAttendance => {
-                  res.send(sumbitAttendance)
-                })
-              }
-            })
-          }
-          else {
-            res.send('Attendee doesnt belong in this group.')
-          }
-        })
-      }
-      else {
-        res.send('No event found')
-      }
-    })
-    .catch(err => {
-      console.log(err)
-      res.sendStatus(400)
-    })
 });
 
 router.post('/request_add_attendee/:group_id', (req, res) => {
@@ -166,4 +178,7 @@ router.post('/addTestimonial/:attendee_id', (req, res) => {
   })
 });
 
-module.exports = router
+module.exports = {
+  Public: router,
+  attendanceApi
+}

@@ -1,56 +1,57 @@
 const TelegrafInlineMenu = require('telegraf-inline-menu')
-const TelegramHelper = require ('../TelegramHelper')
-const { closed } = require('../closed')
-const bot = require('../index.js')
-let message = 'Which date will you be taking attendance for!'
+const TelegramHelper = require('../helper/TelegramHelper')
+const { attendanceApi } = require('../../routes/publicapi')
+const { options } = require('./options')
+
 const attendance = new TelegrafInlineMenu(ctx => {
-  return message
+  return 'Which date will you be taking attendance for!'
 })
 
 const dates = new TelegrafInlineMenu(ctx => {
   return 'Great! Will you be attending?'
 })
 
-const options = new TelegrafInlineMenu(ctx => {
-  return 'Great! Will you be attending?'
-})
-
-dates.button('Yes', 'y', {
-  doFunc: (ctx) => {
-    console.log(ctx.match[1]);
-  },
-})
+dates.manual('Yes', 'y')
 
 dates.button('No', 'n', {
   doFunc: (ctx) => {
-    console.log(ctx.match[1]);
-    ctx.deleteMessage()
-    ctx.reply('Thank You~')
+    // Do not attendening API here
+    TelegramHelper.getTelegramId(ctx.from.id)
+    .then(([res]) => {
+      let attendee_id = res.id
+      let event_id = ctx.match[1]
+      let status = false
+      attendanceApi(attendee_id, event_id, status)
+      .then(res => {
+        ctx.deleteMessage()
+        ctx.reply('Thank You~')
+      })
+      .catch(err => {
+        console.log(err);
+        ctx.reply('Error has occured')
+      })
+    })
+    .catch(err => {
+      console.log(err);
+    })
   },
   joinLastRow: true,
 })
-
-dates.selectSubmenu('op', (ctx) => getOptions(ctx), options)
 
 function getEvents(ctx) {
   let { dates } = TelegramHelper.getDates()
   return dates
 }
 
-function getOptions(ctx) {
-  console.log(ctx.match[0].substr(ctx.match[0].length -1) );
-  if (ctx.match[0].substr(ctx.match[0].length -1) === 'y') {
-    let id = ctx.match[1].toString()
-    let { eventOptions } = TelegramHelper.getDates()
-    console.log(eventOptions[id]);
-    return ['e','e']
-  }
-  else {
-    return []
-  }
-}
+attendance.selectSubmenu('e', (ctx) => getEvents(ctx), dates)
 
-attendance.selectSubmenu('ev', (ctx) => getEvents(ctx), dates)
+attendance.submenu('Options', 'o', options, {
+  hide: (ctx) => {
+    if (ctx.match) {
+      if (ctx.match[0] === 'a') return true
+    }
+  }
+})
 
 module.exports = {
   attendance,

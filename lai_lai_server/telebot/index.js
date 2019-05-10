@@ -1,33 +1,29 @@
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./scratch');
+}
 const Telegraf = require('telegraf')
 const Markup = require('telegraf/markup')
 const TelegrafInlineMenu = require('telegraf-inline-menu')
-const TelegramHelper = require ('./TelegramHelper')
-
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
-module.exports = bot
-const { attendance, dates } = require('./attendance')
 
+const { attendance, dates } = require('./attendance')
+const TelegramHelper = require ('./helper/TelegramHelper')
 const main = new TelegrafInlineMenu(ctx => {
   return `Hey ${ctx.from.first_name}!`
 })
 
-main.submenu('Attendance', 'at', attendance)
+module.exports = { bot, main }
+require('./middleware')
 
-bot.hears('/dates', (ctx, next) => TelegramHelper.auth(ctx.from.id, next), dates.replyMenuMiddleware())
-bot.hears('/attendance', (ctx, next) => TelegramHelper.auth(ctx.from.id, next), attendance.replyMenuMiddleware())
-bot.hears('/start', (ctx, next) => TelegramHelper.auth(ctx.from.id, next), main.replyMenuMiddleware())
-
-bot.action('at', (ctx, next) => TelegramHelper.getEventDates(ctx.from.id, next), attendance.replyMenuMiddleware())
-
+main.submenu('Attendance', 'a', attendance)
 bot.use(main.init({
   backButtonText: 'back…',
   mainMenuButtonText: 'back to main menu…'
 }))
-
 bot.catch((err) => {
   console.log('Ooops', err)
 })
-
 bot.startPolling()
 
 // TelegramHelper.test(721544223)

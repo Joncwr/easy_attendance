@@ -1,7 +1,7 @@
 require('dotenv').config()
 const Api = require('./routes/api')
 const Admin = require('./routes/admin')
-const Public = require('./routes/publicapi')
+const { Public } = require('./routes/publicapi')
 
 const express = require('express');
 const bodyParser = require('body-parser');
