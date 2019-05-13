@@ -16,7 +16,7 @@ const main = new TelegrafInlineMenu(ctx => {
 module.exports = { bot, main }
 require('./middleware')
 
-main.submenu('Attendance', 'a', attendance)
+main.submenu('🗓 Attendance', 'a', attendance)
 bot.use(main.init({
   backButtonText: 'back…',
   mainMenuButtonText: 'back to main menu…'

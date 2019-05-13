@@ -3,7 +3,7 @@ const TelegramHelper = require('../../helpers/TelegramHelper')
 const ObjectHelper = require('../../helpers/ObjectHelper')
 const { attendanceApi } = require('../../../routes/publicapi')
 
-const options = new TelegrafInlineMenu(ctx => {
+const options = new TelegrafInlineMenu(async (ctx) => {
   return 'Nice check out what options we have!'
 })
 
@@ -31,22 +31,23 @@ options.question((ctx) => {
 }, 'c1', {
   questionText: 'Please just message us your answer now for - ' + commentName[0],
   setFunc: (ctx, answer) => {
-    ctx.reply('Thanks! We have recorded your answer - ' + answer)
-    console.log(ctx.match);
+    setValue(ctx, 'comments', 0, {answer})
   },
   hide: (ctx) => {
     return getHide(ctx, 'comments', 0)
   }
 })
 
-let selectedKey = '2'
-options.select('s1', ['1','2','3','4','5','6'], {
+options.select('s1', (ctx) => getValue(ctx, 'selectName', 0), {
   setFunc: async (ctx, key) => {
-    selectedKey = key
-    await ctx.answerCbQuery(`you selected ${key}`)
+    setValue(ctx, 'select', 0, {key})
   },
-  multiselect: (_ctx, key) => key === selectedKey,
-  hide: (ctx) => {return false},
+  isSetFunc: (ctx, key) => {
+    return getValue(ctx, 'select', 0, {key})
+  },
+  hide: (ctx) => {
+    return getHide(ctx, 'select', 0)
+  },
   columns: 3,
 })
 
@@ -70,12 +71,24 @@ options.question((ctx) => {
 }, 'c2', {
   questionText: 'Please just message us your answer now for - ' + commentName[1],
   setFunc: (ctx, answer) => {
-    ctx.reply('Thanks! We have recorded your answer - ' + answer)
-    console.log(ctx.match);
+    setValue(ctx, 'comments', 1, {answer})
   },
   hide: (ctx) => {
     return getHide(ctx, 'comments', 1)
   }
+})
+
+options.select('s2', (ctx) => getValue(ctx, 'selectName', 1), {
+  setFunc: async (ctx, key) => {
+    setValue(ctx, 'select', 1, {key})
+  },
+  isSetFunc: (ctx, key) => {
+    return getValue(ctx, 'select', 1, {key})
+  },
+  hide: (ctx) => {
+    return getHide(ctx, 'select', 1)
+  },
+  columns: 3,
 })
 
 // Option 3 ===========================================
@@ -98,15 +111,28 @@ options.question((ctx) => {
 }, 'c3', {
   questionText: 'Please just message us your answer now for - ' + commentName[2],
   setFunc: (ctx, answer) => {
-    ctx.reply('Thanks! We have recorded your answer - ' + answer)
-    console.log(ctx.match);
+    setValue(ctx, 'comments', 2, {answer})
   },
   hide: (ctx) => {
     return getHide(ctx, 'comments', 2)
   }
 })
 
-function getValue(ctx, method, index) {
+options.select('s3', (ctx) => getValue(ctx, 'selectName', 2), {
+  setFunc: async (ctx, key) => {
+    setValue(ctx, 'select', 2, {key})
+  },
+  isSetFunc: (ctx, key) => {
+    return getValue(ctx, 'select', 2, {key})
+  },
+  hide: (ctx) => {
+    return getHide(ctx, 'select', 2)
+  },
+  columns: 3,
+})
+
+// Functions ===============================
+function getValue(ctx, method, index, value) {
   let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
   if (method === 'toggleName') {
     if (localItem.eventOptions[index]) {
@@ -127,6 +153,22 @@ function getValue(ctx, method, index) {
     }
     else return 'null'
   }
+  else if (method === 'selectName') {
+    if (localItem.eventOptions[index].type === 'multi' && localItem.eventOptions[index].extraFields) {
+      let options = {}
+      localItem.eventOptions[index].extraFields.forEach((data,index)=> {
+        options[index] = data.name
+      })
+      return options
+    }
+    else return []
+  }
+  else if (method === 'select') {
+    if (localItem.eventOptions[index].type === 'multi' && localItem.eventOptions[index].extraFields) {
+      return localItem.eventOptions[index].extraFields[value.key].value
+    }
+    else return false
+  }
 }
 
 function setValue(ctx, method, index, value) {
@@ -136,17 +178,20 @@ function setValue(ctx, method, index, value) {
     if (localItem.eventOptions[index]) {
       localItem.eventOptions[index].value = value.setToggle
       localStorage.setItem(id, JSON.stringify(localItem))
-      console.log(localItem.eventOptions[index].value, value);
-    }
-    else {
-      return 'null'
     }
   }
   else if (method === 'comments') {
     if (localItem.eventOptions[index].type === 'comments' && localItem.eventOptions[index].extraFields) {
-      return localItem.eventOptions[index].extraFields[0].name
+      localItem.eventOptions[index].extraFields[0].comment = value.answer
+      localStorage.setItem(id, JSON.stringify(localItem))
+      ctx.reply('Thanks! We have recorded your answer - ' + value.answer)
     }
-    else return 'null'
+  }
+  else if (method === 'select') {
+    if (localItem.eventOptions[index].type === 'multi' && localItem.eventOptions[index].extraFields) {
+      localItem.eventOptions[index].extraFields[value.key].value = !localItem.eventOptions[index].extraFields[value.key].value
+      localStorage.setItem(id, JSON.stringify(localItem))
+    }
   }
 }
 
@@ -171,9 +216,21 @@ function getHide(ctx, method, index) {
     }
     else return true
   }
+  else if (method === 'select') {
+    if (localItem.eventOptions[index]) {
+      if (localItem.eventOptions[index].value) {
+        if (localItem.eventOptions[index].type === 'multi' && localItem.eventOptions[index].extraFields) {
+          return false
+        }
+        else return true
+      }
+      else return true
+    }
+    else return true
+  }
 }
 
-options.manual('Confirm', 'done')
+options.manual('Confirm 👍', 'done')
 
 module.exports = {
   options

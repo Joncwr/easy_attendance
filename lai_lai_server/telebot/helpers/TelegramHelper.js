@@ -92,15 +92,20 @@ module.exports = {
   auth: (ctx, next) => {
     getTelegramId(ctx.from.id)
     .then(res => {
-      console.log(res);
       if (res) {
+        console.log(ctx)
         return next()
       }
       else {
         ctx.reply('No such user registered.')
       }
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      console.log(ctx.from.id);
+      console.log(err)
+      ctx.reply('No such user registered.')
+    })
+
   },
 
   getEventDates: (id, next) => {
@@ -169,15 +174,12 @@ module.exports = {
         })
       }
     })
-    // menu.push(options.manual('adwadwad','a'))
-    // menu.push(options.manual('adwadwasdad','aa'))
-    // initMenu(menu)
-    // return next()
   },
 
   clearOptions: (ctx) => {
     let id = ctx.from.id
     let localItem = JSON.parse(localStorage.getItem(id))
-    console.log(localItem);
+    localItem['eventOptions'] = {}
+    localStorage.setItem(id, JSON.stringify(localItem))
   }
 }
