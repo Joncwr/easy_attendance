@@ -174,4 +174,10 @@ module.exports = {
     // initMenu(menu)
     // return next()
   },
+
+  clearOptions: (ctx) => {
+    let id = ctx.from.id
+    let localItem = JSON.parse(localStorage.getItem(id))
+    console.log(localItem);
+  }
 }

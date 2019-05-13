@@ -8,7 +8,7 @@ const TelegrafInlineMenu = require('telegraf-inline-menu')
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
 
 const { attendance, dates } = require('./attendance')
-const TelegramHelper = require ('./helper/TelegramHelper')
+const TelegramHelper = require ('./helpers/TelegramHelper')
 const main = new TelegrafInlineMenu(ctx => {
   return `Hey ${ctx.from.first_name}!`
 })

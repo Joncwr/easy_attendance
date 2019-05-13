@@ -1,5 +1,5 @@
 const TelegrafInlineMenu = require('telegraf-inline-menu')
-const TelegramHelper = require('../helper/TelegramHelper')
+const TelegramHelper = require('../helpers/TelegramHelper')
 const { attendanceApi } = require('../../routes/publicapi')
 const { options } = require('./options')
 
