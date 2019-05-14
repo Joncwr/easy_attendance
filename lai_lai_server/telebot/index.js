@@ -8,6 +8,7 @@ const TelegrafInlineMenu = require('telegraf-inline-menu')
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
 
 const { attendance, dates } = require('./attendance')
+const { testimonials } = require('./testimonials')
 const TelegramHelper = require ('./helpers/TelegramHelper')
 const main = new TelegrafInlineMenu(ctx => {
   return `Hey ${ctx.from.first_name}!`
@@ -17,6 +18,8 @@ module.exports = { bot, main }
 require('./middleware')
 
 main.submenu('🗓 Attendance', 'a', attendance)
+main.submenu('✨ Testimonials', 't', testimonials)
+
 bot.use(main.init({
   backButtonText: 'back…',
   mainMenuButtonText: 'back to main menu…'

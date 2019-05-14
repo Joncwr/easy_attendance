@@ -149,17 +149,20 @@ function getValue(ctx, method, index, value) {
   }
   else if (method === 'comments') {
     if (localItem.eventOptions[index].type === 'comments' && localItem.eventOptions[index].extraFields) {
-      return localItem.eventOptions[index].extraFields[0].name
+      return localItem.eventOptions[index].extraFields[0].name + ' (Click to respond) 🙃'
     }
     else return 'null'
   }
   else if (method === 'selectName') {
-    if (localItem.eventOptions[index].type === 'multi' && localItem.eventOptions[index].extraFields) {
-      let options = {}
-      localItem.eventOptions[index].extraFields.forEach((data,index)=> {
-        options[index] = data.name
-      })
-      return options
+    if (localItem.eventOptions[index]) {
+      if (localItem.eventOptions[index].type === 'multi' && localItem.eventOptions[index].extraFields) {
+        let options = {}
+        localItem.eventOptions[index].extraFields.forEach((data,index)=> {
+          options[index] = data.name
+        })
+        return options
+      }
+      else return []
     }
     else return []
   }

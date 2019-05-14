@@ -3,13 +3,15 @@ const { attendance, dates } = require('../attendance')
 const { options } = require('../attendance/options')
 const TelegramHelper = require ('../helpers/TelegramHelper')
 const { attendanceApi } = require('../../routes/publicapi')
+const datesReplyMiddleware = dates.replyMenuMiddleware()
+const attendanceReplyMiddleware = attendance.replyMenuMiddleware()
 
 // COMMANDS
 bot.hears('/dates', (ctx, next) => TelegramHelper.auth(ctx, next), dates.replyMenuMiddleware())
 
 bot.hears('/attendance', (ctx, next) => TelegramHelper.auth(ctx, next), attendance.replyMenuMiddleware())
 
-bot.start((ctx, next) => TelegramHelper.auth(ctx, next), main.replyMenuMiddleware())
+bot.start((ctx, next) => TelegramHelper.auth(ctx, next, datesReplyMiddleware), main.replyMenuMiddleware())
 
 // ACTIONS
 bot.action('a', (ctx, next) => TelegramHelper.getEventDates(ctx.from.id, next), attendance.replyMenuMiddleware())

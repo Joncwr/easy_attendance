@@ -88,13 +88,43 @@ function setEventOptions(id, eventOptions) {
   })
 }
 
+function authEventId(id, group_id) {
+  return new Promise((resolve, reject) => {
+    return Events
+    .query()
+    .where({id, group_id, closed: false})
+    .then(res => resolve(res))
+    .catch(err => reject(err))
+  })
+}
+
 module.exports = {
-  auth: (ctx, next) => {
+  auth: (ctx, next, datesReplyMiddleware) => {
     getTelegramId(ctx.from.id)
     .then(res => {
       if (res) {
-        console.log(ctx)
-        return next()
+        if (ctx.startPayload) {
+          // Load Start Paylaoad here!!!
+          console.log(ctx.startPayload)
+          if (ctx.startPayload.search('attfor') !== -1) {
+            let group_id = JSON.parse(localStorage.getItem(ctx.from.id)).group_id
+            let event_id = ctx.startPayload.replace('attfor', '')
+            authEventId(event_id, group_id)
+            .then(res => {
+              if (res.length > 0) {
+                datesReplyMiddleware.setSpecific(ctx, 'a:e-' + event_id)
+              }
+              else ctx.reply('Sorry the event was not found or has been closed')
+            })
+            .catch(err => {
+              console.log(err)
+              ctx.reply('Sorry the event was not found or has been closed')
+            })
+          }
+        }
+        else {
+          return next()
+        }
       }
       else {
         ctx.reply('No such user registered.')
@@ -165,6 +195,8 @@ module.exports = {
       else {
         attendanceApi(localItem.id, localItem.event_id, true)
         .then(res => {
+          localItem['eventOptions'] = {}
+          localStorage.setItem(id, JSON.stringify(localItem))
           ctx.deleteMessage()
           ctx.reply('Thank You~')
         })
