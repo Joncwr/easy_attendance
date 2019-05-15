@@ -1,6 +1,6 @@
 const TelegrafInlineMenu = require('telegraf-inline-menu')
-const TelegramHelper = require('../helpers/TelegramHelper')
-const { attendanceApi } = require('../../routes/publicapi')
+const TelegramHelper = require('../../helpers/TelegramHelper')
+const { attendanceApi } = require('../../../routes/publicapi')
 const { options } = require('./options')
 
 const attendance = new TelegrafInlineMenu(ctx => {
@@ -8,7 +8,6 @@ const attendance = new TelegrafInlineMenu(ctx => {
 })
 
 const dates = new TelegrafInlineMenu(ctx => {
-  console.log(ctx.match);
   return 'Great! Will you be attending?'
 })
 
@@ -24,9 +23,7 @@ dates.button('No', 'n', {
       let status = false
       attendanceApi(attendee_id, event_id, status)
       .then(res => {
-        TelegramHelper.clearOptions(ctx)
-        ctx.deleteMessage()
-        ctx.reply('Thank you, I hope you will be able to make it the next time :(')
+        TelegramHelper.endMenuConvo(ctx, 'sad')
       })
       .catch(err => {
         console.log(err);

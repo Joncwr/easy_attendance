@@ -51,9 +51,9 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
-  addTestimonial: (attendeeId, testimonial) => {
+  addTestimonial: (attendeeId, testimonialDict) => {
     return new Promise((resolve, reject) => {
-      jwtMiddleware.publicFetch('post', 'publicapi/addTestimonial/' + attendeeId, testimonial)
+      jwtMiddleware.publicFetch('post', 'publicapi/addTestimonial/' + attendeeId, testimonialDict)
       .then(res => {
         if (res) resolve(res)
         else reject(res)

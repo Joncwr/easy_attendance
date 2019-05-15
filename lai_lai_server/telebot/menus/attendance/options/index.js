@@ -1,7 +1,7 @@
 const TelegrafInlineMenu = require('telegraf-inline-menu')
-const TelegramHelper = require('../../helpers/TelegramHelper')
-const ObjectHelper = require('../../helpers/ObjectHelper')
-const { attendanceApi } = require('../../../routes/publicapi')
+const TelegramHelper = require('../../../helpers/TelegramHelper')
+const ObjectHelper = require('../../../helpers/ObjectHelper')
+const { attendanceApi } = require('../../../../routes/publicapi')
 
 const options = new TelegrafInlineMenu(async (ctx) => {
   return 'Nice check out what options we have!'

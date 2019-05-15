@@ -65,6 +65,32 @@ function attendanceApi(attendee_id, event_id, status, eventOptions) {
   })
 }
 
+function addTestimonial(testimonial, attendee_id, group_id) {
+  return new Promise((resolve, reject) => {
+    return Testimonials
+    .query()
+    .insert({ testimonial, attendee_id, group_id })
+    .then(testimonial => {
+      resolve(testimonial)
+    })
+    .catch(err => {
+      reject(err)
+    })
+  })
+}
+
+function addWorshipSong(event_id, worship_song) {
+  return new Promise((resolve, reject) => {
+    return Events
+    .query()
+    .patchAndFetchById(event_id, {worship_song})
+    .then(res => {
+      console.log('events => ', res);
+      resolve(res)})
+    .catch(err => reject(err))
+  })
+}
+
 router.get('/getEvent/:event_id', (req, res) => {
   const { event_id } = req.params
   return Events
@@ -163,22 +189,36 @@ router.post('/request_add_attendee/:group_id', (req, res) => {
 });
 
 router.post('/addTestimonial/:attendee_id', (req, res) => {
-  let { testimonial } = req.body
+  let { testimonial, group_id } = req.body
   let { attendee_id } = req.params
-  return Testimonials
-  .query()
-  .insert({ testimonial, attendee_id })
-  .then(testimonial => {
-    console.log(testimonial)
+  addTestimonial(testimonial, attendee_id, group_id)
+  .then(result => {
+    console.log(result)
     res.sendStatus(200)
   })
   .catch(err => {
-    console.log(err)
+    console.log(err);
+    res.sendStatus(400)
+  })
+});
+
+router.post('/addWorshipSong/:event_id', (req, res) => {
+  let { worship_song } = req.body
+  let { event_id } = req.params
+  addWorshipSong(event_id, worship_song)
+  .then(result => {
+    console.log(result)
+    res.sendStatus(200)
+  })
+  .catch(err => {
+    console.log(err);
     res.sendStatus(400)
   })
 });
 
 module.exports = {
   Public: router,
-  attendanceApi
+  attendanceApi,
+  addTestimonial,
+  addWorshipSong,
 }

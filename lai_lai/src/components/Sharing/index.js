@@ -63,8 +63,9 @@ class Sharing extends React.Component {
       return
     }
     else {
-      let testimonial = { testimonial: this.state.text }
-      PublicApi.addTestimonial(this.state.selectedAttendee.id, testimonial)
+      let query = queryString.parse(window.location.search);
+      let testimonialDict = { testimonial: this.state.text, group_id: query.groupId }
+      PublicApi.addTestimonial(this.state.selectedAttendee.id, testimonialDict)
       .then(res => {
         this.setState({hasSubmitted: true})
       })

@@ -7,8 +7,10 @@ const Markup = require('telegraf/markup')
 const TelegrafInlineMenu = require('telegraf-inline-menu')
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
 
-const { attendance, dates } = require('./attendance')
-const { testimonials } = require('./testimonials')
+const { attendance, dates } = require('./menus/attendance')
+const { testimonials } = require('./menus/testimonials')
+const { worshipsongs } = require('./menus/worshipsongs')
+const { sendworshipsongs } = require('./menus/sendworshipsongs')
 const TelegramHelper = require ('./helpers/TelegramHelper')
 const main = new TelegrafInlineMenu(ctx => {
   return `Hey ${ctx.from.first_name}!`
@@ -18,7 +20,21 @@ module.exports = { bot, main }
 require('./middleware')
 
 main.submenu('🗓 Attendance', 'a', attendance)
-main.submenu('✨ Testimonials', 't', testimonials)
+main.submenu('✨ Sharings', 't', testimonials)
+main.submenu('🎸 Current Worship Songs Dedication', 'w', worshipsongs)
+main.submenu('🎸 Send Worship Songs Dedication', 'sw', sendworshipsongs, {
+  hide: (ctx) => {
+    if (ctx.match) {
+      if (ctx.match[0] === 'main' || ctx.match === 'main') return true
+    }
+    else return false
+  }
+})
+
+// bot.on('text', (ctx) => {
+//   ctx.replyWithAnimation('https://media.giphy.com/media/JoUjhJRHA15sCIavDi/giphy.gif')
+//   ctx.reply('hi')
+// })
 
 bot.use(main.init({
   backButtonText: 'back…',

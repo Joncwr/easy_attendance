@@ -25,6 +25,7 @@
     "pg": "^7.9.0",
     "telegraf": "^3.29.0",
     "telegraf-inline-menu": "^3.5.4",
-    "twilio": "^3.29.2"
+    "twilio": "^3.29.2",
+    "validator": "^10.11.0"
   }
 }

@@ -1,17 +1,27 @@
 const { bot, main } = require('../index.js')
-const { attendance, dates } = require('../attendance')
-const { options } = require('../attendance/options')
+const { attendance, dates } = require('../menus/attendance')
+const { options } = require('../menus/attendance/options')
+const { testimonials } = require('../menus/testimonials')
+const { worshipsongs } = require('../menus/worshipsongs')
 const TelegramHelper = require ('../helpers/TelegramHelper')
 const { attendanceApi } = require('../../routes/publicapi')
+const { sendworshipsongs } = require('../menus/sendworshipsongs')
 const datesReplyMiddleware = dates.replyMenuMiddleware()
 const attendanceReplyMiddleware = attendance.replyMenuMiddleware()
+const sendworshipsongsReplyMiddleware = sendworshipsongs.replyMenuMiddleware()
 
-// COMMANDS
-bot.hears('/dates', (ctx, next) => TelegramHelper.auth(ctx, next), dates.replyMenuMiddleware())
 
-bot.hears('/attendance', (ctx, next) => TelegramHelper.auth(ctx, next), attendance.replyMenuMiddleware())
+// COMMANDS =================================================
 
-bot.start((ctx, next) => TelegramHelper.auth(ctx, next, datesReplyMiddleware), main.replyMenuMiddleware())
+// RETHINK COMMAND, NEED AUTH + MIDDLEWARE TO GET DATES
+// bot.hears('/dates', (ctx, next) => TelegramHelper.auth(ctx, next), dates.replyMenuMiddleware())
+//
+// bot.hears('/attendance', (ctx, next) => TelegramHelper.auth(ctx, next), attendance.replyMenuMiddleware())
+
+bot.start((ctx, next) => TelegramHelper.auth(ctx, next, {
+  datesReplyMiddleware,
+  sendworshipsongsReplyMiddleware,
+}), main.replyMenuMiddleware())
 
 // ACTIONS
 bot.action('a', (ctx, next) => TelegramHelper.getEventDates(ctx.from.id, next), attendance.replyMenuMiddleware())
@@ -24,9 +34,7 @@ bot.action(/.*done$/, (ctx) => {
   let { id, event_id, eventOptions } = localItem
   attendanceApi(id, event_id, true, eventOptions)
   .then(res => {
-    TelegramHelper.clearOptions(ctx)
-    ctx.deleteMessage()
-    ctx.reply('Thank You~')
+    TelegramHelper.endMenuConvo(ctx, 'happy')
   })
   .catch(err => {
     console.log(err);
@@ -34,14 +42,24 @@ bot.action(/.*done$/, (ctx) => {
   })
 })
 
+bot.action('t', (ctx,next) => TelegramHelper.resetTestimonials(ctx,next), testimonials.replyMenuMiddleware())
+
+bot.action('w', (ctx,next) => TelegramHelper.getWorshipSong(ctx,next), worshipsongs.replyMenuMiddleware())
+
+bot.action('a:o:done', (ctx) => {
+  console.log(ctx);
+})
+
+// TEST ==================================================
 bot.hears('/test', (ctx) => {
   ctx.replyWithAnimation('https://media.giphy.com/media/3o6YghZV15YGZoOtIk/giphy.gif')
 })
+// main.manual('tewt', 'a:e-36:y')
 
 module.export=bot
 
-let regex = /^att.*y$/
-bot.action(regex, (ctx) => {
-  console.log('hi');
-  console.log(ctx.match);
-})
+// let regex = /^att.*y$/
+// bot.action(regex, (ctx) => {
+//   console.log('hi');
+//   console.log(ctx.match);
+// })
