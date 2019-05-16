@@ -47,6 +47,7 @@ registration.simpleButton('Confirm! 👊', 'cfm', {
         delete localReg[telegramId]
         localStorage.setItem('register', JSON.stringify(localReg))
         ctx.deleteMessage()
+        ctx.replyWithSticker('CAADBQADAQADH-QBK5v1jkw34ZM6Ag')
         ctx.reply(`Thank you so much for registering, please wait for the group leader's acceptance. 😍`)
       })
       .catch(err => {
