@@ -11,9 +11,11 @@ const { attendance, dates } = require('./menus/attendance')
 const { testimonials } = require('./menus/testimonials')
 const { worshipsongs } = require('./menus/worshipsongs')
 const { sendworshipsongs } = require('./menus/sendworshipsongs')
+const { registration } = require('./menus/registration')
+const { summarynotes } = require('./menus/summarynotes')
 const TelegramHelper = require ('./helpers/TelegramHelper')
 const main = new TelegrafInlineMenu(ctx => {
-  return `Hey ${ctx.from.first_name}!`
+  return `So glad to see you here again ${ctx.from.first_name}! ☺️`
 })
 
 module.exports = { bot, main }
@@ -22,6 +24,7 @@ require('./middleware')
 main.submenu('🗓 Attendance', 'a', attendance)
 main.submenu('✨ Sharings', 't', testimonials)
 main.submenu('🎸 Current Worship Songs Dedication', 'w', worshipsongs)
+main.submenu('✍️ Summary Notes', 'sn', summarynotes)
 main.submenu('🎸 Send Worship Songs Dedication', 'sw', sendworshipsongs, {
   hide: (ctx) => {
     if (ctx.match) {
@@ -30,16 +33,11 @@ main.submenu('🎸 Send Worship Songs Dedication', 'sw', sendworshipsongs, {
     else return false
   }
 })
-
-// bot.on('text', (ctx) => {
-//   ctx.replyWithAnimation('https://media.giphy.com/media/JoUjhJRHA15sCIavDi/giphy.gif')
-//   ctx.reply('hi')
-// })
-
 bot.use(main.init({
   backButtonText: 'back…',
   mainMenuButtonText: 'back to main menu…'
 }))
+bot.use(registration.init())
 bot.catch((err) => {
   console.log('Ooops', err)
 })

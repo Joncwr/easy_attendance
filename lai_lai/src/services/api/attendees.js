@@ -40,5 +40,25 @@ module.exports = {
       })
       .catch(err => reject(err))
     })
-  }
+  },
+  editAttendee: (attendee) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('put', 'api/attendees/editAttendee', attendee)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
+  getRequestedAttendees: (groupId) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('get', 'api/attendees/getRequestedAttendees/' + groupId)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
 }

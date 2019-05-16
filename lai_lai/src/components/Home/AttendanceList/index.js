@@ -262,9 +262,18 @@ class AttendanceList extends React.Component {
     }
   }
 
-  onWhatsapp(number) {
-    let whatsappUrl = 'https://wa.me/' + number
-    window.open(whatsappUrl)
+  onWhatsapp(number, method) {
+    if (method === 'telegramSong') {
+      if (this.props.currentGroup.events) {
+        let { id } = this.props.currentGroup.events
+        let whatsappUrl = 'https://wa.me/' + number + '?text=https://t.me/BibleStudySG_Bot?start=sngdedfor' + id
+        window.open(whatsappUrl)
+      }
+    }
+    else {
+      let whatsappUrl = 'https://wa.me/' + number
+      window.open(whatsappUrl)
+    }
   }
 
   renderAttendees() {
@@ -296,6 +305,9 @@ class AttendanceList extends React.Component {
       if (!currentGroup.events.closed) {
         return (
           <div className="attendanceList-contact-actions">
+            <div className="attendanceList-contact-actions-telegramSong" onClick={() => this.onWhatsapp(number, 'telegramSong')}>
+              <div className="attendanceList-contact-actions-telegramSong-icon" />
+            </div>
             <div className="attendanceList-contact-actions-whatsapp" onClick={() => this.onWhatsapp(number)}>
               <div className="attendanceList-contact-actions-whatsapp-icon" />
             </div>

@@ -1,14 +1,16 @@
 import React from 'react'
 
 import Input from '../../../common/Input'
+import AttendeesApi from '../../../services/api/attendees'
 
 import './index.css'
 
-class AddAttendeeModal extends React.Component {
+class EditAttendee extends React.Component {
   constructor(){
     super()
 
     this.state = {
+      id: '',
       name: '',
       number: '',
       email: '',
@@ -17,6 +19,17 @@ class AddAttendeeModal extends React.Component {
 
     this.handleChange=this.handleChange.bind(this)
     this.onSubmit=this.onSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    let { id, name, number, email , telegram } = this.props.modalProps.attendee
+    this.setState({
+      id,
+      name,
+      number,
+      email: email || '',
+      telegram: telegram || ''
+    })
   }
 
   handleChange(event, index) {
@@ -28,13 +41,22 @@ class AddAttendeeModal extends React.Component {
 
   onSubmit() {
     let addAttendeeDict = {
+      id: this.state.id,
       name: this.state.name,
       number: this.state.number,
       email: this.state.email,
       telegram: this.state.telegram
     }
-    this.props.modalProps(addAttendeeDict)
-    this.props.setModal('hide')
+    AttendeesApi.editAttendee(addAttendeeDict)
+    .then(res => {
+      this.props.modalProps.setSnackbar('show', {
+        text: 'Successfully changed details.'
+      })
+      this.props.setModal('hide')
+    })
+    .catch(err => this.props.modalProps.setSnackbar('show', {
+      text: 'Error. Please try reload and try again.'
+    }))
   }
 
   render() {
@@ -45,9 +67,9 @@ class AddAttendeeModal extends React.Component {
       marginBottom: '10px',
     }
     return (
-      <div className="addAttendeeModal">
-        <div className="addAttendeeModal-header">Add Attendee</div>
-        <div className="addAttendeeModal-input">
+      <div className="editAttendee">
+        <div className="editAttendee-header">Add Attendee</div>
+        <div className="editAttendee-input">
           <Input
             handleChange={this.handleChange}
             name='name'
@@ -77,12 +99,12 @@ class AddAttendeeModal extends React.Component {
             placeholder='Telegram'
           />
         </div>
-        <div className="addAttendeeModal-button" onClick={this.onSubmit}>
-          Add
+        <div className="editAttendee-button" onClick={this.onSubmit}>
+          Update
         </div>
       </div>
     )
   }
 }
 
-export default AddAttendeeModal
+export default EditAttendee

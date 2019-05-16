@@ -33,7 +33,12 @@ class Login extends React.Component {
       localStorage.setItem('user', JSON.stringify(userCredentials))
       this.props.history.push('home')
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      this.props.setSnackbar('show', {
+        text: err.message
+      })
+      console.log(err.message)
+    })
   }
 
   handleChange(event, index) {

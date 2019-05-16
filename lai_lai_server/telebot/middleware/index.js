@@ -6,9 +6,12 @@ const { worshipsongs } = require('../menus/worshipsongs')
 const TelegramHelper = require ('../helpers/TelegramHelper')
 const { attendanceApi } = require('../../routes/publicapi')
 const { sendworshipsongs } = require('../menus/sendworshipsongs')
+const { registration } = require('../menus/registration')
+const { summarynotes } = require('../menus/summarynotes')
 const datesReplyMiddleware = dates.replyMenuMiddleware()
 const attendanceReplyMiddleware = attendance.replyMenuMiddleware()
 const sendworshipsongsReplyMiddleware = sendworshipsongs.replyMenuMiddleware()
+const registrationReplyMiddleware = registration.replyMenuMiddleware()
 
 
 // COMMANDS =================================================
@@ -18,10 +21,19 @@ const sendworshipsongsReplyMiddleware = sendworshipsongs.replyMenuMiddleware()
 //
 // bot.hears('/attendance', (ctx, next) => TelegramHelper.auth(ctx, next), attendance.replyMenuMiddleware())
 
-bot.start((ctx, next) => TelegramHelper.auth(ctx, next, {
-  datesReplyMiddleware,
-  sendworshipsongsReplyMiddleware,
-}), main.replyMenuMiddleware())
+bot.start((ctx, next) => {
+  if (ctx.startPayload.search('regfor') !== -1) {
+    TelegramHelper.registration(ctx, next, {
+      registrationReplyMiddleware,
+    })
+  }
+  else {
+    TelegramHelper.auth(ctx, next, {
+      datesReplyMiddleware,
+      sendworshipsongsReplyMiddleware,
+    })
+  }
+}, main.replyMenuMiddleware())
 
 // ACTIONS
 bot.action('a', (ctx, next) => TelegramHelper.getEventDates(ctx.from.id, next), attendance.replyMenuMiddleware())
@@ -46,6 +58,8 @@ bot.action('t', (ctx,next) => TelegramHelper.resetTestimonials(ctx,next), testim
 
 bot.action('w', (ctx,next) => TelegramHelper.getWorshipSong(ctx,next), worshipsongs.replyMenuMiddleware())
 
+bot.action('sn', (ctx,next) => TelegramHelper.getSummaryEvents(ctx,next), summarynotes.replyMenuMiddleware())
+
 bot.action('a:o:done', (ctx) => {
   console.log(ctx);
 })
@@ -54,6 +68,12 @@ bot.action('a:o:done', (ctx) => {
 bot.hears('/test', (ctx) => {
   ctx.replyWithAnimation('https://media.giphy.com/media/3o6YghZV15YGZoOtIk/giphy.gif')
 })
+
+// bot.on('sticker', (ctx) => {
+//   console.log(ctx.message);
+//   ctx.replyWithSticker('CAADBQADAQADH-QBK5v1jkw34ZM6Ag')
+//   ctx.reply('hi')
+// })
 // main.manual('tewt', 'a:e-36:y')
 
 module.export=bot

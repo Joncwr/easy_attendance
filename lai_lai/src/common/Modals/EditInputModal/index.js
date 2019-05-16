@@ -11,10 +11,19 @@ class EditInputModal extends React.Component {
 
     this.state = {
       name: '',
+      summaryUrl: '',
     }
 
     this.handleChange=this.handleChange.bind(this)
     this.onSubmit=this.onSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    if (this.props.modalProps.event) {
+      this.setState({
+        name: this.props.modalProps.event.name
+      })
+    }
   }
 
   handleChange(event, index) {
@@ -35,7 +44,11 @@ class EditInputModal extends React.Component {
       this.props.modalProps.function(method, null, otherProps)
     }
     else {
-      this.props.modalProps.function(method, this.state.name, otherProps)
+      let eventDict = {
+        name: this.state.name,
+        summaryNotes: {url: this.state.summaryUrl}
+      }
+      this.props.modalProps.function(method, eventDict, otherProps)
     }
     this.props.setModal('hide')
   }
@@ -96,6 +109,12 @@ class EditInputModal extends React.Component {
   }
 
   render() {
+    let style = {
+      height: '50px',
+      width: '100%',
+      fontSize: '1.3em',
+      marginBottom: '10px',
+    }
     let { text } = this.props.modalProps
     return (
       <div className="editInputModal">
@@ -108,6 +127,15 @@ class EditInputModal extends React.Component {
               handleChange={this.handleChange}
               name='name'
               state={this.state.name}
+              style={style}
+              placeholder='Name'
+            />
+            <Input
+              handleChange={this.handleChange}
+              name='summaryUrl'
+              state={this.state.summaryUrl}
+              style={style}
+              placeholder='Summary URL'
             />
           </div>
         </div>

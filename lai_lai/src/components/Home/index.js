@@ -38,6 +38,7 @@ class Home extends Component {
     this.onDropDown=this.onDropDown.bind(this)
     this.openAttendanceStatistics=this.openAttendanceStatistics.bind(this)
     this.openSetEventMessage=this.openSetEventMessage.bind(this)
+    this.editAttendee=this.editAttendee.bind(this)
   }
 
   componentDidMount() {
@@ -48,7 +49,19 @@ class Home extends Component {
       // this.changeScreen('attendance')
       // this.openAttendanceStatistics()
       // this.openSetEventMessage()
+      // this.openSetEventModal()
     }, 200)
+  }
+
+  copyTelegramAttendanceUrl() {
+    if (this.state.currentGroup.events) {
+      let { id } = this.state.currentGroup.events
+      let url = 'https://t.me/BibleStudySG_Bot?start=attfor' + id
+      copy(url)
+      this.props.setSnackbar('show', {
+        text: 'Telegram Attendance Url copied.'
+      })
+    }
   }
 
   joinMessageGroupCopy() {
@@ -67,11 +80,12 @@ class Home extends Component {
     this.props.setModal('show', 'AddAttendeeModal', this.onAddAttendee)
   }
 
-  onAddAttendee(name, number) {
+  onAddAttendee(addAttendeeDict) {
+    let { name, number, email, telegram} = addAttendeeDict
     let group = Object.assign([], this.state.currentGroup)
     if (group) {
       let group_id = group.id
-      let user = { name, number, group_id}
+      let user = { name, number, email, telegram, group_id}
       AttendeesApi.addAttendee(user)
       .then(res => {
         this.props.setSnackbar('show', {
@@ -145,13 +159,22 @@ class Home extends Component {
     this.setState({screen: screen})
   }
 
+  editAttendee(data) {
+    let editAttendeeDict = {
+      attendee: data,
+      setSnackbar: this.props.setSnackbar
+    }
+
+    this.props.setModal('show', 'EditAttendee', editAttendeeDict)
+  }
+
   renderAttendees() {
     let renderAttendees = []
     let attendeesArr = Object.assign([], this.state.attendeesData)
 
     attendeesArr.forEach((data,index) => {
       renderAttendees.push(
-        <div className="home-attendees-info" key={index}>
+        <div className="home-attendees-info" key={index} onClick={() => this.editAttendee(data)}>
           <div className="home-attendees-info-name">{data.name}</div>
           <div className="home-attendees-info-number">{data.number}</div>
           <div className="home-attendees-info-deleteIcon" onClick={() => this.showOnDeleteModal(index)}/>
@@ -208,24 +231,30 @@ class Home extends Component {
   }
 
   openSetEventModal() {
-    let setEventDict = {}
-    setEventDict['text'] = 'event'
-    setEventDict['function'] = this.setEvent
+    if (this.state.currentGroup.events) {
+      let setEventDict = {
+        text: 'event',
+        function: this.setEvent,
+        event: this.state.currentGroup.events,
+      }
 
-    this.props.setModal('show', 'EditInputModal', setEventDict)
+      this.props.setModal('show', 'EditInputModal', setEventDict)
+    }
   }
 
-  setEvent(method, event) {
-    if (event !== '') {
+  setEvent(method, eventDict, otherProps) {
+    if (eventDict.name !== '') {
       let user = Object.assign({}, this.state.user)
       if (user && method === 'update') {
+        console.log(method, eventDict, otherProps);
         let updateEventDict = {
           current_event: this.state.currentGroup.current_event,
-          event_name: event
+          event_name: eventDict.name,
+          summary_notes: eventDict.summaryNotes
         }
         EventsApi.updateEvent(updateEventDict)
         .then(res => {
-          this.props.setDate(event)
+          this.props.setDate(eventDict.name)
           this.props.setSnackbar('show', {
             text: "Event updated."
           })
@@ -238,11 +267,12 @@ class Home extends Component {
       else {
         let createEventsDict = {
           group_id: this.state.currentGroup.id,
-          event_name: event
+          event_name: eventDict.name,
+          summary_notes: eventDict.summaryNotes
         }
         EventsApi.createEvent(createEventsDict)
         .then(res => {
-          this.props.setDate(event)
+          this.props.setDate(eventDict.name)
           this.props.setSnackbar('show', {
             text: "Event created."
           })
@@ -308,6 +338,17 @@ class Home extends Component {
     }
   }
 
+  openRequestedAttendee() {
+    if (this.state.currentGroup) {
+      let group = this.state.currentGroup
+      let requestedAttendeeDict = {
+        group,
+        setSnackbar: this.props.setSnackbar
+      }
+      this.props.setModal('show', 'RequestedAttendeeModal', requestedAttendeeDict)
+    }
+  }
+
   renderDropDown() {
     if (this.state.showDropDown) {
       return  <DropDownComponent
@@ -328,6 +369,7 @@ class Home extends Component {
             <div className="home-header-group">
               <div className="home-header-group-text">{groupName}
               <div className="home-header-group-icon" onClick={this.onDropDown}/></div>
+              <div className="home-attendees-group-requestAttendee" onClick={this.openRequestedAttendee.bind(this)} />
               <div className="home-attendees-group-message" onClick={this.joinMessageGroupCopy.bind(this)} />
               <div className="home-attendees-group-testimonials" onClick={this.openTestimonials.bind(this)} />
             </div>
@@ -339,6 +381,7 @@ class Home extends Component {
                 {date}
                 <div className="home-attendees-event-icon" onClick={this.openSetEventModal} />
               </div>
+              <div className="home-attendees-event-attendanceTelegramUrl" onClick={this.copyTelegramAttendanceUrl.bind(this)} />
               <div className="home-attendees-event-eventMessage" onClick={this.openSetEventMessage} />
             </div>
             <div className="home-attendees-headers">

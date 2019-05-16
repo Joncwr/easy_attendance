@@ -5,6 +5,8 @@ const Attendance = require('../../models/attendance')
 const accountSid = 'AC5af195c67fd6e784c03f34e51eb7dd3b';
 const authToken = '33c1b87b673af4cb521989e6b27e42e2';
 const client = require('twilio')(accountSid, authToken);
+const Telegram = require('telegraf/telegram')
+const bot = new Telegram(process.env.TELEGRAM_BOT_TOKEN)
 
 router.post('/broadcast', (req, res) => {
   let { attendeesData, event_id, message } = req.body
@@ -102,6 +104,16 @@ router.post('/single', (req, res) => {
       console.log('error => ', err);
       res.send(err)
     })
+});
+
+router.post('/testTelegram', (req, res) => {
+  bot.sendMessage(721544223, 'https://t.me/Bible_Study_Test_Bot?start=regfor30')
+  .then(res => {
+    console.log(res);
+  })
+  .catch(err => {
+    console.log(err);
+  })
 });
 
 module.exports = router

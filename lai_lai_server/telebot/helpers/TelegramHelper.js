@@ -99,12 +99,14 @@ function endMenuConvo(ctx, method) {
   localItem['testimonials'] = {}
   localItem['worshipSong'] = {}
   localItem['worshipSongDedication'] = {}
+  localItem['summarynotes'] = {}
   localStorage.setItem(id, JSON.stringify(localItem))
   ctx.deleteMessage()
   if (method === 'happy') {
-    ctx.reply('Thank You~')
+    ctx.replyWithSticker('CAADBQADAQADH-QBK5v1jkw34ZM6Ag')
   }
   else if (method === 'sad') {
+    ctx.replyWithSticker('CAADBQADAgADH-QBK1Ho3U-R2nJ-Ag')
     ctx.reply('Thank you, I hope you will be able to make it the next time :(')
   }
 }
@@ -161,15 +163,14 @@ module.exports = {
         }
       }
       else {
-        ctx.reply('No such user registered.')
+        ctx.reply('No such user registered. Please get the link to register for your group from your group leader. Thank you 😊')
       }
     })
     .catch(err => {
       console.log(ctx.from.id);
       console.log(err)
-      ctx.reply('No such user registered.')
+      ctx.reply('No such user registered. Please get the link to register for your group from your group leader. Thank you 😊')
     })
-
   },
   getEventDates: (id, next) => {
     getEvents(id)
@@ -276,4 +277,48 @@ module.exports = {
     })
   },
   endMenuConvo,
+  registration: (ctx, next, options) => {
+    let group_id = ctx.startPayload.replace('regfor', '')
+    let id = ctx.from.id
+    let beforeParseLS = localStorage.getItem('register')
+    let localReg
+    if (beforeParseLS) localReg = JSON.parse(beforeParseLS)
+    if (!localReg) {
+      localReg = {}
+    }
+    localReg[id] = { name: '', number: '', email: '' , group_id}
+    localStorage.setItem('register', JSON.stringify(localReg))
+    options.registrationReplyMiddleware.setSpecific(ctx, 'main')
+  },
+  getSummaryEvents: (ctx, next) => {
+    let id = ctx.from.id
+    let localItem = JSON.parse(localStorage.getItem(id))
+    let { group_id } = localItem
+    return Events
+    .query()
+    .where({ group_id })
+    .then(events => {
+      let summaryEvents = []
+      if (events.length > 0) {
+        events.forEach(data => {
+          if (data.summary_notes) {
+            let { id, name, worship_song, summary_notes } = data
+            summaryEvents.push({id, name, worship_song, summary_notes})
+          }
+        })
+        if (summaryEvents.length > 0) {
+          localItem['summarynotes'] = summaryEvents
+          localStorage.setItem(id, JSON.stringify(localItem))
+          return next()
+        }
+        else ctx.reply('Sorry there was no summary notes found. 😭')
+      }
+      else ctx.reply('Sorry there was no summary notes found. 😭')
+    })
+    .catch(err => {
+      console.log(err)
+      ctx.reply('Error has occured.')
+    })
+    // return next()
+  }
 }

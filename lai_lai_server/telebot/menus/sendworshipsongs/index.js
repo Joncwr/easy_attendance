@@ -2,6 +2,7 @@ const TelegrafInlineMenu = require('telegraf-inline-menu')
 const TelegramHelper = require('../../helpers/TelegramHelper')
 const ObjectHelper = require('../../helpers/ObjectHelper')
 const { addWorshipSong } = require('../../../routes/publicapi')
+const Attendees = require('../../../models/attendees')
 
 const sendworshipsongs = new TelegrafInlineMenu(ctx => {
   return getValue(ctx, 'menuText')
@@ -43,10 +44,15 @@ sendworshipsongs.simpleButton('Confirm! 👊', 'cfm', {
       ctx.answerCbQuery('Please fill in all fields 😭')
     }
     else {
-      let worship_song = { song_name, text, url, attendee_id: localItem.id }
-      addWorshipSong(event_id, worship_song)
-      .then(res => {
-        TelegramHelper.endMenuConvo(ctx, 'happy')
+      return Attendees
+      .query()
+      .where({id: localItem.id})
+      .then(([res]) => {
+        let worship_song = { song_name, text, url, attendee_id: localItem.id, attendee_name: res.name }
+        addWorshipSong(event_id, worship_song)
+        .then(res => {
+          TelegramHelper.endMenuConvo(ctx, 'happy')
+        })
       })
       .catch(err => {
         console.log(err)

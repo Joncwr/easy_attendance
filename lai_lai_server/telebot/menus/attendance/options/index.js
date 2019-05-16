@@ -4,7 +4,7 @@ const ObjectHelper = require('../../../helpers/ObjectHelper')
 const { attendanceApi } = require('../../../../routes/publicapi')
 
 const options = new TelegrafInlineMenu(async (ctx) => {
-  return 'Nice check out what options we have!'
+  return getValue(ctx, 'menuText')
 })
 
 let optionName = ['Option 1', 'Option 1', 'Option 3']
@@ -134,7 +134,10 @@ options.select('s3', (ctx) => getValue(ctx, 'selectName', 2), {
 // Functions ===============================
 function getValue(ctx, method, index, value) {
   let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
-  if (method === 'toggleName') {
+  if (method === 'menuText') {
+    return `Super excites your coming! 🤩 Check out what options we have on that day 🤔`
+  }
+  else if (method === 'toggleName') {
     if (localItem.eventOptions[index]) {
       return localItem.eventOptions[index].fieldName || ''
     }

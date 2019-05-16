@@ -58,10 +58,16 @@
   background: url('/img/icon_drop_down@3x.png') no-repeat center center/ contain;
 }
 
+.home-attendees-group-requestAttendee,
 .home-attendees-group-message,
 .home-attendees-group-testimonials {
   height: 30px;
   width: 30px;
+}
+
+.home-attendees-group-requestAttendee {
+  background: url('/img/icon_request_attendee@3x.png') no-repeat center center/ contain;
+  margin-right: 10px;
 }
 
 .home-attendees-group-message {
@@ -165,6 +171,13 @@
   height: 1.2em;
   width: 1.2em;
   background: url('/img/icon_edit@3x.png') no-repeat center center/ contain;
+}
+
+.home-attendees-event-attendanceTelegramUrl {
+  margin-left: 5px;
+  height: 30px;
+  width: 30px;
+  background: url('/img/icon_telegram_url@3x.png') no-repeat center center/ contain;
 }
 
 .home-attendees-event-eventMessage {

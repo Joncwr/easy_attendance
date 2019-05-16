@@ -1,4 +1,4 @@
-.addAttendeeModal,
+.editAttendee,
 .editInputModal {
   width: 350px;
   display: flex;
@@ -8,27 +8,27 @@
   background-color: #fff2e6;
 }
 
-.addAttendeeModal-header {
+.editAttendee-header {
   padding: 30px 40px;
   align-self: flex-start;
   font-size: 1.5em;
   font-weight: 700;
 }
 
-.addAttendeeModal-input {
+.editAttendee-input {
   padding: 0 20px;
 }
 
-.addAttendeeModal-button {
+.editAttendee-button {
   width: 50%;
   height: 40px;
   margin: 30px 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ff9933;
+  background-color: #ccffee;
   border-radius: 50px;
-  border: 5px solid #ff8000;
+  border: 5px solid #33ffbb;
   box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.1);
   font-size: 1.3em;
   font-family: Fjalla One;

@@ -52,10 +52,10 @@ router.put('/setEventSchema', (req, res) => {
 });
 
 router.post('/createEvent', (req, res) => {
-  const { group_id, event_name } = req.body
+  const { group_id, event_name, summary_notes } = req.body
   return Events
     .query()
-    .insert({ name: event_name , group_id})
+    .insert({ name: event_name , group_id, summary_notes})
     .then(event => {
       return Groups
         .query()
@@ -71,10 +71,10 @@ router.post('/createEvent', (req, res) => {
 });
 
 router.put('/updateEvent', (req, res) => {
-  const { current_event, event_name } = req.body
+  const { current_event, event_name, summary_notes } = req.body
   return Events
     .query()
-    .patchAndFetchById(current_event, {name: event_name})
+    .patchAndFetchById(current_event, {name: event_name, summary_notes})
     .then(event => {
       res.send(event)
     })

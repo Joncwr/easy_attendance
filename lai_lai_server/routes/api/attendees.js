@@ -4,6 +4,7 @@ const router = express.Router()
 const Attendees = require('../../models/attendees')
 const Attendance = require('../../models/attendance')
 const Attendees_Groups = require('../../models/attendees_groups')
+const Requested_Attendees = require('../../models/requested_attendees')
 
 router.get('/test', (req, res) => {
   res.send('hi')
@@ -30,10 +31,10 @@ router.get('/getAttendees/:group_id', (req, res) => {
 });
 
 router.post('/addAttendee', (req, res) => {
-  let { name, number, group_id } = req.body
+  let { name, number, group_id, email, telegram, } = req.body
   return Attendees
     .query()
-    .insert({name, number})
+    .insert({name, number, email, telegram_id: telegram})
     .then(attendee => {
       return Attendees_Groups
       .query()
@@ -43,6 +44,20 @@ router.post('/addAttendee', (req, res) => {
       })
     })
     .catch(err => res.sendStatus(400))
+});
+
+router.put('/editAttendee', (req, res) => {
+  let { id, name, number, group_id, email, telegram } = req.body
+  return Attendees
+    .query()
+    .patchAndFetchById(id, {name, number, group_id, email, telegram_id: telegram})
+    .then(attendee => {
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)}
+    )
 });
 
 router.delete('/deleteAttendee/:id', (req, res) => {
@@ -65,6 +80,17 @@ router.delete('/deleteAttendee/:id', (req, res) => {
         res.sendStatus(200)
       })
     })
+  })
+  .catch(err => res.sendStatus(400))
+});
+
+router.get('/getRequestedAttendees/:group_id', (req, res) => {
+  const { group_id } = req.params
+  return Requested_Attendees
+  .query()
+  .where({group_id})
+  .then(requested_attendees => {
+    res.send(requested_attendees)
   })
   .catch(err => res.sendStatus(400))
 });

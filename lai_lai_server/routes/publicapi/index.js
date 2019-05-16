@@ -91,6 +91,17 @@ function addWorshipSong(event_id, worship_song) {
   })
 }
 
+function requestAddAttendee(attendeeDict) {
+  let { name, number, email, group_id, telegram_id } = attendeeDict
+  return new Promise((resolve, reject) => {
+    return Requested_Attendees
+    .query()
+    .insert({ name, number, email, group_id, telegram_id})
+    .then(requested_attendees => resolve(requested_attendees))
+    .catch(err => reject(err))
+  })
+}
+
 router.get('/getEvent/:event_id', (req, res) => {
   const { event_id } = req.params
   return Events
@@ -175,15 +186,14 @@ router.post('/attendance', (req, res) => {
 router.post('/request_add_attendee/:group_id', (req, res) => {
   let { name, number, email } = req.body
   let { group_id } = req.params
-  return Requested_Attendees
-  .query()
-  .insert({ name, number, email, group_id})
-  .then(requested_attendees => {
-    console.log(requested_attendees)
+  let attendeeDict = {name, number, email, group_id}
+  requestAddAttendee(attendeeDict)
+  .then(result => {
+    console.log(result)
     res.sendStatus(200)
   })
   .catch(err => {
-    console.log(err)
+    console.log(err);
     res.sendStatus(400)
   })
 });
@@ -221,4 +231,5 @@ module.exports = {
   attendanceApi,
   addTestimonial,
   addWorshipSong,
+  requestAddAttendee,
 }

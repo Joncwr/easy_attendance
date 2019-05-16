@@ -33,6 +33,7 @@ function getValue(ctx, method) {
       }
       else return ''
     }
+    else return ''
   }
   else if (method === 'menuText') {
     if (!ObjectHelper.isEmpty(localItem.worshipSong)) {

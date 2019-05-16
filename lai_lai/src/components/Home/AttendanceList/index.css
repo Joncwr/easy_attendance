@@ -10,6 +10,7 @@
 .attendanceList--mainWrapper {
   flex: 1;
   overflow: auto;
+  font-size: .9em;
 }
 
 .attendanceList-header {
@@ -105,23 +106,30 @@
 }
 
 .attendanceList-contact-actions {
-  width: 70px;
+  width: 75px;
   height: 100%;
-  display: flex;
+  margin-right: 10px;
 }
 
+.attendanceList-contact-actions-telegramSong,
 .attendanceList-contact-actions-message,
 .attendanceList-contact-actions-whatsapp {
-  width: 30px;
+  display: inline-block;
+  width: 25px;
   height: 100%;
   padding: .3em;
   box-sizing: border-box;
 }
 
+.attendanceList-contact-actions-telegramSong-icon,
 .attendanceList-contact-actions-message-icon,
 .attendanceList-contact-actions-whatsapp-icon {
   height: 100%;
   width: 100%;
+}
+
+.attendanceList-contact-actions-telegramSong-icon {
+  background: url('/img/icon_telegram_song@3x.png') no-repeat center center/ contain;
 }
 
 .attendanceList-contact-actions-message-icon {
