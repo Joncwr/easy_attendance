@@ -67,11 +67,11 @@ class Home extends Component {
   joinMessageGroupCopy() {
     if (this.state.currentGroup) {
       let { id } = this.state.currentGroup
-      let url = 'http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/sharing?groupId=' + id
-
+      // let url = 'http://ec2-18-191-78-79.us-east-2.compute.amazonaws.com/sharing?groupId=' + id
+      let url = 'https://t.me/BibleStudySG_Bot?start=regfor' + id
       copy(url)
       this.props.setSnackbar('show', {
-        text: 'Url copied to clipboard.'
+        text: 'Registration for Telegram Bot copied.'
       })
     }
   }
