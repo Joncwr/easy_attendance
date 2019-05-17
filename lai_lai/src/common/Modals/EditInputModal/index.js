@@ -20,8 +20,11 @@ class EditInputModal extends React.Component {
 
   componentDidMount() {
     if (this.props.modalProps.event) {
+      let summaryUrl = ''
+      if (this.props.modalProps.event.summary_notes) summaryUrl = this.props.modalProps.event.summary_notes.url
       this.setState({
-        name: this.props.modalProps.event.name
+        name: this.props.modalProps.event.name,
+        summaryUrl,
       })
     }
   }
