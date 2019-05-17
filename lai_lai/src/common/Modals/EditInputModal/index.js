@@ -31,7 +31,12 @@ class EditInputModal extends React.Component {
     let value = event.target.value
 
     if (this.props.modalProps.text === 'event') {
-      if (value.length < 20) this.setState({[name]: value})
+      if (name === 'name') {
+        if (value.length < 20) this.setState({[name]: value})
+      }
+      else {
+        this.setState({[name]: value})
+      }
     }
     else {
       this.setState({[name]: value})
