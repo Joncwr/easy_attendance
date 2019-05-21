@@ -1,6 +1,7 @@
 const Attendees = require('../../models/attendees')
 const Events = require('../../models/events')
 const Groups = require('../../models/groups')
+const Prayer_Request = require('../../models/prayer_request')
 const { options, setOptionsMenuVariables } = require('../menus/attendance/options')
 const { attendanceApi } = require('../../routes/publicapi')
 const ObjectHelper = require('../helpers/ObjectHelper')
@@ -105,6 +106,8 @@ function endMenuConvo(ctx, method) {
   localItem['eventMessage'] = {}
   localItem['testimonials'] = {}
   localItem['worshipSong'] = {}
+  localItem['groupsPrayerRequest'] = []
+  localItem['prayerRequest'] = ''
   localItem['worshipSongDedication'] = {}
   localItem['summarynotes'] = {}
   localStorage.setItem(id, JSON.stringify(localItem))
@@ -354,5 +357,30 @@ module.exports = {
       ctx.reply('Error has occured.')
     })
     // return next()
+  },
+  initiatePrayerRequest: (ctx,next) => {
+    let id = ctx.from.id
+    let localItem = JSON.parse(localStorage.getItem(id))
+    localItem['prayerRequest'] = ''
+    localStorage.setItem(id, JSON.stringify(localItem))
+    return next()
+  },
+  getPrayerRequest: (ctx, next) => {
+    let id = ctx.from.id
+    let localItem = JSON.parse(localStorage.getItem(id))
+    let { group_id } = localItem
+    return Prayer_Request
+    .query()
+    .where({ group_id })
+    .orderBy('prayer_count', 'asc')
+    .then(prayer_request => {
+      localItem['groupsPrayerRequest'] = prayer_request
+      localStorage.setItem(id, JSON.stringify(localItem))
+      return next()
+    })
+    .catch(err => {
+      console.log(err)
+      ctx.reply('Error has occured.')
+    })
   }
 }

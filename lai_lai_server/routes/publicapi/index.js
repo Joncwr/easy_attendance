@@ -7,6 +7,7 @@ const Attendance = require('../../models/attendance')
 const Groups = require('../../models/groups')
 const Testimonials = require('../../models/testimonials')
 const Requested_Attendees = require('../../models/requested_attendees')
+const Prayer_Request = require('../../models/prayer_request')
 
 function attendanceApi(attendee_id, event_id, status, eventOptions) {
   return new Promise((resolve, reject) => {
@@ -96,8 +97,19 @@ function requestAddAttendee(attendeeDict) {
   return new Promise((resolve, reject) => {
     return Requested_Attendees
     .query()
-    .insert({ name, number, email, group_id, telegram_id})
+    .insert({ name, number, email, group_id, telegram_id })
     .then(requested_attendees => resolve(requested_attendees))
+    .catch(err => reject(err))
+  })
+}
+
+function addPrayerRequest(prayerDict) {
+  let { description, attendee_id, group_id } = prayerDict
+  return new Promise((resolve, reject) => {
+    return Prayer_Request
+    .query()
+    .insert({ description, attendee_id, group_id })
+    .then(prayer_request => resolve(prayer_request))
     .catch(err => reject(err))
   })
 }
@@ -232,4 +244,5 @@ module.exports = {
   addTestimonial,
   addWorshipSong,
   requestAddAttendee,
+  addPrayerRequest,
 }

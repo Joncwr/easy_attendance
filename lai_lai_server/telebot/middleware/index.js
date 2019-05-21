@@ -8,6 +8,7 @@ const { attendanceApi } = require('../../routes/publicapi')
 const { sendworshipsongs } = require('../menus/sendworshipsongs')
 const { registration } = require('../menus/registration')
 const { summarynotes } = require('../menus/summarynotes')
+const { prayer_request_request,prayer_request_pray } = require('../menus/prayer_request')
 const datesReplyMiddleware = dates.replyMenuMiddleware()
 const attendanceReplyMiddleware = attendance.replyMenuMiddleware()
 const sendworshipsongsReplyMiddleware = sendworshipsongs.replyMenuMiddleware()
@@ -59,6 +60,10 @@ bot.action('t', (ctx,next) => TelegramHelper.resetTestimonials(ctx,next), testim
 bot.action('w', (ctx,next) => TelegramHelper.getWorshipSong(ctx,next), worshipsongs.replyMenuMiddleware())
 
 bot.action('sn', (ctx,next) => TelegramHelper.getSummaryEvents(ctx,next), summarynotes.replyMenuMiddleware())
+
+bot.action('pr:r', (ctx,next) => TelegramHelper.initiatePrayerRequest(ctx,next), prayer_request_request.replyMenuMiddleware())
+
+bot.action('pr:p', (ctx,next) => TelegramHelper.getPrayerRequest(ctx,next), prayer_request_pray.replyMenuMiddleware())
 
 bot.action(/^inatt.*/, (ctx) =>  TelegramHelper.replyAttendance(ctx, {
   datesReplyMiddleware
