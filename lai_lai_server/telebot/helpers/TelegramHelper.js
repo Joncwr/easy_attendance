@@ -297,14 +297,13 @@ module.exports = {
     return Events
     .query()
     .where({ group_id })
+    .whereNotNull('summary_notes')
     .then(events => {
       let summaryEvents = []
       if (events.length > 0) {
         events.forEach(data => {
-          if (data.summary_notes) {
-            let { id, name, worship_song, summary_notes } = data
-            summaryEvents.push({id, name, worship_song, summary_notes})
-          }
+          let { id, name, worship_song, summary_notes } = data
+          summaryEvents.push({id, name, worship_song, summary_notes})
         })
         if (summaryEvents.length > 0) {
           localItem['summarynotes'] = summaryEvents
