@@ -43,6 +43,12 @@ function getEvents(id) {
     .where({ group_id , closed: false})
     .then(events => {
       dates = {}
+      let eventMessages = {}
+      events.forEach(data => {
+        eventMessages[data.id] = data.message
+      })
+      localItem['eventMessage'] = eventMessages
+      localStorage.setItem(id, JSON.stringify(localItem))
       events.forEach(data =>{
         dates[data.id] = '🗓 ' + data.name
       })
@@ -96,6 +102,7 @@ function endMenuConvo(ctx, method) {
   let id = ctx.from.id
   let localItem = JSON.parse(localStorage.getItem(id))
   localItem['eventOptions'] = {}
+  localItem['eventMessage'] = {}
   localItem['testimonials'] = {}
   localItem['worshipSong'] = {}
   localItem['worshipSongDedication'] = {}
@@ -126,6 +133,8 @@ module.exports = {
             authEventId(event_id, group_id)
             .then(res => {
               if (res.length > 0) {
+                localItem['eventMessage'] = { [res[0].id]: res[0].message }
+                localStorage.setItem(ctx.from.id, JSON.stringify(localItem))
                 options.datesReplyMiddleware.setSpecific(ctx, 'a:e-' + event_id)
               }
               else ctx.reply('Sorry the event was not found or has been closed')

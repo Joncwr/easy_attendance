@@ -22,13 +22,13 @@ class EditAttendee extends React.Component {
   }
 
   componentDidMount() {
-    let { id, name, number, email , telegram } = this.props.modalProps.attendee
+    let { id, name, number, email , telegram_id } = this.props.modalProps.attendee
     this.setState({
       id,
       name,
       number,
       email: email || '',
-      telegram: telegram || ''
+      telegram: telegram_id || ''
     })
   }
 

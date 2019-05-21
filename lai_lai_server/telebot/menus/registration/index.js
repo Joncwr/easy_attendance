@@ -40,19 +40,25 @@ registration.simpleButton('Confirm! 👊', 'cfm', {
     let localItem = localReg[telegramId]
     if (localItem) {
       let { name, number, email, group_id } = localItem
-      let telegram_id = parseInt(telegramId, 10)
-      let attendeeDict = { name, number, email, group_id, telegram_id }
-      requestAddAttendee(attendeeDict)
-      .then(res => {
-        delete localReg[telegramId]
-        localStorage.setItem('register', JSON.stringify(localReg))
-        ctx.deleteMessage()
-        ctx.reply(`Thank you so much for registering, please wait for the group leader's acceptance. 😍`)
-      })
-      .catch(err => {
-        console.log(err)
-        ctx.reply('Something went wrong, so sorry about this, but can you please register again through the link. 😭')
-      })
+      if (name === '' || number === '') {
+        ctx.answerCbQuery('Please fill in at least your name and number 😭')
+      }
+      else {
+        let telegram_id = parseInt(telegramId, 10)
+        let attendeeDict = { name, number, email, group_id, telegram_id }
+        requestAddAttendee(attendeeDict)
+        .then(res => {
+          delete localReg[telegramId]
+          localStorage.setItem('register', JSON.stringify(localReg))
+          ctx.deleteMessage()
+          ctx.replyWithSticker('CAADBQADAQADH-QBK5v1jkw34ZM6Ag')
+          ctx.reply(`Thank you so much for registering, please wait for the group leader's acceptance. 😍`)
+        })
+        .catch(err => {
+          console.log(err)
+          ctx.reply('Something went wrong, so sorry about this, but can you please register again through the link. 😭')
+        })
+      }
     }
     else {
       ctx.reply('Something went wrong, so sorry about this, but can you please register again through the link. 😭')
