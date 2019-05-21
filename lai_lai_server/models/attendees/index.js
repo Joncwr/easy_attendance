@@ -6,7 +6,13 @@ class Attendees extends Model {
   static get tableName() {
     return 'attendees';
   }
-
+  static get modifiers() {
+    return {
+      telegramExists(builder) {
+        builder.whereNotNull('telegram_id');
+      },
+    };
+  }
   static get relationMappings () {
     return {
       groups: {

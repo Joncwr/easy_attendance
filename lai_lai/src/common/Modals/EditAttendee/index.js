@@ -27,8 +27,8 @@ class EditAttendee extends React.Component {
       id,
       name,
       number,
-      email: email || '',
-      telegram: telegram_id || ''
+      email: email || null,
+      telegram: telegram_id || null
     })
   }
 

@@ -50,6 +50,7 @@ class Home extends Component {
       // this.openAttendanceStatistics()
       // this.openSetEventMessage()
       // this.openSetEventModal()
+      // this.broadcastTelegramMessage()
     }, 200)
   }
 
@@ -210,24 +211,50 @@ class Home extends Component {
     }))
   }
 
-  onSend() {
+  onSend(method) {
     if (this.state.attendeesData.length > 0 && this.props.date) {
-      let messageDict = {
-        text: 'Broadcast invitation?',
-        value: {
-          attendeesData: this.state.attendeesData,
-          event_id: this.state.currentGroup.current_event,
-          message: 'bible study coming up! Your'
-        },
-        function: this.broadcastMessageApi.bind(this)
+      if (method === 'wa') {
+        let messageDict = {
+          text: 'Broadcast invitation?',
+          value: {
+            attendeesData: this.state.attendeesData,
+            event_id: this.state.currentGroup.current_event,
+            message: 'bible study coming up! Your'
+          },
+          function: this.broadcastMessageApi.bind(this)
+        }
+        this.props.setModal('show', 'ConfirmationModal', messageDict)
       }
-      this.props.setModal('show', 'ConfirmationModal', messageDict)
+      else if (method === 'tg') {
+        let messageDict = {
+          text: 'Broadcast Telegram invitation?',
+          function: this.broadcastTelegramMessage.bind(this)
+        }
+        this.props.setModal('show', 'ConfirmationModal', messageDict)
+      }
     }
     else {
       this.props.setSnackbar('show', {
         text: "No attendees/event present."
       })
     }
+  }
+
+  broadcastTelegramMessage() {
+    let broadcastDict = {
+      group_id: this.state.currentGroup.id,
+      event_id: this.state.currentGroup.current_event,
+      event_name: this.state.currentGroup.events.name
+    }
+    MessageApi.sendTelegramBroadcast(broadcastDict)
+    .then(res => {
+      this.props.setSnackbar('show', {
+        text: "Message Successfully broadcasted."
+      })
+    })
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Could'nt broadcast on telegram."
+    }))
   }
 
   openSetEventModal() {
@@ -438,15 +465,29 @@ class Home extends Component {
         return (
           <div className="home-actions home-actions--home">
             <Button
-              onClick={this.onSend}
+              onClick={() => this.onSend('wa')}
               disabled={true}
-              name='Send'
+              name='Send Twilio'
               style={{
                 backgroundColor: '#ffddcc',
                 borderColor: '#ff884d',
                 height: '50px',
                 flex: 1,
-                margin: '0 10px'
+                margin: '0 15px',
+                fontSize: '1em',
+              }}
+            />
+            <Button
+              onClick={() => this.onSend('tg')}
+              disabled={true}
+              name='Send Telegram'
+              style={{
+                backgroundColor: '#e6f7ff',
+                borderColor: '#66ccff',
+                height: '50px',
+                flex: 1,
+                margin: '0 15px',
+                fontSize: '1em',
               }}
             />
           </div>

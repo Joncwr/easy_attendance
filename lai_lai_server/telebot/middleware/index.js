@@ -60,15 +60,26 @@ bot.action('w', (ctx,next) => TelegramHelper.getWorshipSong(ctx,next), worshipso
 
 bot.action('sn', (ctx,next) => TelegramHelper.getSummaryEvents(ctx,next), summarynotes.replyMenuMiddleware())
 
-bot.action('a:o:done', (ctx) => {
-  console.log(ctx);
-})
+bot.action(/^inatt.*/, (ctx) =>  TelegramHelper.replyAttendance(ctx, {
+  datesReplyMiddleware
+}))
 
 // TEST ==================================================
 bot.hears('/test', (ctx) => {
   ctx.replyWithAnimation('https://media.giphy.com/media/3o6YghZV15YGZoOtIk/giphy.gif')
 })
-
+// const Telegram = require('telegraf/telegram')
+// const telegramBot = new Telegram(process.env.TELEGRAM_BOT_TOKEN)
+// telegramBot.sendMessage(721544223, '', {
+//   text: 'l;oplolo',
+//   reply_markup: {
+//     inline_keyboard: [
+//         [{text: 'lol', callback_data: 'a:e.35'}],
+//         [{text: 'lol', callback_data: 'my_fancy_event_2'}],
+//         [{text: 'lol', callback_data: 'my_fancy_event_3'}]
+//     ]
+// }
+// })
 // bot.on('sticker', (ctx) => {
 //   console.log(ctx.message);
 //   ctx.replyWithSticker('CAADBQADAQADH-QBK5v1jkw34ZM6Ag')

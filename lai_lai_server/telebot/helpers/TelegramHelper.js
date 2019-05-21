@@ -181,6 +181,32 @@ module.exports = {
       ctx.reply('No such user registered. Please get the link to register for your group from your group leader. Thank you 😊')
     })
   },
+  replyAttendance: (ctx, options) => {
+    getTelegramId(ctx.from.id)
+    .then(res => {
+      let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
+      let group_id = localItem.group_id
+      let event_id = ctx.match[0].replace('inatt.', '')
+      authEventId(event_id, group_id)
+      .then(res => {
+        if (res.length > 0) {
+          localItem['eventMessage'] = { [res[0].id]: res[0].message }
+          localStorage.setItem(ctx.from.id, JSON.stringify(localItem))
+          options.datesReplyMiddleware.setSpecific(ctx, 'a:e-' + event_id)
+        }
+        else ctx.reply('Sorry the event was not found or has been closed')
+      })
+      .catch(err => {
+        console.log(err)
+        ctx.reply('Sorry the event was not found or has been closed')
+      })
+    })
+    .catch(err => {
+      console.log(ctx.from.id);
+      console.log(err)
+      ctx.reply('No such user registered. Please get the link to register for your group from your group leader. Thank you 😊')
+    })
+  },
   getEventDates: (id, next) => {
     getEvents(id)
     .then(res => {

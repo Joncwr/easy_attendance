@@ -2,11 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 const Attendance = require('../../models/attendance')
+const Groups = require('../../models/groups')
 const accountSid = 'AC5af195c67fd6e784c03f34e51eb7dd3b';
 const authToken = '33c1b87b673af4cb521989e6b27e42e2';
 const client = require('twilio')(accountSid, authToken);
 const Telegram = require('telegraf/telegram')
-const bot = new Telegram(process.env.TELEGRAM_BOT_TOKEN)
+const TelegramBot = new Telegram(process.env.TELEGRAM_BOT_TOKEN)
 
 router.post('/broadcast', (req, res) => {
   let { attendeesData, event_id, message } = req.body
@@ -113,6 +114,72 @@ router.post('/testTelegram', (req, res) => {
   })
   .catch(err => {
     console.log(err);
+  })
+});
+
+router.post('/telegramBroadcast', (req, res) => {
+  let { group_id, event_id, event_name } = req.body
+  return Groups
+  .query()
+  .where({id: group_id})
+  .eager('attendees(telegramExists)')
+  .then(([group]) => {
+    group.attendees.forEach(attendee => {
+      let inlineButton = [{text: '📝 Respond for ' + event_name + '! 💖', callback_data: 'inatt.' + event_id}]
+      TelegramBot.sendMessage(attendee.telegram_id, null, {
+        text: 'Please take a minute to mark your attendance by clicking the link below! 🙏😊',
+        reply_markup: { inline_keyboard: [inlineButton] }
+      })
+      .then(res => {
+        return Attendance
+        .query()
+        .where({attendee_id: attendee.id, event_id})
+        .then(attendance => {
+          if (attendance.length > 0) {
+            return Attendance
+            .query()
+            .patchAndFetchById(attendance[0].id, {attendee_id: attendee.id, event_id, message_status: 'delivered'})
+            .then(result => {
+            })
+          }
+          else {
+            return Attendance
+            .query()
+            .insert({attendee_id: attendee.id, event_id, message_status: 'delivered'})
+            .then(result => {
+            })
+          }
+        })
+      })
+      .catch(err => {
+        return Attendance
+        .query()
+        .where({attendee_id: attendee.id, event_id})
+        .then(attendance => {
+          if (attendance.length > 0) {
+            return Attendance
+            .query()
+            .patchAndFetchById(attendance[0].id, {attendee_id: attendee.id, event_id, message_status: 'failed'})
+            .then(result => {
+            })
+          }
+          else {
+            return Attendance
+            .query()
+            .insert({attendee_id: attendee.id, event_id, message_status: 'failed'})
+            .then(result => {
+            })
+          }
+        })
+        console.log('COULNT SEND MESSAGE', err.description);
+      })
+    })
+
+    res.sendStatus(200)
+  })
+  .catch(err => {
+    console.log(err)
+    res.sendStatus(400)
   })
 });
 
