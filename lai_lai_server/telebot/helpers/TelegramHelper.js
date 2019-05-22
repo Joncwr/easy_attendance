@@ -5,6 +5,7 @@ const Prayer_Request = require('../../models/prayer_request')
 const { options, setOptionsMenuVariables } = require('../menus/attendance/options')
 const { attendanceApi } = require('../../routes/publicapi')
 const ObjectHelper = require('../helpers/ObjectHelper')
+const Markup = require('telegraf/markup')
 let dates = {}
 
 function getTelegramId(id) {
@@ -99,26 +100,79 @@ function authEventId(id, group_id) {
   })
 }
 
-function endMenuConvo(ctx, method) {
+function clearLS(ctx) {
   let id = ctx.from.id
   let localItem = JSON.parse(localStorage.getItem(id))
   localItem['eventOptions'] = {}
   localItem['eventMessage'] = {}
   localItem['testimonials'] = {}
   localItem['worshipSong'] = {}
-  localItem['groupsPrayerRequest'] = []
+  localItem['groupsPrayerRequest'] = {}
   localItem['prayerRequest'] = ''
   localItem['worshipSongDedication'] = {}
   localItem['summarynotes'] = {}
   localStorage.setItem(id, JSON.stringify(localItem))
+}
+
+function endMenuConvo(ctx, method) {
+  clearLS(ctx)
   ctx.deleteMessage()
   if (method === 'happy') {
     ctx.replyWithSticker('CAADBQADAQADH-QBK5v1jkw34ZM6Ag')
+    ctx.reply('To go back to the main menu please click /start or the keyboard button below.', Markup
+      .keyboard([
+        ['😇 Start 😇'], // Row1 with 2 buttons
+      ])
+      .oneTime()
+      .resize()
+      .extra()
+    )
   }
   else if (method === 'sad') {
     ctx.replyWithSticker('CAADBQADAgADH-QBK1Ho3U-R2nJ-Ag')
-    ctx.reply('Thank you, I hope you will be able to make it the next time :(')
+    ctx.reply('Thank you, I hope you will be able to make it the next time :(', Markup
+    .keyboard([
+      ['😇 Start 😇'], // Row1 with 2 buttons
+    ])
+    .oneTime()
+    .resize()
+    .extra())
   }
+}
+
+function getAttendeeName(id) {
+  return Attendees
+  .query()
+  .where({id})
+  .then(([res]) => { return res.name })
+  .catch(err => console.log(err))
+}
+
+function getPrayers(ctx) {
+  return new Promise((resolve, reject) => {
+    let id = ctx.from.id
+    let localItem = JSON.parse(localStorage.getItem(id))
+    let { group_id } = localItem
+    return Prayer_Request
+    .query()
+    .where({ group_id })
+    .orderBy('prayer_count', 'asc')
+    .eager('attendees(selectName)')
+    .then(prayer_request => {
+      let groupsPrayerRequest = {}
+      prayer_request.forEach(data => {
+        groupsPrayerRequest[data.id] = {
+          description: data.description,
+          name: data.attendees.name,
+          prayer_count: data.prayer_count,
+        }
+      })
+      localItem['groupsPrayerRequest'] = groupsPrayerRequest
+      localStorage.setItem(id, JSON.stringify(localItem))
+      resolve()
+    })
+    .catch(err => reject(err))
+  })
 }
 
 module.exports = {
@@ -126,10 +180,10 @@ module.exports = {
     getTelegramId(ctx.from.id)
     .then(res => {
       if (res) {
+        let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
         if (ctx.startPayload) {
           // Load Start Paylaoad here!!!
           console.log(ctx.startPayload)
-          let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
           if (ctx.startPayload.search('attfor') !== -1) {
             let group_id = localItem.group_id
             let event_id = ctx.startPayload.replace('attfor', '')
@@ -171,7 +225,20 @@ module.exports = {
           }
         }
         else {
-          return next()
+          let group_id = localItem.group_id
+          return Prayer_Request
+          .query()
+          .where({group_id})
+          .then(res => {
+            let prayerRequestCount = res.length
+            localItem['prayerRequestCount'] = prayerRequestCount
+            localStorage.setItem(ctx.from.id, JSON.stringify(localItem))
+            return next()
+          })
+          .catch(err => {
+            console.log(err)
+            ctx.reply('An error has occurred.')
+          })
         }
       }
       else {
@@ -356,7 +423,6 @@ module.exports = {
       console.log(err)
       ctx.reply('Error has occured.')
     })
-    // return next()
   },
   initiatePrayerRequest: (ctx,next) => {
     let id = ctx.from.id
@@ -366,21 +432,25 @@ module.exports = {
     return next()
   },
   getPrayerRequest: (ctx, next) => {
-    let id = ctx.from.id
-    let localItem = JSON.parse(localStorage.getItem(id))
-    let { group_id } = localItem
-    return Prayer_Request
-    .query()
-    .where({ group_id })
-    .orderBy('prayer_count', 'asc')
-    .then(prayer_request => {
-      localItem['groupsPrayerRequest'] = prayer_request
-      localStorage.setItem(id, JSON.stringify(localItem))
+    getPrayers(ctx)
+    .then(res => {
       return next()
     })
     .catch(err => {
       console.log(err)
       ctx.reply('Error has occured.')
     })
-  }
+  },
+  replyPrayerRequest: (ctx, options) => {
+    let prayerId = ctx.match[0].replace('inpr.', '')
+    getPrayers(ctx)
+    .then(res => {
+      options.prayer_confirmationReplyMiddleware.setSpecific(ctx, 'pr:p:r-' + prayerId )
+    })
+    .catch(err => {
+      console.log(err)
+      ctx.reply('Error has occured.')
+    })
+  },
+  clearLS,
 }

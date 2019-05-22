@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.alterTable('prayer_request', t => {
-    t.json('prayer_response')
+    t.json('prayer_response').defaultTo('{}')
   })
 };
 

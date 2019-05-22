@@ -11,6 +11,12 @@ class Attendees extends Model {
       telegramExists(builder) {
         builder.whereNotNull('telegram_id');
       },
+      selectName(builder) {
+        builder.select('name')
+      },
+      selectTelegram(builder) {
+        builder.select('telegram_id')
+      },
     };
   }
   static get relationMappings () {

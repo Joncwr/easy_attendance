@@ -8,11 +8,12 @@ const { attendanceApi } = require('../../routes/publicapi')
 const { sendworshipsongs } = require('../menus/sendworshipsongs')
 const { registration } = require('../menus/registration')
 const { summarynotes } = require('../menus/summarynotes')
-const { prayer_request_request,prayer_request_pray } = require('../menus/prayer_request')
+const { prayer_request_request,prayer_request_pray,prayer_request_pray_confirmation } = require('../menus/prayer_request')
 const datesReplyMiddleware = dates.replyMenuMiddleware()
 const attendanceReplyMiddleware = attendance.replyMenuMiddleware()
 const sendworshipsongsReplyMiddleware = sendworshipsongs.replyMenuMiddleware()
 const registrationReplyMiddleware = registration.replyMenuMiddleware()
+const prayer_confirmationReplyMiddleware = prayer_request_pray_confirmation.replyMenuMiddleware()
 
 
 // COMMANDS =================================================
@@ -69,10 +70,20 @@ bot.action(/^inatt.*/, (ctx) =>  TelegramHelper.replyAttendance(ctx, {
   datesReplyMiddleware
 }))
 
+bot.action(/^inpr.*/, (ctx) =>  TelegramHelper.replyPrayerRequest(ctx, {
+  prayer_confirmationReplyMiddleware
+}))
+
+// HEARS ==========================================
+bot.hears('😇 Start 😇', (ctx,next) => TelegramHelper.auth(ctx, next, {
+  datesReplyMiddleware,
+  sendworshipsongsReplyMiddleware,
+}), main.replyMenuMiddleware())
+
 // TEST ==================================================
-bot.hears('/test', (ctx) => {
-  ctx.replyWithAnimation('https://media.giphy.com/media/3o6YghZV15YGZoOtIk/giphy.gif')
-})
+// bot.hears('/test', (ctx) => {
+//   ctx.replyWithAnimation('https://media.giphy.com/media/3o6YghZV15YGZoOtIk/giphy.gif')
+// })
 // const Telegram = require('telegraf/telegram')
 // const telegramBot = new Telegram(process.env.TELEGRAM_BOT_TOKEN)
 // telegramBot.sendMessage(721544223, '', {
@@ -87,7 +98,7 @@ bot.hears('/test', (ctx) => {
 // })
 // bot.on('sticker', (ctx) => {
 //   console.log(ctx.message);
-//   ctx.replyWithSticker('CAADBQADAQADH-QBK5v1jkw34ZM6Ag')
+//   ctx.replyWithSticker('CAADBQADAwADH-QBK4PSHtYCLovsAg')
 //   ctx.reply('hi')
 // })
 // main.manual('tewt', 'a:e-36:y')

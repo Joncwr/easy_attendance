@@ -18,11 +18,12 @@ const TelegramHelper = require ('./helpers/TelegramHelper')
 require('./helpers/DailyBibleVerse')
 const main = new TelegrafInlineMenu(ctx => {
   let dailyVerse_ls = JSON.parse(localStorage.getItem('dailyVerse'))
+  let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
   let dailyVerse = ''
   if (dailyVerse_ls.verse) {
-    if (dailyVerse_ls.verse !== '') dailyVerse = `Daily Verse: ${dailyVerse_ls.verse}\n`
+    if (dailyVerse_ls.verse !== '') dailyVerse = `📜 Daily Verse: ${dailyVerse_ls.verse}\n`
   }
-  return `${dailyVerse}So glad to see you here again ${ctx.from.first_name}! ☺️`
+  return `${dailyVerse}🙏 There are ${localItem.prayerRequestCount} prayer request at the moment!\n\nSo glad to see you here again ${ctx.from.first_name}! ☺️`
 })
 module.exports = { bot, main }
 require('./middleware')
