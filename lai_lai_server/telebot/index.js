@@ -15,10 +15,15 @@ const { registration } = require('./menus/registration')
 const { summarynotes } = require('./menus/summarynotes')
 const { prayer_request } = require('./menus/prayer_request')
 const TelegramHelper = require ('./helpers/TelegramHelper')
+require('./helpers/DailyBibleVerse')
 const main = new TelegrafInlineMenu(ctx => {
-  return `So glad to see you here again ${ctx.from.first_name}! ☺️`
+  let dailyVerse_ls = JSON.parse(localStorage.getItem('dailyVerse'))
+  let dailyVerse = ''
+  if (dailyVerse_ls.verse) {
+    if (dailyVerse_ls.verse !== '') dailyVerse = `Daily Verse: ${dailyVerse_ls.verse}\n`
+  }
+  return `${dailyVerse}So glad to see you here again ${ctx.from.first_name}! ☺️`
 })
-
 module.exports = { bot, main }
 require('./middleware')
 
