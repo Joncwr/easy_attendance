@@ -139,7 +139,8 @@ function getValue(ctx, method, index, value) {
   }
   else if (method === 'toggleName') {
     if (localItem.eventOptions[index]) {
-      return localItem.eventOptions[index].fieldName || ''
+      let status = (localItem.eventOptions[index].value) ? 'Yes! 🥰' : 'No.. 😥'
+      return localItem.eventOptions[index].fieldName + ': ' + status || ''
     }
     else {
       return 'null'
@@ -152,7 +153,12 @@ function getValue(ctx, method, index, value) {
   }
   else if (method === 'comments') {
     if (localItem.eventOptions[index].type === 'comments' && localItem.eventOptions[index].extraFields) {
-      return localItem.eventOptions[index].extraFields[0].name + ' (Click to respond) 🙃'
+      if (localItem.eventOptions[index].extraFields[0].comment !== '') {
+        return localItem.eventOptions[index].extraFields[0].name + ' (Response recorded! 😘)'
+      }
+      else {
+        return localItem.eventOptions[index].extraFields[0].name + ' (Click to respond 🙃)'
+      }
     }
     else return 'null'
   }
@@ -161,7 +167,8 @@ function getValue(ctx, method, index, value) {
       if (localItem.eventOptions[index].type === 'multi' && localItem.eventOptions[index].extraFields) {
         let options = {}
         localItem.eventOptions[index].extraFields.forEach((data,index)=> {
-          options[index] = data.name
+          let status = (data.value) ? 'Yes Please!' : 'No thanks!'
+          options[index] = data.name + ': ' + status || ''
         })
         return options
       }
