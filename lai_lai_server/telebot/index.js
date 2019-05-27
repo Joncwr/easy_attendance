@@ -31,11 +31,17 @@ module.exports = { bot, main }
 require('./middleware')
 
 main.submenu('🗓 Attendance', 'a', attendance)
-main.submenu('✨ Sharings', 't', testimonials)
-main.submenu('🎸 Current Worship Songs Dedication', 'w', worshipsongs)
-main.submenu('✍️ Summary Notes', 'sn', summarynotes)
+main.submenu('✨ Sharings', 't', testimonials, {
+  joinLastRow: true
+})
+main.submenu('🎸 Current Worship Songs', 'w', worshipsongs)
+main.submenu('✍️ Summary Notes', 'sn', summarynotes, {
+  joinLastRow: true
+})
 main.submenu('🙏 Prayer Room', 'pr', prayer_request)
-main.submenu('🌅 Daily Devotion', 'dd', dailydevotion)
+main.submenu('🌅 Daily Devotion', 'dd', dailydevotion, {
+  joinLastRow: true
+})
 main.submenu('🎸 Send Worship Songs Dedication', 'sw', sendworshipsongs, {
   hide: (ctx) => {
     if (ctx.match) {
