@@ -14,8 +14,10 @@ const { sendworshipsongs } = require('./menus/sendworshipsongs')
 const { registration } = require('./menus/registration')
 const { summarynotes } = require('./menus/summarynotes')
 const { prayer_request } = require('./menus/prayer_request')
+const { dailydevotion } = require('./menus/dailydevotion')
 const TelegramHelper = require ('./helpers/TelegramHelper')
 require('./helpers/DailyBibleVerse')
+require('./helpers/DailyEDWJ')
 const main = new TelegrafInlineMenu(ctx => {
   let dailyVerse_ls = JSON.parse(localStorage.getItem('dailyVerse'))
   let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
@@ -33,6 +35,7 @@ main.submenu('✨ Sharings', 't', testimonials)
 main.submenu('🎸 Current Worship Songs Dedication', 'w', worshipsongs)
 main.submenu('✍️ Summary Notes', 'sn', summarynotes)
 main.submenu('🙏 Prayer Room', 'pr', prayer_request)
+main.submenu('🌅 Daily Devotion', 'dd', dailydevotion)
 main.submenu('🎸 Send Worship Songs Dedication', 'sw', sendworshipsongs, {
   hide: (ctx) => {
     if (ctx.match) {
