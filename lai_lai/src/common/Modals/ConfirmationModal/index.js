@@ -16,6 +16,11 @@ class DeleteAttendeeModal extends React.Component {
     if (this.props.modalProps.source) {
       if (this.props.modalProps.source === 'groupActions') this.props.modalProps.function(this.props.modalProps.method, 'delete', this.props.modalProps.value)
     }
+    else if (this.props.modalProps.options) {
+      if (this.props.modalProps.options === 'tg-second') {
+        this.props.modalProps.function('tg-second')
+      }
+    }
     else {
       this.props.modalProps.function(this.props.modalProps.value)
     }

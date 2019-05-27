@@ -183,4 +183,35 @@ router.post('/telegramBroadcast', (req, res) => {
   })
 });
 
+router.post('/telegramBroadcastUnanswered', (req, res) => {
+  let { group_id, event_id, event_name } = req.body
+  return Groups
+  .query()
+  .where({id: group_id})
+  .eager('attendees(telegramExists)')
+  .then(([group]) => {
+    group.attendees.forEach(attendee => {
+      return Attendance
+      .query()
+      .where({attendee_id: attendee.id, event_id, status: null})
+      .then(attendance => {
+        if (attendance.length > 0) {
+          let inlineButton = [{text: '📝 Respond for ' + event_name + '! 💖', callback_data: 'inatt.' + event_id}]
+          TelegramBot.sendMessage(attendee.telegram_id, null, {
+            text: 'Please take a minute to mark your attendance by clicking the link below! 🙏😊',
+            reply_markup: { inline_keyboard: [inlineButton] }
+          })
+          .then(res => {})
+          .catch(err => console.log(err))
+        }
+      })
+    })
+    res.sendStatus(200)
+  })
+  .catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
+});
+
 module.exports = router

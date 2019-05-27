@@ -232,6 +232,15 @@ class Home extends Component {
         }
         this.props.setModal('show', 'ConfirmationModal', messageDict)
       }
+      else if (method ==='tg-second') {
+        let messageDict = {
+          text: 'Send to those who didnt answer (Telegram)',
+          function: this.broadcastTelegramMessage.bind(this),
+          options: 'tg-second',
+          style: {fontSize: '1.3em'}
+        }
+        this.props.setModal('show', 'ConfirmationModal', messageDict)
+      }
     }
     else {
       this.props.setSnackbar('show', {
@@ -240,21 +249,34 @@ class Home extends Component {
     }
   }
 
-  broadcastTelegramMessage() {
+  broadcastTelegramMessage(value) {
     let broadcastDict = {
       group_id: this.state.currentGroup.id,
       event_id: this.state.currentGroup.current_event,
       event_name: this.state.currentGroup.events.name
     }
-    MessageApi.sendTelegramBroadcast(broadcastDict)
-    .then(res => {
-      this.props.setSnackbar('show', {
-        text: "Message Successfully broadcasted."
+    if (value === 'tg-second') {
+      MessageApi.sendTelegramBroadcastUnanswered(broadcastDict)
+      .then(res => {
+        this.props.setSnackbar('show', {
+          text: "Message Successfully broadcasted."
+        })
       })
-    })
-    .catch(err => this.props.setSnackbar('show', {
-      text: "Could'nt broadcast on telegram."
-    }))
+      .catch(err => this.props.setSnackbar('show', {
+        text: "Could'nt broadcast on telegram."
+      }))
+    }
+    else {
+      MessageApi.sendTelegramBroadcast(broadcastDict)
+      .then(res => {
+        this.props.setSnackbar('show', {
+          text: "Message Successfully broadcasted."
+        })
+      })
+      .catch(err => this.props.setSnackbar('show', {
+        text: "Could'nt broadcast on telegram."
+      }))
+    }
   }
 
   openSetEventModal() {
@@ -473,8 +495,21 @@ class Home extends Component {
                 borderColor: '#ff884d',
                 height: '50px',
                 flex: 1,
-                margin: '0 15px',
-                fontSize: '1em',
+                margin: '0 5px',
+                fontSize: '.9em',
+              }}
+            />
+            <Button
+              onClick={() => this.onSend('tg-second')}
+              disabled={true}
+              name='TG Never Answer'
+              style={{
+                backgroundColor: '#ffe6e6',
+                borderColor: '#ff6666',
+                height: '50px',
+                flex: 1,
+                margin: '0 5px',
+                fontSize: '.9em',
               }}
             />
             <Button
@@ -486,8 +521,8 @@ class Home extends Component {
                 borderColor: '#66ccff',
                 height: '50px',
                 flex: 1,
-                margin: '0 15px',
-                fontSize: '1em',
+                margin: '0 5px',
+                fontSize: '.9em',
               }}
             />
           </div>

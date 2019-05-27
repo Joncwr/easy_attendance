@@ -135,12 +135,23 @@ options.select('s3', (ctx) => getValue(ctx, 'selectName', 2), {
 function getValue(ctx, method, index, value) {
   let localItem = JSON.parse(localStorage.getItem(ctx.from.id))
   if (method === 'menuText') {
-    return `Super excites your coming! 🤩 Check out what options we have on that day 🤔`
+    if (localItem.eventOptions) {
+      let eventOptions = Object.assign([], localItem.eventOptions)
+      let eventOptionMessage = 'Your current choices..\n'
+      eventOptions.forEach(data => {
+        let status = (data.value) ? 'Yes! 🥰' : 'No thanks... 😥'
+        eventOptionMessage = eventOptionMessage + `${data.fieldName}: ${status}\n`
+      })
+      return `Super excites your coming! 🤩 Check out what options we have on that day 🤔\n\n${eventOptionMessage}`
+    }
+    else {
+      return `Super excites your coming! 🤩 Check out what options we have on that day 🤔`
+    }
   }
   else if (method === 'toggleName') {
     if (localItem.eventOptions[index]) {
-      let status = (localItem.eventOptions[index].value) ? 'Yes! 🥰' : 'No.. 😥'
-      return localItem.eventOptions[index].fieldName + ': ' + status || ''
+      let status = (localItem.eventOptions[index].value) ? 'Yes' : 'No'
+      return `${localItem.eventOptions[index].fieldName}: Current Choice ( ${status} )` || ''
     }
     else {
       return 'null'
@@ -243,7 +254,7 @@ function getHide(ctx, method, index) {
   }
 }
 
-options.manual('Confirm 👍', 'done')
+options.manual('Once your done selecting, Click Here! 😍', 'done')
 
 module.exports = {
   options
