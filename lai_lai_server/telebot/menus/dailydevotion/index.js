@@ -21,12 +21,6 @@ function getValue(ctx, method) {
   }
 }
 
-// dailydevotion.button('refresh', 'test', {
-//   doFunc: (ctx) => {
-//     ctx.replyWithPhoto('https://s3-ap-southeast-1.amazonaws.com/bible-study-edwj/EDWJ_27_05_19.jpeg')
-//   }
-// })
-
 module.exports = {
   dailydevotion,
 }

@@ -51,6 +51,30 @@ main.submenu('🎸 Send Worship Songs Dedication', 'sw', sendworshipsongs, {
   }
 })
 
+// Inline Queriesssss=======================================
+const bible = require('holy-bible');
+const BibleBookFormatter = require('./helpers/BibleBookFormatter')
+bot.on('inline_query', ({ inlineQuery, answerInlineQuery }) => {
+  bible.get(inlineQuery.query, 'ASV')
+  .then(res => {
+    let book = res.passage.split('.')
+    let bookNameFormatted = BibleBookFormatter.abbrevConverter(book[0])
+    let passage = res.passage.replace(book[0], bookNameFormatted)
+    let result = [{
+      type: 'article',
+      title: `${passage}` || 'null',
+      description: `Your query: ${inlineQuery.query}` || 'null',
+      id: 1,
+      input_message_content: {
+        message_text: `*${passage}*\n_"${res.text}"_`,
+        parse_mode: 'Markdown'
+      }
+    }]
+    return answerInlineQuery(result)
+  })
+  .catch(err => {})
+})
+
 bot.use(main.init({
   backButtonText: 'back…',
   mainMenuButtonText: 'back to main menu…'

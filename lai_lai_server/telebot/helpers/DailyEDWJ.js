@@ -3,12 +3,12 @@ const schedule = require('node-schedule')
 
 // Initiate LS incase no key
 if (!localStorage.getItem('dailyEDWJ')) {
-    let day = moment().format('DD_MM_YY')
-    let dailyEDWJ = {
-      url: `https://s3-ap-southeast-1.amazonaws.com/bible-study-edwj/EDWJ_${day}.jpg`
-    }
+  let day = moment().format('DD_MM_YY')
+  let dailyEDWJ = {
+    url: `https://s3-ap-southeast-1.amazonaws.com/bible-study-edwj/EDWJ_${day}.jpg`
+  }
 
-    localStorage.setItem('dailyEDWJ', JSON.stringify(dailyEDWJ))
+  localStorage.setItem('dailyEDWJ', JSON.stringify(dailyEDWJ))
 }
 
 schedule.scheduleJob('0 0 * * *', () => {
