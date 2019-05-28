@@ -59,7 +59,8 @@ bot.on('inline_query', ({ inlineQuery, answerInlineQuery }) => {
   .then(res => {
     let book = res.passage.split('.')
     let bookNameFormatted = BibleBookFormatter.abbrevConverter(book[0])
-    let passage = res.passage.replace(book[0], bookNameFormatted)
+    let bookRegex = new RegExp(book[0], 'g')
+    let passage = res.passage.replace(bookRegex, bookNameFormatted)
     let result = [{
       type: 'article',
       title: `${passage}` || 'null',
