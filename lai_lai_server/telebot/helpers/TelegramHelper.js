@@ -403,6 +403,7 @@ module.exports = {
     .query()
     .where({ group_id })
     .whereNotNull('summary_notes')
+    .orderBy('created_at', 'desc')
     .then(events => {
       let summaryEvents = []
       if (events.length > 0) {
