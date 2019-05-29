@@ -24,7 +24,7 @@ function getValue(ctx, method) {
 
 dailydevotion.simpleButton('📖 How to use Bible Search (Inline Query)', 'iq', {
   doFunc: (ctx) => {
-    ctx.reply(`To use the Bible Search, either click the button below or you can manually do it anywhere and anytime on telegram when you type '@BibleStudySG_Bot *bookname:chapter:verse*', you can use short forms too!\nExample: @BibleStudySG_Bot 1cor1:1`, Markup
+    ctx.reply(`To use the Bible Search, either click the button below or you can manually do it anywhere and anytime on telegram when you type '@BibleStudySG_Bot *bookname:chapter:verse*', you can use short forms too!\nExample: @BibleStudySG_Bot 1cor1:1 or @BibleStudySG_Bot 1cor1:1-3 (for a range of verses :)`, Markup
       .inlineKeyboard([
         Markup.switchToCurrentChatButton('🔍 Search Bible!','',false)
       ])
