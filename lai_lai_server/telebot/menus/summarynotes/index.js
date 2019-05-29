@@ -80,7 +80,9 @@ function getSummaryDates(ctx) {
   return renderButton
 }
 
-summarynotes.selectSubmenu('e', (ctx) => getSummaryDates(ctx), summarynotesdate)
+summarynotes.selectSubmenu('e', (ctx) => getSummaryDates(ctx), summarynotesdate, {
+  columns: 3
+})
 
 module.exports = {
   summarynotes,
