@@ -86,4 +86,5 @@ summarynotes.selectSubmenu('e', (ctx) => getSummaryDates(ctx), summarynotesdate,
 
 module.exports = {
   summarynotes,
+  summarynotesdate
 }

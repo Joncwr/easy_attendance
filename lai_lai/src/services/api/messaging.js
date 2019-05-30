@@ -40,5 +40,15 @@ module.exports = {
       })
       .catch(err => reject(err))
     })
+  },
+  sendSummaryNotesToDeclined: (summaryNotesDict) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('post', 'api/messaging/sendSummaryNotesToDeclined', summaryNotesDict)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
   }
 }

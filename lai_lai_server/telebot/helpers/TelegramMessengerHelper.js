@@ -43,5 +43,5 @@ module.exports = {
       console.log(err)
       ctx.reply('An error has occurred.')
     })
-  }
+  },
 }

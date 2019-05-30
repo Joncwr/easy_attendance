@@ -425,6 +425,36 @@ module.exports = {
       ctx.reply('Error has occured.')
     })
   },
+  getSummaryNotes: (ctx, options) => {
+    let event_id = ctx.match.input.replace('snotes:','')
+    let id = ctx.from.id
+    let localItem = JSON.parse(localStorage.getItem(id))
+    let { group_id } = localItem
+    return Events
+    .query()
+    .where({ id: event_id, group_id })
+    .whereNotNull('summary_notes')
+    .then(events => {
+      let summaryEvents = []
+      if (events.length > 0) {
+        events.forEach(data => {
+          let { id, name, worship_song, summary_notes } = data
+          summaryEvents.push({id, name, worship_song, summary_notes})
+        })
+        if (summaryEvents.length > 0) {
+          localItem['summarynotes'] = summaryEvents
+          localStorage.setItem(id, JSON.stringify(localItem))
+          options.summarynotesdateReplyMiddleware.setSpecific(ctx, 'sn:e-0')
+        }
+        else ctx.reply('Sorry there was no summary notes found. 😭')
+      }
+      else ctx.reply('Sorry there was no summary notes found. 😭')
+    })
+    .catch(err => {
+      console.log(err)
+      ctx.reply('Error has occured.')
+    })
+  },
   initiatePrayerRequest: (ctx,next) => {
     let id = ctx.from.id
     let localItem = JSON.parse(localStorage.getItem(id))

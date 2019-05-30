@@ -152,7 +152,8 @@
 .attendanceList-options-extraOptions,
 .attendanceList-options-save,
 .attendanceList-options-tags,
-.attendanceList-options-summary {
+.attendanceList-options-summary,
+.attendanceList-options-sendSummaryNotes {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -161,6 +162,7 @@
 
 .attendanceList-options-tags,
 .attendanceList-options-save,
+.attendanceList-options-summary,
 .attendanceList-options-extraOptions {
   border-right: 5px solid #ffd9b3;
 }
@@ -168,7 +170,8 @@
 .attendanceList-options-save-icon,
 .attendanceList-options-extraOptions-icon,
 .attendanceList-options-tags-icon,
-.attendanceList-options-summary-icon {
+.attendanceList-options-summary-icon,
+.attendanceList-options-sendSummaryNotes-icon {
   height: 1.7em;
   width: 1.7em;
 }
@@ -191,6 +194,10 @@
 
 .attendanceList-options-save-icon.closed {
 	background: url('/img/icon_unsave@3x.png') no-repeat center center/ contain;
+}
+
+.attendanceList-options-sendSummaryNotes-icon {
+	background: url('/img/icon_telegram_notes@3x.png') no-repeat center center/ contain;
 }
 
 .attendanceList-options-summary-icon.disabled {

@@ -228,6 +228,35 @@ class AttendanceList extends React.Component {
     this.props.setModal('show', 'SummaryModal', summaryModalDict)
   }
 
+  sendSummaryNotes() {
+    let sendSummaryNotesDict = {
+      text: 'Send Summary Notes?',
+      function: this.sendSummaryNotesApi.bind(this),
+    }
+
+    this.props.setModal('show', 'ConfirmationModal', sendSummaryNotesDict)
+  }
+
+  sendSummaryNotesApi() {
+    let { currentGroup } = this.props
+    if (currentGroup.events) {
+      let sendSummaryNotesDict = {
+        group_id: currentGroup.id,
+        event_id: currentGroup.events.id,
+      }
+
+      MessageApi.sendSummaryNotesToDeclined(sendSummaryNotesDict)
+      .then(res => {
+        this.props.setSnackbar('show', {
+          text: "Successfully sent summary notes."
+        })
+      })
+      .catch(err => this.props.setSnackbar('show', {
+        text: "Could'nt send summary notes."
+      }))
+    }
+  }
+
   setEventsStatus(status) {
     if (this.props.currentGroup.events) {
       let isEventClosed
@@ -370,6 +399,9 @@ class AttendanceList extends React.Component {
               <div className="attendanceList-options-summary-icon disabled"/>
             </div>
           }
+          <div className="attendanceList-options-sendSummaryNotes">
+            <div className="attendanceList-options-sendSummaryNotes-icon" onClick={this.sendSummaryNotes.bind(this)}/>
+          </div>
         </div>
       </div>
     )

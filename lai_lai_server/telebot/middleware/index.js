@@ -8,13 +8,14 @@ const { attendanceApi } = require('../../routes/publicapi')
 const { sendworshipsongs } = require('../menus/sendworshipsongs')
 const { registration } = require('../menus/registration')
 const { dailydevotion } = require('../menus/dailydevotion')
-const { summarynotes } = require('../menus/summarynotes')
+const { summarynotes, summarynotesdate } = require('../menus/summarynotes')
 const { prayer_request_request,prayer_request_pray,prayer_request_pray_confirmation } = require('../menus/prayer_request')
 const datesReplyMiddleware = dates.replyMenuMiddleware()
 const attendanceReplyMiddleware = attendance.replyMenuMiddleware()
 const sendworshipsongsReplyMiddleware = sendworshipsongs.replyMenuMiddleware()
 const registrationReplyMiddleware = registration.replyMenuMiddleware()
 const prayer_confirmationReplyMiddleware = prayer_request_pray_confirmation.replyMenuMiddleware()
+const summarynotesdateReplyMiddleware = summarynotesdate.replyMenuMiddleware()
 
 
 // COMMANDS =================================================
@@ -73,6 +74,10 @@ bot.action(/^inatt.*/, (ctx) =>  TelegramHelper.replyAttendance(ctx, {
 
 bot.action(/^inpr.*/, (ctx) =>  TelegramHelper.replyPrayerRequest(ctx, {
   prayer_confirmationReplyMiddleware
+}))
+
+bot.action(/^snotes:*/, (ctx) => TelegramHelper.getSummaryNotes(ctx, {
+  summarynotesdateReplyMiddleware
 }))
 
 // HEARS ==========================================

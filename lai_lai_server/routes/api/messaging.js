@@ -214,4 +214,35 @@ router.post('/telegramBroadcastUnanswered', (req, res) => {
   })
 });
 
+router.post('/sendSummaryNotesToDeclined', (req, res) => {
+  let { event_id } = req.body
+  return Attendance
+  .query()
+  .where({ event_id })
+  .whereNot({ status: true })
+  .eager('attendees(telegramExists)')
+  .then(attendance => {
+    attendance.forEach(data => {
+      if (data.attendees) {
+        let inlineButton = [{
+          text: `👉 Click to be directed to the summary notes! 📖`,
+          callback_data: `snotes:${event_id}`
+        }]
+        TelegramBot.sendMessage(data.attendees.telegram_id, null, {
+          text: '❤️ Please catch up on with the Bible Study Material with the summary notes available below! 🙏',
+          reply_markup: { inline_keyboard: [inlineButton] }
+        })
+        .then(res => {})
+        .catch(err => console.log(err))
+      }
+    })
+    res.sendStatus(200)
+  })
+  .catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
+});
+
+
 module.exports = router
