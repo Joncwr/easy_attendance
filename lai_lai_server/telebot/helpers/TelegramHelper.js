@@ -6,6 +6,7 @@ const { options, setOptionsMenuVariables } = require('../menus/attendance/option
 const { attendanceApi } = require('../../routes/publicapi')
 const ObjectHelper = require('../helpers/ObjectHelper')
 const Markup = require('telegraf/markup')
+const moment = require('moment')
 let dates = {}
 
 function getTelegramId(id) {
@@ -156,7 +157,7 @@ function getPrayers(ctx) {
     return Prayer_Request
     .query()
     .where({ group_id })
-    .orderBy('prayer_count', 'asc')
+    .where('created_at', '>=', moment().subtract(2, 'week'))
     .eager('attendees(selectName)')
     .then(prayer_request => {
       let groupsPrayerRequest = {}
@@ -229,6 +230,7 @@ module.exports = {
           return Prayer_Request
           .query()
           .where({group_id})
+          .where('created_at', '>=', moment().subtract(2, 'week'))
           .then(res => {
             let prayerRequestCount = res.length
             localItem['prayerRequestCount'] = prayerRequestCount
