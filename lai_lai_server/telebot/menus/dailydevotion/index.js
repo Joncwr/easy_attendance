@@ -6,7 +6,9 @@ const dailydevotion = new TelegrafInlineMenu(ctx => {
   return getValue(ctx, 'menuText')
 }, {
   photo: (ctx) => {
-    return getValue(ctx, 'photo')
+    return {
+      url: getValue(ctx, 'photo')
+    }
   }
 })
 
