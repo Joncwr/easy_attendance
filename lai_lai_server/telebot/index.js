@@ -27,7 +27,7 @@ const main = new TelegrafInlineMenu(ctx => {
     if (dailyVerse_ls.verse !== '') dailyVerse = `📜 Daily Verse: ${dailyVerse_ls.verse}\n`
   }
   if (localItem.songPicker) {
-    songPicker = `\n\n Next worship song by: ${localItem.songPicker}! 🎵`
+    songPicker = `\n\nNext worship song by: ${localItem.songPicker}! 🎵`
   }
   return `${dailyVerse}There are ${localItem.prayerRequestCount} prayer request at the moment! 🙏${songPicker}\n\nSo glad to see you here again ${ctx.from.first_name}! ☺️`
 })
