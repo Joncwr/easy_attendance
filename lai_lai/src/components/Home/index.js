@@ -175,9 +175,11 @@ class Home extends Component {
 
     attendeesArr.forEach((data,index) => {
       renderAttendees.push(
-        <div className="home-attendees-info" key={index} onClick={() => this.editAttendee(data)}>
-          <div className="home-attendees-info-name">{data.name}</div>
-          <div className="home-attendees-info-number">{data.number}</div>
+        <div className="home-attendees-info" key={index}>
+          <div className="home-attendees-info-wrapper" onClick={() => this.editAttendee(data)}>
+            <div className="home-attendees-info-name">{data.name}</div>
+            <div className="home-attendees-info-number">{data.number}</div>
+          </div>
           <div className="home-attendees-info-deleteIcon" onClick={() => this.showOnDeleteModal(index)}/>
         </div>
       )

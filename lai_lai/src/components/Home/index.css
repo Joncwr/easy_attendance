@@ -120,11 +120,12 @@
 
 .home-groups-headers,
 .home-attendees-info,
+.home-attendees-info-wrapper,
 .home-attendees-headers {
   display: flex;
 }
 
-.home-attendees-info,
+.home-attendees-info-wrapper,
 .home-attendees-headers {
   font-size: 1.3em;
 }
@@ -188,7 +189,13 @@
 }
 
 .home-attendees-info {
+  justify-content: center;
+  align-items: center;
   padding: 10px 20px;
+}
+
+.home-attendees-info-wrapper {
+  flex: 1;
   box-sizing: border-box;
 }
 
