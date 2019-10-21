@@ -16,7 +16,14 @@ class Groups extends Model {
           to: 'events.id'
         }
       },
-
+      songPicker: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: require('../../models/attendees'),
+        join: {
+          from: 'groups.song_picker',
+          to: 'attendees.id'
+        }
+      },
       attendees: {
         relation: Model.ManyToManyRelation,
         modelClass: require('../../models/attendees'),

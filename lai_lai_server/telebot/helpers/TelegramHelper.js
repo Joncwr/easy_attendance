@@ -235,7 +235,16 @@ module.exports = {
             let prayerRequestCount = res.length
             localItem['prayerRequestCount'] = prayerRequestCount
             localStorage.setItem(ctx.from.id, JSON.stringify(localItem))
-            return next()
+
+            return Groups
+            .query()
+            .eager('songPicker')
+            .then(([groups]) => {
+              let { songPicker } = groups
+              localItem['songPicker'] = songPicker.name
+              localStorage.setItem(ctx.from.id, JSON.stringify(localItem))
+              return next()
+            })
           })
           .catch(err => {
             console.log(err)

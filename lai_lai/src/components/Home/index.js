@@ -29,6 +29,7 @@ class Home extends Component {
     this.getAttendees=this.getAttendees.bind(this)
     this.onAddAttendee=this.onAddAttendee.bind(this)
     this.onDelete=this.onDelete.bind(this)
+    this.chooseSong=this.chooseSong.bind(this)
     this.onSend=this.onSend.bind(this)
     this.changeScreen=this.changeScreen.bind(this)
     this.setEvent=this.setEvent.bind(this)
@@ -176,6 +177,7 @@ class Home extends Component {
     attendeesArr.forEach((data,index) => {
       renderAttendees.push(
         <div className="home-attendees-info" key={index}>
+        <div className="home-attendees-info-songIcon" onClick={() => this.showChooseSongModal(index)}/>
           <div className="home-attendees-info-wrapper" onClick={() => this.editAttendee(data)}>
             <div className="home-attendees-info-name">{data.name}</div>
             <div className="home-attendees-info-number">{data.number}</div>
@@ -197,6 +199,33 @@ class Home extends Component {
     }
 
     this.props.setModal('show', 'ConfirmationModal', onDeleteDict)
+  }
+
+  showChooseSongModal(index) {
+    let name = this.state.attendeesData[index].name
+    let onChooseAttendeeDict = {
+      text: name + ' will choose the next song?',
+      value: index,
+      function: this.chooseSong,
+    }
+
+    this.props.setModal('show', 'ConfirmationModal', onChooseAttendeeDict)
+  }
+
+  chooseSong(index) {
+    let chooseSongDict = {
+      id : this.state.attendeesData[index].id
+    }
+    GroupsApi.chooseSongPicker(this.state.currentGroup.id, chooseSongDict)
+    .then(res => {
+      this.props.setSnackbar('show', {
+        text: `${this.state.attendeesData[index].name} was successfully chosen.`
+      })
+      this.getAttendees()
+    })
+    .catch(err => this.props.setSnackbar('show', {
+      text: "Could'nt choose song picker."
+    }))
   }
 
   onDelete(index) {

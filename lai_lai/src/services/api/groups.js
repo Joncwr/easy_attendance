@@ -61,4 +61,14 @@ module.exports = {
       .catch(err => reject(err))
     })
   },
+  chooseSongPicker: (groupId, chooseSongPickerDict) => {
+    return new Promise((resolve, reject) => {
+      jwtMiddleware.jwtFetch('put', 'api/groups/chooseSongPicker/' + groupId, chooseSongPickerDict)
+      .then(res => {
+        if (res) resolve(res)
+        else reject(res)
+      })
+      .catch(err => reject(err))
+    })
+  },
 }

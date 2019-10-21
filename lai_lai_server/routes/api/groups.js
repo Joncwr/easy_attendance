@@ -194,4 +194,19 @@ router.put('/closeTestimonial/:testimonialId', (req, res) => {
     })
 });
 
+router.put('/chooseSongPicker/:groupId', (req, res) => {
+  const { groupId } = req.params
+  let { id } = req.body
+  return Groups
+    .query()
+    .patchAndFetchById(groupId, {song_picker: id})
+    .then(Groups => {
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400)
+    })
+});
+
 module.exports = router
