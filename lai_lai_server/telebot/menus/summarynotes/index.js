@@ -27,9 +27,12 @@ summarynotesdate.simpleButton('Read the full sharing! 📑', 'ss', {
     let localItem = JSON.parse(localStorage.getItem(id))
     let eventIndex = ctx.match[1]
     let { worship_song, summary_notes } = localItem.summarynotes[eventIndex]
-    let text = `Event: ${localItem.summarynotes[eventIndex].name}\n\nWho chose it: ${worship_song.attendee_name}\n\nSong name: ${worship_song.song_name}\n\nShort sharing:\n${worship_song.text}\n\nPlease also download the summary notes from the link in the button below 🤗`
-    if (text.length > 1024) {
-      return false
+    if ( worship_song ) {
+      let text = `Event: ${localItem.summarynotes[eventIndex].name}\n\nWho chose it: ${worship_song.attendee_name}\n\nSong name: ${worship_song.song_name}\n\nShort sharing:\n${worship_song.text}\n\nPlease also download the summary notes from the link in the button below 🤗`
+      if (text.length > 1024) {
+        return false
+      }
+      else return true
     }
     else return true
   }
