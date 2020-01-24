@@ -56,29 +56,59 @@ main.submenu('🎸 Send Worship Songs Dedication', 'sw', sendworshipsongs, {
 })
 
 // Inline Queriesssss=======================================
-const bible = require('holy-bible');
-const BibleBookFormatter = require('./helpers/BibleBookFormatter')
+
+const bible = require("bible-english")
+
 bot.on('inline_query', ({ inlineQuery, answerInlineQuery }) => {
-  bible.get(inlineQuery.query, 'ASV')
+  bible.getVerse(inlineQuery.query, (err, data) => {})
   .then(res => {
-    let book = res.passage.split('.')
-    let bookNameFormatted = BibleBookFormatter.abbrevConverter(book[0])
-    let bookRegex = new RegExp(book[0], 'g')
-    let passage = res.passage.replace(bookRegex, bookNameFormatted)
+    console.log(res[0], res[res.length-1]);
+    let passageRange = res[0].chapter + ':' + res[0].verse + ' - ' +  res[res.length-1].chapter + ':' + res[res.length-1].verse
+    let title = res[0].bookname;
+    let text = [];
+    (res || []).forEach(c => {
+      let passage = c.verse + "| " + c.text
+      text.push(passage)
+    })
+    let textStringify = text.join("");
     let result = [{
       type: 'article',
-      title: `${passage}` || 'null',
+      title: `${title}` || 'null',
       description: `Your query: ${inlineQuery.query}` || 'null',
       id: 1,
       input_message_content: {
-        message_text: `*${passage}*\n_"${res.text}"_`,
+        message_text: `*${title} ${passageRange}*\n_${textStringify}_`,
         parse_mode: 'Markdown'
       }
     }]
     return answerInlineQuery(result)
   })
-  .catch(err => {})
+  .catch(err => console.log(err))
 })
+
+// const bible = require('holy-bible');
+// const BibleBookFormatter = require('./helpers/BibleBookFormatter')
+// bot.on('inline_query', ({ inlineQuery, answerInlineQuery }) => {
+//   bible.get(inlineQuery.query, 'ASV')
+//   .then(res => {
+//     let book = res.passage.split('.')
+//     let bookNameFormatted = BibleBookFormatter.abbrevConverter(book[0])
+//     let bookRegex = new RegExp(book[0], 'g')
+//     let passage = res.passage.replace(bookRegex, bookNameFormatted)
+//     let result = [{
+//       type: 'article',
+//       title: `${passage}` || 'null',
+//       description: `Your query: ${inlineQuery.query}` || 'null',
+//       id: 1,
+//       input_message_content: {
+//         message_text: `*${passage}*\n_"${res.text}"_`,
+//         parse_mode: 'Markdown'
+//       }
+//     }]
+//     return answerInlineQuery(result)
+//   })
+//   .catch(err => {})
+// })
 
 bot.use(main.init({
   backButtonText: 'back…',
