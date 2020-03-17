@@ -238,10 +238,7 @@ module.exports = {
 
             return Groups
             .query()
-            .eager('songPicker')
             .then(([groups]) => {
-              let { songPicker } = groups
-              localItem['songPicker'] = songPicker.name
               localStorage.setItem(ctx.from.id, JSON.stringify(localItem))
               return next()
             })
